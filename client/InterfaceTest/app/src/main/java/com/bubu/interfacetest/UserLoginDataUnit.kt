@@ -34,10 +34,21 @@ class UserLoginDataUnit(val id : String, val password : String) {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitObject = retrofit.create(UserLoginInterface::class.java)
-        var res = retrofitObject.get(UserLoginData).execute().body()
-        //var res = retrofitObject.get(userFeedData).execute()
-        //if(res.headers()) Exception
-        return res
+        try {
+            var resp = retrofitObject.get(UserLoginData).execute().body()
+            if(resp.isSuccessful){
+                return resp.body()
+            } else {
+                //error
+                return null
+            }
+        } catch (e : SocketTimeoutException) {
+            Log.d("TimeOutException",e.toString())
+            return null
+        } catch (e : Exception) {
+            Log.d("Exception", e.toString())
+            return null
+        }
     }
 
 

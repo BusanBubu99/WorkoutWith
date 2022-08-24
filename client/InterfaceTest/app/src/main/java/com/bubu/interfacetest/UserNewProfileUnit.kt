@@ -35,9 +35,20 @@ class UserNewProfileUnit( val token: String, val name: String, val profilePic: f
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitObject = retrofit.create(UserNewProfileInterface::class.java)
-        var res = retrofitObject.get(userNewProfileData).execute().body()
-        //var res = retrofitObject.get(userFeedData).execute()
-        //if(res.headers()) Exception
-        return res
+        try {
+            var res = retrofitObject.get(userNewProfileData).execute().body()
+            if(resp.isSuccessful){
+                return resp.body()
+            } else {
+                //error
+                return null
+            }
+        } catch (e : SocketTimeoutException) {
+            Log.d("TimeOutException",e.toString())
+            return null
+        } catch (e : Exception) {
+            Log.d("Exception", e.toString())
+            return null
+        }
     }
 }

@@ -37,9 +37,20 @@ class UserSearchUnit(val target : String, val count : Int) {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitObject = retrofit.create(UserSearchInterface::class.java)
-        var res = retrofitObject.get(userSearchData).execute().body()
-        //var res = retrofitObject.get(userFeedData).execute()
-        //if(res.headers()) Exception
-        return res
+        try {
+            var resp = retrofitObject.get(userSearchData).execute().body()
+            if(resp.isSuccessful){
+                return resp.body()
+            } else {
+                //error
+                return null
+            }
+        } catch (e : SocketTimeoutException) {
+            Log.d("TimeOutException",e.toString())
+            return null
+        } catch (e : Exception) {
+            Log.d("Exception", e.toString())
+            return null
+        }
     }
 }

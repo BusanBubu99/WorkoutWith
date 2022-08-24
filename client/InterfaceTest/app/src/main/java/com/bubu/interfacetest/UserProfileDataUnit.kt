@@ -36,9 +36,20 @@ class UserProfileDataUnit(val targetId : String) {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitObject = retrofit.create(UserProfileDataInterface::class.java)
-        var res = retrofitObject.get(userProfileData).execute().body()
-        //var res = retrofitObject.get(userFeedData).execute()
-        //if(res.headers()) Exception
-        return res
+        try {
+            var resp = retrofitObject.get(userProfileData).execute().body()
+            if(resp.isSuccessful){
+                return resp.body()
+            } else {
+                //error
+                return null
+            }
+        } catch (e : SocketTimeoutException) {
+            Log.d("TimeOutException",e.toString())
+            return null
+        } catch (e : Exception) {
+            Log.d("Exception", e.toString())
+            return null
+        }
     }
 }

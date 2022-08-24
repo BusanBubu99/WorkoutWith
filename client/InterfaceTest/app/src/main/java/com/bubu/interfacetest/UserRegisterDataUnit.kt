@@ -35,9 +35,20 @@ class UserRegisterDataUnit(val id : String, val password : String, val email : S
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitObject = retrofit.create(UserRegisterInterface::class.java)
-        var res = retrofitObject.get(userRegisterData).execute().body()
-        //var res = retrofitObject.get(userFeedData).execute()
-        //if(res.headers()) Exception
-        return res
+        try {
+            var resp = retrofitObject.get(userRegisterData).execute().body()
+            if(resp.isSuccessful){
+                return resp.body()
+            } else {
+                //error
+                return null
+            }
+        } catch (e : SocketTimeoutException) {
+            Log.d("TimeOutException",e.toString())
+            return null
+        } catch (e : Exception) {
+            Log.d("Exception", e.toString())
+            return null
+        }
     }
 }

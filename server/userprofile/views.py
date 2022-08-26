@@ -9,10 +9,9 @@ from .models import UserProfile
 # Create your views here.
 class ProfileViewSet(viewsets.ViewSet):
     def list(self, request, **kwargs):
-        targetId = request.GET["targetId"]
+        targetId = request.GET.get("targetId", None)
         if targetId is None:
-            return Response("Query \"targetId\" is required to get user profile.", status=400)
-        
+            return Response("Query \'targetId\' is required to get user profile.", status=400)
         try:
             profileObject = UserProfile.objects.get(userid=targetId)
             serializer = ProfileSerializer(profileObject)

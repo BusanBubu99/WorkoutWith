@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col"></div>
+    <div class="col-12 col-xl-4 col-md-4">
+        <div class="card" style="width: 30rem;">
+            <img src=" {{ object.image.url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ object.author }}</h5>
+                <p class="card-text">{{ object.text }}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">수정일 : {{ object.updated }}</li>
+                <li class="list-group-item">생성일 : {{ object.created }}</li>
+
+                {% load disqus_tags %}
+                <div class="card-body">
+                    {% disqus_show_comments %}
+                </div>
+            </ul>
+            <div class="card-body">
+                <a href="{% url 'photo:update' object.id %}" class="card-link">수정하기</a>
+                <a href="{% url 'photo:delete' object.id %}" class="card-link">삭제하기</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col"></div>
+</div>
+{% endblock %}

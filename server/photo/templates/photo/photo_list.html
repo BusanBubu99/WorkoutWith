@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+<div class='container'>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-5">
+            {% for object in object_list %}
+
+            <div class="card">
+                <div class="card-header">
+                    {{object.author}}
+                </div>
+                <img src="{object.image.url}}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text"> {{ object.text }} </p>
+                </div>
+                <ul class = "list-group list-group-flush">
+                    <li class="list-group-item">생성일 : {{object.created}}</li>
+                    <li class="list-group-item">생성일 : {{object.updated}}</li>
+                </ul>
+                <div class="card-body">
+                    <a href="{% url 'photo:detail' object.id %}" class = "card-link">댓글달기</a>
+                    {% if user == object.author %}
+                    <a href="{% url 'photo:update' object.id %}" class = "card-link">수정하기</a>
+                    <a href="{% url 'photo:delete' object.id %}" class = "card-link">삭제하기</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock %}

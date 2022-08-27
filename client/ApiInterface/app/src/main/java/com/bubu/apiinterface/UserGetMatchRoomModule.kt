@@ -24,26 +24,23 @@ data class UserGetMatchRoomVoteInfo(
     @SerializedName("voteId") val voteId: Int
 )
 
-class UserGetMatchRoomModule(override val token: String, override val userData: JsonObject)
-    : UserApiInterface<JsonObject, UserGetMatchRoomResponseData> {
+class UserGetMatchRoomModule(override val userData: JsonObject)
+    : UserApiInterface<UserGetMatchRoomResponseData> {
     interface UserGetMatchRoomInterface {
         //@Headers("Content-Type: application/json")
-        @GET("/v1/matching/")
+        @GET("/v1/matching/info")
         fun get(
-            @Query("matchId") token : String
+            @Query("matchId") matchId : String
             //@Body body: JsonObject
-        ): Call<UserStartMatchResponseData>
+        ): Call<UserGetMatchRoomResponseData>
         //보내는 데이터 형식
     }
 
     override suspend fun getApiData(): UserGetMatchRoomResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val retrofitObject = retrofit.create(UserStartMatchModule.UserStartMatchInterface::class.java)
+        val retrofit = ApiClient.getApiClient()
+        val retrofitObject = retrofit.create(UserGetMatchRoomInterface::class.java)
         try {
-            var resp = retrofitObject.get(userData).execute()
+            var resp = retrofitObject.get(userData["matchId"].toString()).execute()
             if(resp.code() == OK) { //
                 Log.d("response Code", resp.code().toString())
                 Log.d("response", resp.body().toString())

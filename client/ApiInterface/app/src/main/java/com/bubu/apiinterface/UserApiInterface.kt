@@ -2,8 +2,12 @@ package com.bubu.apiinterface
 
 import android.util.Log
 import com.google.gson.JsonObject
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import java.net.SocketTimeoutException
 
 
@@ -11,15 +15,11 @@ import java.net.SocketTimeoutException
  * UserApiInterface
  * Defines the interface for the client's retrofit API.
  *
- * Generic : <D, I, R> :
- * D : UserData
- * I : Retrofit Interface
+ * Generic : <R> :
  * R : ResponseUserData
  *
  * Parameter :
- * tokenParam(String) : LoginToken
- * requestMethod(String) : Retrofit Request Method
- * uri(String) : Retrofit URI
+ * userData : Json UserData
  *
  * Return Value : R
  * R : Retrofit Response Value
@@ -33,11 +33,41 @@ import java.net.SocketTimeoutException
 const val OK : Int = 200
 
 
-interface UserApiInterface<D,R> {
-    val token : String
-    val userData : D
-    val serverAddress : String
-        get() = "http://127.0.0.1:8000"
+interface UserApiInterface<R> {
+    val userData : JsonObject
+    val serverAddress: String
+        get() = "http://192.168.0.10:8000"
     abstract suspend fun getApiData() : R?
 }
+
+object ApiClient {
+    private const val BASE_URL = "http://192.168.0.10:8000"
+    fun getApiClient(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(provideOkHttpClient(AppInterceptor()))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    private fun provideOkHttpClient(interceptor: AppInterceptor): OkHttpClient
+            = OkHttpClient.Builder().run {
+        addInterceptor(interceptor)
+        build()
+    }
+
+    class AppInterceptor : Interceptor {
+        @Throws(IOException::class)
+        override fun intercept(chain: Interceptor.Chain) : Response = with(chain) {
+            val newRequest = request().newBuilder()
+                .addHeader("Auth", userInformation.token)
+                //.addHeader("Content","application/json")
+                //.addHeader("()","()")
+                .build()
+            proceed(newRequest)
+        }
+    }
+}
+
+
 

@@ -4,34 +4,36 @@ import android.util.Log
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
 import java.net.SocketTimeoutException
 
-data class UserIsLikeCommunityResponseData(@SerializedName("likeable") val likeable : Boolean)
+data class UserTestResponseData(
+    @SerializedName("_id") val id : String,
+    @SerializedName("name") val name :String,
+    @SerializedName("tags") val tags : String
+)
 
-class UserIsLikeCommunityModule(override val userData: JsonObject)
-    : UserApiInterface<UserIsLikeCommunityResponseData> {
+class UserTestModule(override val userData: JsonObject) : UserApiInterface<List<UserTestResponseData>> {
 
-    interface UserIsLikeCommunityInterface {
-        //@Headers("Content-Type: application/json")
-        @GET("/v1/community/like/")
+    interface UserTestInterface {
+        @Headers("Content-Type: application/json")
+        @POST("/v1/test/")
         fun get(
-            @Query("postId") postId : String
-            //@Body body: JsonObject
-        ): Call<UserGetCommunityListResponseData>
+            //@Query("postId") postId : String
+            @Body body: JsonObject
+        ): Call<List<UserTestResponseData>>
         //보내는 데이터 형식
     }
-    override suspend fun getApiData(): UserIsLikeCommunityResponseData? {
+    override suspend fun getApiData(): List<UserTestResponseData>? {
         val retrofit = ApiClient.getApiClient()
-        val retrofitObject = retrofit.create(UserIsLikeCommunityInterface::class.java)
+        val retrofitObject = retrofit.create(UserTestInterface::class.java)
         try {
-            var resp = retrofitObject.get(userData["postId"].toString()).execute()
+            var resp = retrofitObject.get(userData).execute()
             if(resp.code() == OK) { //
                 Log.d("response Code", resp.code().toString())
                 Log.d("response", resp.body().toString())
+                return resp.body()
+                //return  List<UserTestResponseData>()
                 //Parsing Here!
                 //...
                 //....

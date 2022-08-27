@@ -33,26 +33,23 @@ data class LikeObj(
 //    ]
 //}
 
-class UserGetCommunityModule(override val token: String, override val userData: JsonObject)
-    : UserApiInterface<JsonObject,UserGetCommunityResponseData> {
+class UserGetCommunityModule(override val userData: JsonObject)
+    : UserApiInterface<UserGetCommunityResponseData> {
     interface UserGetCommunityInterface {
         //@Headers("Content-Type: application/json")
         @GET("/v1/community/")
         fun get(
-            @Query("postId") postId : Int
+            @Query("postId") postId : String
             //@Body body: JsonObject
         ): Call<UserGetCommunityResponseData>
         //보내는 데이터 형식
     }
 
     override suspend fun getApiData(): UserGetCommunityResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserGetCommunityInterface::class.java)
         try {
-            var resp = retrofitObject.get(23/*(postId)*/).execute()
+            var resp = retrofitObject.get(userData["postId"].toString()).execute()
             if(resp.code() == OK) { //
                 Log.d("response Code", resp.code().toString())
                 Log.d("response", resp.body().toString())

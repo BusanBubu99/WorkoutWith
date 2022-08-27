@@ -5,20 +5,17 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 import java.net.SocketTimeoutException
 
 data class UserCreateCommunityResponseData(val code : Int)
 
-class UserCreateCommunityModule(override val token: String, override val userData: JsonObject)
-    : UserApiInterface<JsonObject,UserCreateCommunityResponseData> {
+class UserCreateCommunityModule(override val userData: JsonObject)
+    : UserApiInterface<UserCreateCommunityResponseData> {
 
     interface UserCreateCommunityInterface {
         //@Headers("Content-Type: application/json")
-        @POST("/v1/community/")
+        @PUT("/v1/community/")
         fun get(
             //@Query("targetId") targetId : String
             @Body body: JsonObject
@@ -26,12 +23,8 @@ class UserCreateCommunityModule(override val token: String, override val userDat
         //보내는 데이터 형식
     }
     override suspend fun getApiData(): UserCreateCommunityResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val retrofitObject =
-            retrofit.create(UserCreateCommunityInterface::class.java)
+        val retrofit = ApiClient.getApiClient()
+        val retrofitObject = retrofit.create(UserCreateCommunityInterface::class.java)
         try {
             var resp = retrofitObject.get(userData).execute()
             if (resp.code() == OK) { //

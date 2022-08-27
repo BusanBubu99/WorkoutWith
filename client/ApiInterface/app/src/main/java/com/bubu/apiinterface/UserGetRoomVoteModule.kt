@@ -12,18 +12,18 @@ import java.net.SocketTimeoutException
 
 data class UserGetRoomVoteResponseData(
     @SerializedName("voteTitle") val voteTitle: String,
-    @SerializedName("time") val time: voteTimeObject,
+    @SerializedName("time") val time: VoteTimeObject,
     @SerializedName("content") val content: String,
-    @SerializedName("userList") val userList: List<userListObject>,
+    @SerializedName("userList") val userList: List<UserListObject>,
 )
 
-data class voteTimeObject(
+data class VoteTimeObject(
     @SerializedName("startTime") val startTime: String,
     @SerializedName("endTime") val endTime: String,
     @SerializedName("date") val date: String
 )
 
-data class userListObject(
+data class UserListObject(
     @SerializedName("userId") val userId : String,
     @SerializedName("profilePic") val profilePic : String,//file
     @SerializedName("like") val like : Int
@@ -47,27 +47,24 @@ data class userListObject(
 //    ]
 //}
 // //
-class UserGetRoomVoteModule(override val token: String, override val userData: JsonObject)
-    : UserApiInterface<JsonObject, UserGetRoomVoteResponseData> {
+class UserGetRoomVoteModule(override val userData: JsonObject)
+    : UserApiInterface<UserGetRoomVoteResponseData> {
 
     interface UserGetRoomVoteInterface {
         //@Headers("Content-Type: application/json")
         @GET("/v1/matching/vote/")
         fun get(
-            @Query("voteId") voteId : JsonObject
+            @Query("voteId") voteId : String
             //@Body body: JsonObject
         ): Call<UserGetRoomVoteResponseData>
         //보내는 데이터 형식
     }
 
     override suspend fun getApiData(): UserGetRoomVoteResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserGetRoomVoteInterface::class.java)
         try {
-            var resp = retrofitObject.get(userData).execute()
+            var resp = retrofitObject.get(userData["voteId"].toString()).execute()
             if(resp.code() == OK) { //
                 Log.d("response Code", resp.code().toString())
                 Log.d("response", resp.body().toString())

@@ -11,10 +11,10 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import java.net.SocketTimeoutException
 
+//HTTP Response 만확인하면 될듯
+data class UserRegisterResponse(@SerializedName("code") val code: Int)
 
-data class UserRegisterResponse(@SerializedName("token") val token: UserRegisterResponse?)
-
-class UserRegisterModule(override val userData: JsonObject, override val token: String) : UserApiInterface<JsonObject,UserRegisterResponse>{
+class UserRegisterModule(override val userData: JsonObject) : UserApiInterface<UserRegisterResponse>{
 
     interface UserRegisterInterface {
         @Headers("Content-Type: application/json")

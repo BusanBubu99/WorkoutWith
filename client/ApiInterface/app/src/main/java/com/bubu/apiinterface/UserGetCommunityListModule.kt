@@ -29,27 +29,24 @@ data class PostList(
 //likecount : 좋아요 수
 //]
 
-class UserGetCommunityListModule(override val token: String, override val userData: JsonObject)
-    : UserApiInterface<JsonObject, UserGetCommunityListResponseData> {
+class UserGetCommunityListModule(override val userData: JsonObject)
+    : UserApiInterface<UserGetCommunityListResponseData> {
 
     interface UserGetCommunityListInterface {
         //@Headers("Content-Type: application/json")
         @GET("/v1/community/")
         fun get(
-            @Query("token") token : String
+            //@Query("token") token : String
             //@Body body: JsonObject
         ): Call<UserGetCommunityListResponseData>
         //보내는 데이터 형식
     }
 
     override suspend fun getApiData(): UserGetCommunityListResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserGetCommunityListInterface::class.java)
         try {
-            var resp = retrofitObject.get(token).execute()
+            var resp = retrofitObject.get().execute()
             if(resp.code() == OK) { //
                 Log.d("response Code", resp.code().toString())
                 Log.d("response", resp.body().toString())

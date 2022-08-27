@@ -2,6 +2,7 @@ package com.bubu.apiinterface
 
 import android.util.Log
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,9 +11,10 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import java.net.SocketTimeoutException
 
-data class UserSendEmailResponse(val id: String, val password : String)
+//Http Response 만확인하면 될듯
+data class UserSendEmailResponse(@SerializedName("code") val code : Int)
 
-class UserSendEmailModule(override val userData: JsonObject, override val token: String) : UserApiInterface<JsonObject,UserSendEmailResponse> {
+class UserSendEmailModule(override val userData: JsonObject) : UserApiInterface<UserSendEmailResponse> {
 
     interface UserSendEmailInterface {
         @Headers("Content-Type: application/json")

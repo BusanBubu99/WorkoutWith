@@ -14,12 +14,12 @@ import java.net.SocketTimeoutException
 data class UserCreateRoomVoteResponse(val code : Int)
 
 
-class UserCreateRoomVoteModule(override val token: String, override val userData: JsonObject)
-    : UserApiInterface<JsonObject, UserCreateRoomVoteResponse> {
+class UserCreateRoomVoteModule(override val userData: JsonObject)
+    : UserApiInterface<UserCreateRoomVoteResponse> {
 
     interface UserCreateRoomVoteInterface {
         @Headers("Content-Type: application/json")
-        @POST("/v1/user/")
+        @POST("/v1/matching/vote/")
         fun get(
             //@Query("targetId") targetId : String
             @Body body: JsonObject
@@ -28,10 +28,7 @@ class UserCreateRoomVoteModule(override val token: String, override val userData
     }
 
     override suspend fun getApiData(): UserCreateRoomVoteResponse? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserCreateRoomVoteInterface::class.java)
         try {
             var resp = retrofitObject.get(userData).execute()

@@ -11,8 +11,8 @@ import java.net.SocketTimeoutException
 
 data class UserStartMatchResponseData(@SerializedName("matchId") val matchId : Int)
 
-class UserStartMatchModule(override val token: String, override val userData: JsonObject)
-    : UserApiInterface<JsonObject,UserStartMatchResponseData> {
+class UserStartMatchModule(override val userData: JsonObject)
+    : UserApiInterface<UserStartMatchResponseData> {
 
     interface UserStartMatchInterface {
         @Headers("Content-Type: application/json")
@@ -23,10 +23,7 @@ class UserStartMatchModule(override val token: String, override val userData: Js
         //보내는 데이터 형식
     }
     override suspend fun getApiData(): UserStartMatchResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserStartMatchInterface::class.java)
         try {
             var resp = retrofitObject.get(userData).execute()

@@ -8,11 +8,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
+lateinit var userInformation : UserData
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        
         /**
          * How to Use in Coroutine
          *
@@ -24,19 +26,22 @@ class MainActivity : AppCompatActivity() {
          * [http보류]
          * token : 사용자 인증정보
          * */
+        userInformation = UserData
+        userInformation.token = "test" //init user token
         CoroutineScope(Dispatchers.Default).launch {
-            var loginData = JsonObject()
-            loginData.addProperty("id","dong")
-            loginData.addProperty("pw","password")
-            val testObject = UserLoginModule(loginData,"")
+            var searchUserData = JsonObject()
+            searchUserData.addProperty("target","dong")
+            searchUserData.addProperty("count",3)
+            val testObject = UserTestModule(searchUserData)
             val result = testObject.getApiData()
             if(result == null) {
                 Log.d("Error!", "Please Check the Log")
             } else { //Success!
-                Log.d("result",result.token)
+                Log.d("result",result.toString())
+                Log.d("result test", result[0].id)
+                Log.d("result test", result[0].name)
+                Log.d("result test", result[0].tags)
             }
         }
-
-
     }
 }

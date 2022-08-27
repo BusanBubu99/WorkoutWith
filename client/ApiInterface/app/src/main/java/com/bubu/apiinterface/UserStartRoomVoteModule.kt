@@ -17,8 +17,8 @@ data class UserStartRoomVoteResponseData(
     @SerializedName("error") val error: String
 )
 
-class UserStartRoomVoteModule(override val token: String, override val userData: JsonObject)
-    : UserApiInterface<JsonObject,UserStartRoomVoteResponseData> {
+class UserStartRoomVoteModule(override val userData: JsonObject)
+    : UserApiInterface<UserStartRoomVoteResponseData> {
 
     interface UserStartRoomVoteInterface {
         @Headers("Content-Type: application/json")
@@ -31,10 +31,7 @@ class UserStartRoomVoteModule(override val token: String, override val userData:
     }
 
     override suspend fun getApiData(): UserStartRoomVoteResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserStartRoomVoteInterface::class.java)
         try {
             var resp = retrofitObject.get(userData).execute()

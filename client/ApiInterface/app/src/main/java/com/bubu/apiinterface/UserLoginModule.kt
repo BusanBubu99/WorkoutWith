@@ -2,6 +2,7 @@ package com.bubu.apiinterface
 
 import android.util.Log
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,9 +12,9 @@ import retrofit2.http.POST
 import java.net.SocketTimeoutException
 
 
-data class UserLoginResponseData(val token : String)
+data class UserLoginResponseData(@SerializedName("token") val token : String)
 
-class UserLoginModule(override val userData: JsonObject, override val token: String) : UserApiInterface<JsonObject, UserLoginResponseData> {
+class UserLoginModule(override val userData: JsonObject) : UserApiInterface<UserLoginResponseData> {
 
     interface UserLoginInterface {
         @Headers("Content-Type: application/json")

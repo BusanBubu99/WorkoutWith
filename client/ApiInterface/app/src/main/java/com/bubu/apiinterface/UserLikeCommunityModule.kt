@@ -13,8 +13,8 @@ import java.net.SocketTimeoutException
 
 data class UserLikeCommunityResponseData(val code : Int)
 
-class UserLikeCommunityModule(override val token: String, override val userData: JsonObject)
-    : UserApiInterface<JsonObject,UserLikeCommunityResponseData> {
+class UserLikeCommunityModule(override val userData: JsonObject)
+    : UserApiInterface<UserLikeCommunityResponseData> {
     interface UserLikeCommunityInterface {
         //@Headers("Content-Type: application/json")
         @POST("/v1/community/like/")
@@ -26,10 +26,7 @@ class UserLikeCommunityModule(override val token: String, override val userData:
     }
 
     override suspend fun getApiData(): UserLikeCommunityResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserLikeCommunityInterface::class.java)
         try {
             var resp = retrofitObject.get(userData).execute()

@@ -26,27 +26,24 @@ data class UserGetProfileCommunityPostResponseData(
     @SerializedName("like") val like: Int
 )
 
-class UserGetProfileModule(override val userData: String, override val token: String) : UserApiInterface<String,UserGetProfileResponseData> {
+class UserGetProfileModule(override val userData: JsonObject)
+    : UserApiInterface<UserGetProfileResponseData> {
 
     interface UserGetProfileInterface {
         //@Headers("Content-Type: application/json")
-        @GET("/v1/user/")
+        @GET("/v1/sns/profile")
         fun get(
             @Query("targetId") targetId : String
-            //@Body body: JsonObject
-        ): Call<UserEditProfileResponseData>
+        ): Call<UserGetProfileResponseData>
         //보내는 데이터 형식
     }
 
 
     override suspend fun getApiData(): UserGetProfileResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserGetProfileInterface::class.java)
         try {
-            var resp = retrofitObject.get(userData).execute()
+            var resp = retrofitObject.get(userData["targetId"].toString()).execute()
             if(resp.code() == OK) { //
                 Log.d("response Code", resp.code().toString())
                 Log.d("response", resp.body().toString())

@@ -2,6 +2,7 @@ package com.bubu.apiinterface
 
 import android.util.Log
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,12 +11,12 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import java.net.SocketTimeoutException
 
-data class UserEditProfileResponseData(val code : Int)
+data class UserEditProfileResponseData(@SerializedName("code") val code : Int)
 
-class UserEditProfileModule(override val userData: JsonObject) : UserApiInterface<JsonObject,UserEditProfileResponseData> {
+
+class UserEditProfileModule(override val userData: JsonObject) : UserApiInterface<UserEditProfileResponseData> {
 
     interface UserEditProfileInterface {
-        @Headers("Content-Type: application/json")
         @POST("/v1/user/")
         fun get(
             @Body body: JsonObject
@@ -23,10 +24,7 @@ class UserEditProfileModule(override val userData: JsonObject) : UserApiInterfac
         //보내는 데이터 형식
     }
     override suspend fun getApiData(): UserEditProfileResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserEditProfileInterface::class.java)
         try {
             var resp = retrofitObject.get(userData).execute()

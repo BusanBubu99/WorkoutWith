@@ -2,6 +2,7 @@ package com.bubu.apiinterface
 
 import android.util.Log
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,9 +11,9 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import java.net.SocketTimeoutException
 
-data class UserIdEmailAuthResponse(val code : Int)
+data class UserIdEmailAuthResponse(@SerializedName("code") val code : Int)
 
-class UserIdEmailAuthModule(override val userData: JsonObject, override val token: String) : UserApiInterface<JsonObject,UserIdEmailAuthResponse> {
+class UserIdEmailAuthModule(override val userData: JsonObject) : UserApiInterface<UserIdEmailAuthResponse> {
 
     interface UserIdEmailAuthInterface {
         @Headers("Content-Type: application/json")

@@ -7,6 +7,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Query
 import java.net.SocketTimeoutException
 
@@ -17,25 +18,22 @@ data class UserGetMatchLists(
     @SerializedName("title") val title : String
 )
 
-class UserGetMatchListModule(override val userData: String, override val token: String) : UserApiInterface<String,UserGetMatchListResponseData> {
+class UserGetMatchListModule(override val userData: JsonObject)
+    : UserApiInterface<UserGetMatchListResponseData> {
 
     interface UserGetMatchListInterface {
-        //@Headers("Content-Type: application/json")
         @GET("/v1/matching/")
         fun get(
-            @Query("token") token : String
+            //@Query("token") token : String
             //@Body body: JsonObject
         ): Call<UserGetMatchListResponseData>
         //보내는 데이터 형식
     }
     override suspend fun getApiData(): UserGetMatchListResponseData? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(super.serverAddress)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserGetMatchListInterface::class.java)
         try {
-            var resp = retrofitObject.get(token).execute()
+            var resp = retrofitObject.get().execute()
             if(resp.code() == OK) { //
                 Log.d("response Code", resp.code().toString())
                 Log.d("response", resp.body().toString())

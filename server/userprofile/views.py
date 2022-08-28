@@ -15,7 +15,19 @@ class ProfileViewSet(viewsets.ViewSet):
         try:
             profileObject = UserProfile.objects.get(userid=targetId)
             serializer = ProfileSerializer(profileObject)
-            if serializer.is_valid():
-                return Response(serializer.data, status=200)
+            return Response(serializer.data, status=200)
         except ObjectDoesNotExist:
-            return Response(f'Can\'t find profile information with user id {targetId}.')
+            return Response(f'Can\'t find profile information with user id {targetId}.', status=400)
+
+    def create(self, request, **kwargs):
+        # TODO: need to pass userid from request by authorizations
+
+        requestData = {"userid": request.POST.get("userid"),
+                       "name": request.POST.get("name"),
+                       "profilePic": request.FILES.get("profilePic"),
+                       "tags": request.POST.get("tags")}
+        serializer = ProfileSerializer(data=requestData)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=400)

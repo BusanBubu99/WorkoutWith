@@ -5,6 +5,7 @@ from .views import ProfileViewSet
 
 profileView = ProfileViewSet.as_view({
     "get": "list",
+    "post": "create",
 })
 
 urlpatterns = [

@@ -12,11 +12,20 @@ import json
 class ProfileViewSet(viewsets.ViewSet):
     def list(self, request, **kwargs):
         targetId = request.GET.get("targetId", None)
+        isExistCheck = True if request.GET.get("check", False) == "True" else False
         nullObject = {"userId": None,
                       "name": None,
                       "profilePic": None,
                       "tags": None,
                       "userLocation": None}
+
+        if isExistCheck:
+            try:
+                profileObject = UserProfile.objects.get(userid=request.user.username)
+                return Response({"snsResult": 99}, status=200)
+            except ObjectDoesNotExist:
+                return Response({"snsResult": 0}, status=400)
+
         if targetId is None:
             return Response({"error": "Query \'targetId\' is required " +
                             "to get user profile."},

@@ -10,9 +10,12 @@ import json
 
 
 class ProfileViewSet(viewsets.ViewSet):
+    permission_classes_by_action = {'create': [IsAuthenticated]}
+
     def list(self, request, **kwargs):
         targetId = request.GET.get("targetId", None)
-        isExistCheck = True if request.GET.get("check", False) == "True" else False
+        isExistCheck = True if request.GET.get("check", None) == "True" \
+            else False
         nullObject = {"userId": None,
                       "name": None,
                       "profilePic": None,
@@ -21,7 +24,8 @@ class ProfileViewSet(viewsets.ViewSet):
 
         if isExistCheck:
             try:
-                profileObject = UserProfile.objects.get(userid=request.user.username)
+                profileObject = UserProfile.objects.get(
+                    userid=request.user.username)
                 return Response({"snsResult": 99}, status=200)
             except ObjectDoesNotExist:
                 return Response({"snsResult": 0}, status=400)
@@ -38,7 +42,6 @@ class ProfileViewSet(viewsets.ViewSet):
             return Response(nullObject, status=400)
 
     def create(self, request, **kwargs):
-        permission_classes = [IsAuthenticated]
         location = json.loads(request.POST.get("userLocation", "{}"))
         requestData = {"userid": request.user.username,
                        "name": request.POST.get("name"),
@@ -52,3 +55,10 @@ class ProfileViewSet(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission
+                    in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]

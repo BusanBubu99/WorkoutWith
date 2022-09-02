@@ -18,8 +18,8 @@ class ProfileViewSet(viewsets.ViewSet):
                       "tags": None,
                       "userLocation": None}
         if targetId is None:
-            return Response("Query \'targetId\' is required" +
-                            "to get user profile.",
+            return Response({"error": "Query \'targetId\' is required " +
+                            "to get user profile."},
                             status=400)
         try:
             profileObject = UserProfile.objects.get(userid=targetId)

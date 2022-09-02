@@ -12,6 +12,11 @@ import json
 class ProfileViewSet(viewsets.ViewSet):
     def list(self, request, **kwargs):
         targetId = request.GET.get("targetId", None)
+        nullObject = {"userId": None,
+                      "name": None,
+                      "profilePic": None,
+                      "tags": None,
+                      "userLocation": None}
         if targetId is None:
             return Response("Query \'targetId\' is required" +
                             "to get user profile.",
@@ -21,9 +26,7 @@ class ProfileViewSet(viewsets.ViewSet):
             serializer = ProfileSerializer(profileObject)
             return Response(serializer.data, status=200)
         except ObjectDoesNotExist:
-            return Response(f"Can\'t find profile information" +
-                            "with user id {targetId}.",
-                            status=400)
+            return Response(nullObject, status=400)
 
     def create(self, request, **kwargs):
         permission_classes = [IsAuthenticated]

@@ -1,5 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .serializers import ProfileSerializer
@@ -12,23 +13,22 @@ class ProfileViewSet(viewsets.ViewSet):
     def list(self, request, **kwargs):
         targetId = request.GET.get("targetId", None)
         if targetId is None:
-            return Response("Query \'targetId\' is required \
-                            to get user profile.",
+            return Response("Query \'targetId\' is required" +
+                            "to get user profile.",
                             status=400)
         try:
             profileObject = UserProfile.objects.get(userid=targetId)
             serializer = ProfileSerializer(profileObject)
             return Response(serializer.data, status=200)
         except ObjectDoesNotExist:
-            return Response(f'Can\'t find profile information \
-                            with user id {targetId}.',
+            return Response(f"Can\'t find profile information" +
+                            "with user id {targetId}.",
                             status=400)
 
     def create(self, request, **kwargs):
-        # TODO: need to pass userid from request by authorizations
-
+        permission_classes = [IsAuthenticated]
         location = json.loads(request.POST.get("userLocation", "{}"))
-        requestData = {"userid": request.POST.get("userid"),
+        requestData = {"userid": request.user.username,
                        "name": request.POST.get("name"),
                        "profilePic": request.FILES.get("profilePic"),
                        "tags": request.POST.get("tags"),

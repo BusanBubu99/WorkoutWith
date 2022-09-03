@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                 searchUserData.addProperty("password2",binding.password.text.toString())
                 val testObject = UserRegisterModule(searchUserData)
                 when (val result = testObject.getApiData()) {
-                    is JsonObject -> { // Successful
+                    is UserRegisterResponse -> { // Successful
                         Log.d("result!", result.toString())
                         //CoroutineScope(Dispatchers.Main).launch {
                         //  Staring the UI

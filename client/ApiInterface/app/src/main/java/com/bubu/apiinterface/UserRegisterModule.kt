@@ -1,9 +1,9 @@
 package com.bubu.apiinterface
 
 import android.util.Log
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,14 +18,6 @@ import java.net.SocketTimeoutException
 data class UserRegisterResponse(
     @SerializedName("access_token") val accessToken: String,
     @SerializedName("refresh_token") val refreshToken: String,
-    @SerializedName("user") val user: UserRegisterUserData
-)
-
-data class UserRegisterUserData(
-    @SerializedName("pk") val pk: Int,
-    @SerializedName("email") val email: String,
-    @SerializedName("first_name") val firstName: String,
-    @SerializedName("last_name") val lastName: String
 )
 
 /**
@@ -53,9 +45,6 @@ class UserRegisterModule(override val userData: JsonObject) :
         ): Call<Any>
         //보내는 데이터 형식
     }
-    fun test(res : Any) {
-
-    }
 
     override suspend fun getApiData(): Any? {
         val retrofit = Retrofit.Builder()
@@ -65,30 +54,21 @@ class UserRegisterModule(override val userData: JsonObject) :
         val retrofitObject = retrofit.create(UserRegisterInterface::class.java)
         try {
             var resp = retrofitObject.get(userData).execute()
-            var errorMessages = mutableListOf<String>()
             if (resp.code() in 100..199) {
-                test(resp)
-                Log.d("response Code", resp.code().toString())
-                Log.d("response Type", resp.errorBody()!!.javaClass.name)
-                Log.d("response Message", resp.errorBody()!!.string())
-                errorMessages.add(resp.errorBody()!!.string())
-                return UserError(errorMessages)
+                return super.handle100(resp)
             } else if (resp.code() in 200..299) { //Successful!!
-                Log.d("response Code", resp.code().toString())
-                Log.d("response", resp.body().toString())
-                //Log.d("response Message", resp.errorBody()!!.string())
-                return resp.body()
+                var responseBody = super.handle200(resp)
+                Log.d("response Type",responseBody?.javaClass!!.name)
+                val jsonObject: JsonObject = Gson().toJsonTree(responseBody).asJsonObject
+                val accessToken = jsonObject.get("access_token").toString()
+                val refreshToken = jsonObject.get("refresh_token").toString()
+                return UserRegisterResponse(accessToken,refreshToken)
             } else if (resp.code() in 300..399) {
-                Log.d("response Code", resp.code().toString())
-                Log.d("response Type", resp.errorBody()!!.javaClass.name)
-                Log.d("response Message", resp.errorBody()!!.string())
-                errorMessages.add(resp.errorBody()!!.string())
-                return UserError(errorMessages)
+                return super.handle300(resp)
             } else if (resp.code() in 400..499) {
-                Log.d("response Code", resp.code().toString())
-                Log.d("response Type", resp.errorBody()!!.javaClass.name)
-                val err = resp.errorBody()!!.string()
-                Log.d("response Message", err)
+                val errorResponse =  super.handle400(resp)
+                val errorMessages = mutableListOf<String>()
+                val err = errorResponse.message[0]
                 if(err.contains("password")) {
                     errorMessages.add("비밀번호를 다시 입력하세요!")
                 }
@@ -100,11 +80,7 @@ class UserRegisterModule(override val userData: JsonObject) :
                 }
                 return UserError(errorMessages)
             } else {
-                Log.d("response Code", resp.code().toString())
-                Log.d("response Type", resp.errorBody()!!.javaClass.name)
-                Log.d("response Message", resp.errorBody()!!.string())
-                errorMessages.add(resp.errorBody()!!.string())
-                return UserError(errorMessages)
+                return super.handle500(resp)
             }
         } catch (e: SocketTimeoutException) {
             Log.d("TimeOutException Maybe Server Closed", e.toString())

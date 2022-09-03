@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
@@ -36,12 +37,54 @@ const val OK : Int = 200
 interface UserApiInterface {
     val userData : JsonObject
     val serverAddress: String
-        get() = "http://192.168.0.10:8000"
+        get() = "http://14.44.115.2:8000"
     suspend fun getApiData() : Any?
+    suspend fun handle100(resp : retrofit2.Response<Any>) : UserError {
+        var errorMessages = mutableListOf<String>()
+        val err = resp.errorBody()!!.string()
+        Log.d("response Code", resp.code().toString())
+        Log.d("response Type", resp.errorBody()!!.javaClass.name)
+        Log.d("response Message", err)
+        errorMessages.add(err)
+        return UserError(errorMessages)
+    }
+    suspend fun handle200(resp : retrofit2.Response<Any>) : Any? {
+        Log.d("response Code", resp.code().toString())
+        Log.d("response", resp.body().toString())
+        return resp.body()
+    }
+    suspend fun handle300(resp : retrofit2.Response<Any>) : UserError {
+        var errorMessages = mutableListOf<String>()
+        val err = resp.errorBody()!!.string()
+        Log.d("response Code", resp.code().toString())
+        Log.d("response Type", resp.errorBody()!!.javaClass.name)
+        Log.d("response Message", err)
+        errorMessages.add(err)
+        return UserError(errorMessages)
+    }
+    suspend fun handle400(resp : retrofit2.Response<Any>) : UserError {
+        var errorMessages = mutableListOf<String>()
+        val err = resp.errorBody()!!.string()
+        Log.d("response Code", resp.code().toString())
+        Log.d("response Type", resp.errorBody()!!.javaClass.name)
+        Log.d("response Message", err)
+        errorMessages.add(err)
+        return UserError(errorMessages)
+    }
+    suspend fun handle500(resp : retrofit2.Response<Any>) : UserError {
+        var errorMessages = mutableListOf<String>()
+        val err = resp.errorBody()!!.string()
+        Log.d("response Code", resp.code().toString())
+        Log.d("response Type", resp.errorBody()!!.javaClass.name)
+        Log.d("response Message", err)
+        errorMessages.add(err)
+        return UserError(errorMessages)
+    }
 }
-
+/*
+* */
 object ApiClient {
-    private const val BASE_URL = "http://192.168.0.10:8000"
+    private const val BASE_URL = "http://14.44.115.2:8000"
     fun getApiClient(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)

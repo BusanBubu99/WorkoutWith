@@ -1,5 +1,6 @@
 package com.bubu.apiinterface
 
 object UserData {
-    var token : String = ""
+    var accessToken : String = ""
+    var refreshToken : String = ""
 }

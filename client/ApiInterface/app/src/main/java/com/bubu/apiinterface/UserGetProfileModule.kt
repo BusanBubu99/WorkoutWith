@@ -27,7 +27,7 @@ data class UserGetProfileCommunityPostResponseData(
 )
 
 class UserGetProfileModule(override val userData: JsonObject)
-    : UserApiInterface<UserGetProfileResponseData> {
+    : UserApiInterface {
 
     interface UserGetProfileInterface {
         //@Headers("Content-Type: application/json")

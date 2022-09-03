@@ -34,7 +34,7 @@ data class LikeObj(
 //}
 
 class UserGetCommunityModule(override val userData: JsonObject)
-    : UserApiInterface<UserGetCommunityResponseData> {
+    : UserApiInterface {
     interface UserGetCommunityInterface {
         //@Headers("Content-Type: application/json")
         @GET("/v1/community/")

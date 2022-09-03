@@ -11,7 +11,7 @@ import java.net.SocketTimeoutException
 data class UserCreateCommunityResponseData(val code : Int)
 
 class UserCreateCommunityModule(override val userData: JsonObject)
-    : UserApiInterface<UserCreateCommunityResponseData> {
+    : UserApiInterface {
 
     interface UserCreateCommunityInterface {
         //@Headers("Content-Type: application/json")

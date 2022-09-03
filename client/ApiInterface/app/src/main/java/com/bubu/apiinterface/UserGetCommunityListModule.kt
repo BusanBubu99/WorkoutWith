@@ -30,7 +30,7 @@ data class PostList(
 //]
 
 class UserGetCommunityListModule(override val userData: JsonObject)
-    : UserApiInterface<UserGetCommunityListResponseData> {
+    : UserApiInterface {
 
     interface UserGetCommunityListInterface {
         //@Headers("Content-Type: application/json")

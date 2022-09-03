@@ -1,14 +1,16 @@
 package com.bubu.apiinterface
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
+import androidx.appcompat.app.AppCompatActivity
 import com.bubu.apiinterface.databinding.ActivityMainBinding
 import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.io.EOFException
+import java.net.SocketTimeoutException
 
 
 lateinit var userInformation : UserData
@@ -33,22 +35,35 @@ class MainActivity : AppCompatActivity() {
              * */
 
             userInformation = UserData
-            userInformation.token = "test" //init user token
+            //userInformation.token = "test" //init user token
             CoroutineScope(Dispatchers.Default).launch {
                 var searchUserData = JsonObject()
-                searchUserData.addProperty("target","dong")
-                searchUserData.addProperty("count",3)
-                val testObject = UserTestModule(searchUserData)
-                val result = testObject.getApiData()
-                if(result == null) {
-                    Log.d("Error!", "Please Check the Log")
-                } else { //Success!
-                    Log.d("result",result.toString())
-                    Log.d("result test", result[0].id)
-                    Log.d("result test", result[0].name)
-                    Log.d("result test", result[0].tags)
-                    CoroutineScope(Dispatchers.Main).launch {
-                        binding.textView.text = result[0].name
+                searchUserData.addProperty("username", binding.username.text.toString())
+                searchUserData.addProperty("email",binding.email.text.toString())
+                searchUserData.addProperty("password1",binding.password.text.toString())
+                searchUserData.addProperty("password2",binding.password.text.toString())
+                val testObject = UserRegisterModule(searchUserData)
+                when (val result = testObject.getApiData()) {
+                    is JsonObject -> { // Successful
+                        Log.d("result!", result.toString())
+                        //CoroutineScope(Dispatchers.Main).launch {
+                        //  Staring the UI
+                        //}
+                    }
+                    is UserError -> { //if Error
+                        Log.d("result", "I AM HERE!")
+                        result.message.forEach { //Print Error Message
+                            Log.d("result Error",it)
+                        }
+                    }
+                    is SocketTimeoutException -> {
+                        Log.d("result Exception",result.toString())
+                    }
+                    is EOFException -> {
+                        Log.d("result Exception",result.toString())
+                    }
+                    is Exception -> {
+                        Log.d("result Exception",result.toString())
                     }
                 }
             }

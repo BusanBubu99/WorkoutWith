@@ -12,7 +12,7 @@ import java.net.SocketTimeoutException
 data class UserStartMatchResponseData(@SerializedName("matchId") val matchId : Int)
 
 class UserStartMatchModule(override val userData: JsonObject)
-    : UserApiInterface<UserStartMatchResponseData> {
+    : UserApiInterface {
 
     interface UserStartMatchInterface {
         @Headers("Content-Type: application/json")

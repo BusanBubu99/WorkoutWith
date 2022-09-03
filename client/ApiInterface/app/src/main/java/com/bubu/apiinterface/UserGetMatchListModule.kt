@@ -19,7 +19,7 @@ data class UserGetMatchLists(
 )
 
 class UserGetMatchListModule(override val userData: JsonObject)
-    : UserApiInterface<UserGetMatchListResponseData> {
+    : UserApiInterface {
 
     interface UserGetMatchListInterface {
         @GET("/v1/matching/")

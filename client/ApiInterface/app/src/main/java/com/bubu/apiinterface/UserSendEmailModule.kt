@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException
 //Http Response 만확인하면 될듯
 data class UserSendEmailResponse(@SerializedName("code") val code : Int)
 
-class UserSendEmailModule(override val userData: JsonObject) : UserApiInterface<UserSendEmailResponse> {
+class UserSendEmailModule(override val userData: JsonObject) : UserApiInterface {
 
     interface UserSendEmailInterface {
         @Headers("Content-Type: application/json")

@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException
 data class UserEditProfileResponseData(@SerializedName("code") val code : Int)
 
 
-class UserEditProfileModule(override val userData: JsonObject) : UserApiInterface<UserEditProfileResponseData> {
+class UserEditProfileModule(override val userData: JsonObject) : UserApiInterface {
 
     interface UserEditProfileInterface {
         @POST("/v1/user/")

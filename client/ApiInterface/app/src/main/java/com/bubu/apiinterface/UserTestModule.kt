@@ -13,7 +13,7 @@ data class UserTestResponseData(
     @SerializedName("tags") val tags : String
 )
 
-class UserTestModule(override val userData: JsonObject) : UserApiInterface<List<UserTestResponseData>> {
+class UserTestModule(override val userData: JsonObject) : UserApiInterface {
 
     interface UserTestInterface {
         @Headers("Content-Type: application/json")
@@ -21,15 +21,18 @@ class UserTestModule(override val userData: JsonObject) : UserApiInterface<List<
         fun get(
             //@Query("postId") postId : String
             @Body body: JsonObject
-        ): Call<List<UserTestResponseData>>
+        ): Call<Any>
         //보내는 데이터 형식
     }
-    override suspend fun getApiData(): List<UserTestResponseData>? {
+    override suspend fun getApiData(): Any? {
         val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserTestInterface::class.java)
         try {
             var resp = retrofitObject.get(userData).execute()
-            if(resp.code() == OK) { //
+            if(resp.body() == null) {
+                return resp.errorBody()?.string()
+            }
+            if(resp.code() in 200..299) { //
                 Log.d("response Code", resp.code().toString())
                 Log.d("response", resp.body().toString())
                 return resp.body()
@@ -38,18 +41,18 @@ class UserTestModule(override val userData: JsonObject) : UserApiInterface<List<
                 //...
                 //....
                 return null
-            } else if (resp.code() == 300) {
+            } else if (resp.code() in 300 .. 399) {
                 Log.d("response Code", resp.code().toString())
-                return null
+                return resp.body()
             } else {
-                return null
+                return resp.body()
             }
         } catch (e : SocketTimeoutException) {
-            Log.d("TimeOutException",e.toString())
-            return null
+            Log.d("TimeOutException@",e.toString())
+            return e
         } catch (e : Exception) {
-            Log.d("Exception", e.toString())
-            return null
+            Log.d("Exception@", e.toString())
+            return e
         }
     }
 }

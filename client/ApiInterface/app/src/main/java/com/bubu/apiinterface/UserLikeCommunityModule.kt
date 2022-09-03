@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException
 data class UserLikeCommunityResponseData(val code : Int)
 
 class UserLikeCommunityModule(override val userData: JsonObject)
-    : UserApiInterface<UserLikeCommunityResponseData> {
+    : UserApiInterface {
     interface UserLikeCommunityInterface {
         //@Headers("Content-Type: application/json")
         @POST("/v1/community/like/")

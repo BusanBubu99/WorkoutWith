@@ -33,11 +33,11 @@ import java.net.SocketTimeoutException
 const val OK : Int = 200
 
 
-interface UserApiInterface<R> {
+interface UserApiInterface {
     val userData : JsonObject
     val serverAddress: String
         get() = "http://192.168.0.10:8000"
-    abstract suspend fun getApiData() : R?
+    suspend fun getApiData() : Any?
 }
 
 object ApiClient {
@@ -60,7 +60,7 @@ object ApiClient {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain) : Response = with(chain) {
             val newRequest = request().newBuilder()
-                .addHeader("Auth", userInformation.token)
+                //.addHeader("Auth", userInformation.token)
                 //.addHeader("Content","application/json")
                 //.addHeader("()","()")
                 .build()

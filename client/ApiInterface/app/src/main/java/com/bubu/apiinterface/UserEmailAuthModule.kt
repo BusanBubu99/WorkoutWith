@@ -20,7 +20,7 @@ import java.net.SocketTimeoutException
 data class UserEmailAuthResponseData(@SerializedName("id") val id : String)
 
 class UserEmailAuthModule(override val userData: JsonObject)
-    : UserApiInterface<UserEmailAuthResponseData> {
+    : UserApiInterface {
 
     interface UserEmailAuthInterface {
         @Headers("Content-Type: application/json")

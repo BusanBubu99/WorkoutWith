@@ -25,7 +25,7 @@ data class UserGetMatchRoomVoteInfo(
 )
 
 class UserGetMatchRoomModule(override val userData: JsonObject)
-    : UserApiInterface<UserGetMatchRoomResponseData> {
+    : UserApiInterface {
     interface UserGetMatchRoomInterface {
         //@Headers("Content-Type: application/json")
         @GET("/v1/matching/info")

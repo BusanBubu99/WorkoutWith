@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException
 data class UserChangePasswordResponseData(@SerializedName("code") val code : Int)
 
 class UserChangePasswordModule(override val userData: JsonObject)
-    : UserApiInterface<UserChangePasswordResponseData> {
+    : UserApiInterface {
 
     interface UserChangePasswordInterface {
         @Headers("Content-Type: application/json")

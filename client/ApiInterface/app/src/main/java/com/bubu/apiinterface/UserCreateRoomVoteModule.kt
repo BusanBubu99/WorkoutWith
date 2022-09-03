@@ -15,7 +15,7 @@ data class UserCreateRoomVoteResponse(val code : Int)
 
 
 class UserCreateRoomVoteModule(override val userData: JsonObject)
-    : UserApiInterface<UserCreateRoomVoteResponse> {
+    : UserApiInterface {
 
     interface UserCreateRoomVoteInterface {
         @Headers("Content-Type: application/json")

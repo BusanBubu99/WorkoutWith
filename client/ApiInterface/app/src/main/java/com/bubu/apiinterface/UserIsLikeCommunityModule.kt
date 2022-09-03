@@ -13,7 +13,7 @@ import java.net.SocketTimeoutException
 data class UserIsLikeCommunityResponseData(@SerializedName("likeable") val likeable : Boolean)
 
 class UserIsLikeCommunityModule(override val userData: JsonObject)
-    : UserApiInterface<UserIsLikeCommunityResponseData> {
+    : UserApiInterface {
 
     interface UserIsLikeCommunityInterface {
         //@Headers("Content-Type: application/json")

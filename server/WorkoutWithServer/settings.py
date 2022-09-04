@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'accounts',
     'board',
     'userprofile',
+    'matching',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'

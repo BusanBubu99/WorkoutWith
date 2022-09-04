@@ -22,10 +22,14 @@ class MatchingRoomViewSet(viewsets.ViewSet):
     def create(self, request, **kwargs):
         requestData = request.data
         location = requestData["userLocation"]
-        userId = requestData["userId"]
-        userInfo = UserProfile.objects.get(userid=userId)
+        userId = request.user.username
+        try:
+            userInfo = UserProfile.objects.get(userid=userId)
+        except ObjectDoesNotExist:
+            return Response({"error": "can't find user information from given credentials."}, status=400)
         roomInfo = location["city"] + location["county"] + location["district"] + requestData["game"]
         roomInfo = hashlib.sha1(roomInfo.encode('utf-8')).hexdigest()
+
         try:
             matchInExist = MatchingRoom.objects.get(matchId=roomInfo)
             matchInExist.userInfo.add(userInfo)

@@ -38,7 +38,7 @@ class MatchingRoomViewSet(viewsets.ViewSet):
             matchInExist.userInfo.add(userInfo)
             test = MatchingRoom.objects.filter(matchId=roomInfo)
             serializer = MatchingSerializer(test, many=True)
-            return Response(serializer.data, status=200)
+            return Response({"matchId": roomInfo}, status=200)
         except ObjectDoesNotExist:
             requestData = {"userInfo": userInfo.__dict__,
                         "userLocation": location,
@@ -48,7 +48,7 @@ class MatchingRoomViewSet(viewsets.ViewSet):
             if serializer.is_valid():
                 matchroom = serializer.save()
                 matchroom.userInfo.add(userInfo)
-                return Response(serializer.data, status=200)
+                return Response({"matchId": roomInfo}, status=200)
             return Response(serializer.errors, status=400)
 
     def get_permissions(self):

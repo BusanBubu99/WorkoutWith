@@ -41,11 +41,9 @@ class MatchingRoomViewSet(viewsets.ViewSet):
                         "userLocation": location,
                         "game": requestData["game"],
                         "matchId": roomInfo}
-
             serializer = MatchingSerializer(data=requestData)
             if serializer.is_valid():
-                serializer.save()
-                matchInExist = MatchingRoom.objects.get(matchId=roomInfo)
-                matchInExist.userInfo.add(userInfo)
+                matchroom = serializer.save()
+                matchroom.userInfo.add(userInfo)
                 return Response(serializer.data, status=200)
             return Response(serializer.errors, status=400)

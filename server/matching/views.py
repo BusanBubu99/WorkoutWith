@@ -2,6 +2,7 @@ from unittest import TestCase
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .serializers import MatchingSerializer
@@ -14,6 +15,8 @@ import hashlib
 
 # Create your views here.
 class MatchingRoomViewSet(viewsets.ViewSet):
+    permission_classes_by_action = {'create': [IsAuthenticated]}
+
     def list(self, request, **kwargs):
         queryset = MatchingRoom.objects.all()
         serializer = MatchingSerializer(queryset, many=True)
@@ -47,3 +50,10 @@ class MatchingRoomViewSet(viewsets.ViewSet):
                 matchroom.userInfo.add(userInfo)
                 return Response(serializer.data, status=200)
             return Response(serializer.errors, status=400)
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission
+                    in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]

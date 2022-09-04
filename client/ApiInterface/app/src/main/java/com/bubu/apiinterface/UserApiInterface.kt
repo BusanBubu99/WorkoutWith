@@ -30,12 +30,9 @@ import java.net.SocketTimeoutException
  * else Exception
  *
 * */
-//server http response code
-const val OK : Int = 200
-
-
+const val OK = 200
 interface UserApiInterface {
-    val userData : JsonObject
+    val userData : Any?
     val serverAddress: String
         get() = "http://14.44.115.2:8000"
     suspend fun getApiData() : Any?
@@ -50,7 +47,8 @@ interface UserApiInterface {
     }
     suspend fun handle200(resp : retrofit2.Response<Any>) : Any? {
         Log.d("response Code", resp.code().toString())
-        Log.d("response", resp.body().toString())
+        Log.d("response Type",resp?.javaClass!!.name)
+        Log.d("response Message", resp.body().toString())
         return resp.body()
     }
     suspend fun handle300(resp : retrofit2.Response<Any>) : UserError {

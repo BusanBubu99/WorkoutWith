@@ -15,10 +15,7 @@ import java.net.SocketTimeoutException
 
 
 //HTTP Response 만확인하면 될듯
-data class UserRegisterResponse(
-    @SerializedName("access_token") val accessToken: String,
-    @SerializedName("refresh_token") val refreshToken: String,
-)
+
 
 /**
  * {
@@ -45,7 +42,12 @@ class UserRegisterModule(override val userData: JsonObject) :
         ): Call<Any>
         //보내는 데이터 형식
     }
-
+/**
+ * "username"
+ * "email"
+ * "password1"
+ * "password2"
+ * */
     override suspend fun getApiData(): Any? {
         val retrofit = Retrofit.Builder()
             .baseUrl(super.serverAddress)
@@ -58,11 +60,10 @@ class UserRegisterModule(override val userData: JsonObject) :
                 return super.handle100(resp)
             } else if (resp.code() in 200..299) { //Successful!!
                 var responseBody = super.handle200(resp)
-                Log.d("response Type",responseBody?.javaClass!!.name)
                 val jsonObject: JsonObject = Gson().toJsonTree(responseBody).asJsonObject
                 val accessToken = jsonObject.get("access_token").toString()
                 val refreshToken = jsonObject.get("refresh_token").toString()
-                return UserRegisterResponse(accessToken,refreshToken)
+                return UserLoginResponseData(accessToken,refreshToken)
             } else if (resp.code() in 300..399) {
                 return super.handle300(resp)
             } else if (resp.code() in 400..499) {

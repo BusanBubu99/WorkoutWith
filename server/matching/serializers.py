@@ -7,11 +7,14 @@ class UserinMatchingSerializer(serializers.Serializer):
     profilePic = serializers.ImageField(use_url=True)
     name = serializers.CharField(max_length=100)
 
+class SimplifiedProfileSerializer(ProfileSerializer):
+    class Meta(ProfileSerializer.Meta):
+        fields = ('userid', 'profilePic')
+
 class MatchingSerializer(serializers.ModelSerializer):
-    userInfo = ProfileSerializer(many=True, read_only=True)
+    userInfo = SimplifiedProfileSerializer(many=True, read_only=True)
     userLocation = LocationSerializer()
 
     class Meta:
         model = MatchingRoom
         fields = ("userInfo", "userLocation", "game", "matchId")
-        # fields = ("userLocation", "game", "matchId")

@@ -15,10 +15,13 @@ import hashlib
 
 # Create your views here.
 class MatchingRoomViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [IsAuthenticated]}
+    permission_classes_by_action = {'list': [IsAuthenticated],
+                                    'create': [IsAuthenticated]}
 
     def list(self, request, **kwargs):
-        queryset = MatchingRoom.objects.all()
+        userId = request.user.username
+        user = UserProfile.objects.get(userid=userId)
+        queryset = MatchingRoom.objects.filter(userInfo=user)
         serializer = MatchingSerializer(queryset, many=True)
         return Response(serializer.data, status=200)
 

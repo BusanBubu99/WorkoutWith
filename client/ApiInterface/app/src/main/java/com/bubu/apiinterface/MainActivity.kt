@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         userInformation = UserData
-
         /**
          * get Address Module Usage
          * */
@@ -83,9 +82,6 @@ class MainActivity : AppCompatActivity() {
                 when (auth.getApiData()) {
                     true -> {
                         //Do Any Operation or Jobs..
-                        CoroutineScope(Dispatchers.Main).launch {
-                            binding.accessToken.text = userInformation.accessToken
-                        }
                     }
                     is UserError -> {
                         //Error Handling
@@ -114,12 +110,8 @@ class MainActivity : AppCompatActivity() {
              *
              * UserLogin Usage
              * */
-            CoroutineScope(Dispatchers.Default).launch {
-                var searchUserData = JsonObject()
-                searchUserData.addProperty("username", binding.username.text.toString())
-                searchUserData.addProperty("email", binding.email.text.toString())
-                searchUserData.addProperty("password", binding.password.text.toString())
-                val testObject = UserLoginModule(searchUserData)
+            /*CoroutineScope(Dispatchers.Default).launch {
+                val testObject = UserLoginModule()
                 when (val result = testObject.getApiData()) {
                     is UserLoginResponseData -> { // Successful
                         Log.d("result!", result.toString())
@@ -145,7 +137,7 @@ class MainActivity : AppCompatActivity() {
                         Log.d("result Exception", result.toString())
                     }
                 }
-            }
+            }*/
 
         }
 

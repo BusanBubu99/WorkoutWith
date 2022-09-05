@@ -1,6 +1,7 @@
 package com.bubu.apiinterface
 
 import android.util.Log
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
@@ -9,50 +10,56 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import java.io.EOFException
 import java.net.SocketTimeoutException
 
 //Http Response 만확인하면 될듯
 data class UserSendEmailResponse(@SerializedName("code") val code : Int)
 
-class UserSendEmailModule(override val userData: JsonObject) : UserApiInterface {
+data class UserSendEmailData(val email : String)
+
+class UserSendEmailModule(override val userData: UserSendEmailData) : UserApiInterface {
 
     interface UserSendEmailInterface {
         @Headers("Content-Type: application/json")
         @POST("/v1/user/")
         fun get(
             @Body body: JsonObject
-        ): Call<UserSendEmailResponse>
+        ): Call<Any>
         //보내는 데이터 형식
     }
 
 
-    override suspend fun getApiData(): UserSendEmailResponse? {
+    override suspend fun getApiData(): Any? {
         val retrofit = Retrofit.Builder()
             .baseUrl(super.serverAddress)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitObject = retrofit.create(UserSendEmailInterface::class.java)
         try {
-            var resp = retrofitObject.get(userData).execute()
-            if(resp.code() == OK) { //
-                Log.d("response Code", resp.code().toString())
-                Log.d("response", resp.body().toString())
-                //Parsing Here!
-                //...
-                //....
-                return null
-            } else if (resp.code() == 300) {
-                Log.d("response Code", resp.code().toString())
-                return null
+            val requestData = JsonObject()
+            requestData.addProperty("email",userData.email)
+            var resp = retrofitObject.get(requestData).execute()
+            if (resp.code() in 100..199) {
+                return super.handle100(resp)
+            } else if (resp.code() in 200..299) {
+                return resp.code()
+            } else if (resp.code() in 300..399) {
+                return super.handle300(resp)
+            } else if (resp.code() in 400..499) {
+                return super.handle400(resp)
             } else {
-                return null
+                return super.handle500(resp)
             }
-        } catch (e : SocketTimeoutException) {
-            Log.d("TimeOutException",e.toString())
-            return null
-        } catch (e : Exception) {
+        } catch (e: SocketTimeoutException) {
+            Log.d("TimeOutException Maybe Server Closed", e.toString())
+            return e
+        } catch (e: EOFException) {
+            Log.d("EOFException Maybe Response Data Type Mismatch", e.toString())
+            return e
+        } catch (e: Exception) {
             Log.d("Exception", e.toString())
-            return null
+            return e
         }
     }
 }

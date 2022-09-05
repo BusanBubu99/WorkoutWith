@@ -35,7 +35,13 @@ data class UserLoginResponseData(
  *
  * */
 
-class UserLoginModule(override val userData: JsonObject) : UserApiInterface {
+data class UserLoginData(
+    val username: String,
+    val email: String,
+    val password: String
+)
+
+class UserLoginModule(override val userData: UserLoginData) : UserApiInterface {
 
     interface UserLoginInterface {
         @Headers("Content-Type: application/json")
@@ -45,7 +51,8 @@ class UserLoginModule(override val userData: JsonObject) : UserApiInterface {
         ): Call<Any>
         //보내는 데이터 형식
     }
-/**
+
+    /**
     {"username":"gbdngb12", "email":"gbdngb12@Naver.com", "password":"1919tkd2@"}*/
     override suspend fun getApiData(): Any? {
         val retrofit = Retrofit.Builder()
@@ -54,24 +61,28 @@ class UserLoginModule(override val userData: JsonObject) : UserApiInterface {
             .build()
         val retrofitObject = retrofit.create(UserLoginInterface::class.java)
         try {
-            var resp = retrofitObject.get(userData).execute()
+            val requestData = JsonObject()
+            requestData.addProperty("username",userData.username)
+            requestData.addProperty("email",userData.email)
+            requestData.addProperty("password",userData.password)
+            var resp = retrofitObject.get(requestData).execute()
             if (resp.code() in 100..199) {
                 return super.handle100(resp)
             } else if (resp.code() in 200..299) { //
                 val responseBody = super.handle200(resp)
                 val jsonObject: JsonObject = Gson().toJsonTree(responseBody).asJsonObject
-                val accessToken = jsonObject.get("access_token").toString().replace("\"","")
-                val refreshToken = jsonObject.get("refresh_token").toString().replace("\"","")
+                val accessToken = jsonObject.get("access_token").toString().replace("\"", "")
+                val refreshToken = jsonObject.get("refresh_token").toString().replace("\"", "")
                 userInformation.accessToken = accessToken
                 userInformation.refreshToken = refreshToken
-                return UserLoginResponseData(accessToken,refreshToken)
+                return UserLoginResponseData(accessToken, refreshToken)
             } else if (resp.code() in 300..399) {
                 return super.handle300(resp)
             } else if (resp.code() in 400..499) {
-                val errorResponse =  super.handle400(resp)
+                val errorResponse = super.handle400(resp)
                 val errorMessages = mutableListOf<String>()
                 val err = errorResponse.message[0]
-                if(err.contains("Unable to log in with provided credentials.")) {
+                if (err.contains("Unable to log in with provided credentials.")) {
                     errorMessages.add("계정정보가 맞지 않습니다!")
                 }
                 return UserError(errorMessages)

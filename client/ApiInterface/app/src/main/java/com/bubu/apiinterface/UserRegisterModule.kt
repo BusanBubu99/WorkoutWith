@@ -14,9 +14,6 @@ import java.io.EOFException
 import java.net.SocketTimeoutException
 
 
-//HTTP Response 만확인하면 될듯
-
-
 /**
  * {
  *  "access_token": "",
@@ -31,8 +28,14 @@ import java.net.SocketTimeoutException
  * }
  * */
 
-class UserRegisterModule(override val userData: JsonObject) :
-    UserApiInterface {
+data class UserRegisterData(
+    val username: String,
+    val email: String,
+    val password1: String,
+    val password2: String
+)
+
+class UserRegisterModule(override val userData: UserRegisterData) : UserApiInterface {
 
     interface UserRegisterInterface {
         @Headers("Content-Type: application/json")
@@ -42,12 +45,14 @@ class UserRegisterModule(override val userData: JsonObject) :
         ): Call<Any>
         //보내는 데이터 형식
     }
-/**
- * "username"
- * "email"
- * "password1"
- * "password2"
- * */
+
+    /**
+     * "username"
+     * "email"
+     * "password1"
+     * "password2"
+     * */
+
     override suspend fun getApiData(): Any? {
         val retrofit = Retrofit.Builder()
             .baseUrl(super.serverAddress)
@@ -55,7 +60,12 @@ class UserRegisterModule(override val userData: JsonObject) :
             .build()
         val retrofitObject = retrofit.create(UserRegisterInterface::class.java)
         try {
-            var resp = retrofitObject.get(userData).execute()
+            val requestData = JsonObject()
+            requestData.addProperty("username", userData.username)
+            requestData.addProperty("email", userData.email)
+            requestData.addProperty("password1", userData.password1)
+            requestData.addProperty("password2", userData.password2)
+            var resp = retrofitObject.get(requestData).execute()
             if (resp.code() in 100..199) {
                 return super.handle100(resp)
             } else if (resp.code() in 200..299) { //Successful!!
@@ -63,20 +73,20 @@ class UserRegisterModule(override val userData: JsonObject) :
                 val jsonObject: JsonObject = Gson().toJsonTree(responseBody).asJsonObject
                 val accessToken = jsonObject.get("access_token").toString()
                 val refreshToken = jsonObject.get("refresh_token").toString()
-                return UserLoginResponseData(accessToken,refreshToken)
+                return UserLoginResponseData(accessToken, refreshToken)
             } else if (resp.code() in 300..399) {
                 return super.handle300(resp)
             } else if (resp.code() in 400..499) {
-                val errorResponse =  super.handle400(resp)
+                val errorResponse = super.handle400(resp)
                 val errorMessages = mutableListOf<String>()
                 val err = errorResponse.message[0]
-                if(err.contains("password")) {
+                if (err.contains("password")) {
                     errorMessages.add("비밀번호를 다시 입력하세요!")
                 }
-                if(err.contains("username")) {
+                if (err.contains("username")) {
                     errorMessages.add("아이디를 다시 입력하세요!")
                 }
-                if(err.contains("email")) {
+                if (err.contains("email")) {
                     errorMessages.add("이메일을 다시 입력하세요!")
                 }
                 return UserError(errorMessages)

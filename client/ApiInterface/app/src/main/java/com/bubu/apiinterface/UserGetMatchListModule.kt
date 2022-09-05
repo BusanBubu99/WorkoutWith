@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException
 data class UserGetMatchListResponseData(val list : List<UserGetMatchLists>)
 
 data class UserGetMatchLists(
-    @SerializedName("id") val id : String,
+    @SerializedName("matchId") val id : String,
     @SerializedName("title") val title : String
 )
 
@@ -25,11 +25,10 @@ class UserGetMatchListModule(override val userData: JsonObject)
         @GET("/v1/matching/")
         fun get(
             //@Query("token") token : String
-            //@Body body: JsonObject
-        ): Call<UserGetMatchListResponseData>
+        ): Call<Any>
         //보내는 데이터 형식
     }
-    override suspend fun getApiData(): UserGetMatchListResponseData? {
+    override suspend fun getApiData(): Any? {
         val retrofit = ApiClient.getApiClient()
         val retrofitObject = retrofit.create(UserGetMatchListInterface::class.java)
         try {

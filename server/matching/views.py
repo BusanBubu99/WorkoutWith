@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .serializers import MatchingSerializer
+from .serializers import MatchingSerializer, VoteSerializer
 from .models import MatchingRoom
 from userprofile.models import UserProfile
 
@@ -27,13 +27,12 @@ class MatchingRoomViewSet(viewsets.ViewSet):
 
     def create(self, request, **kwargs):
         requestData = request.data
-        location = requestData["userLocation"]
         userId = request.user.username
         try:
             userInfo = UserProfile.objects.get(userid=userId)
         except ObjectDoesNotExist:
             return Response({"error": "can't find user information from given credentials."}, status=400)
-        roomInfo = location["city"] + location["county"] + location["district"] + requestData["game"]
+        roomInfo = requestData["city"] + requestData["county"] + requestData["district"] + requestData["game"]
         roomInfo = hashlib.sha1(roomInfo.encode('utf-8')).hexdigest()
 
         try:
@@ -44,7 +43,9 @@ class MatchingRoomViewSet(viewsets.ViewSet):
             return Response({"matchId": roomInfo}, status=200)
         except ObjectDoesNotExist:
             requestData = {"userInfo": userInfo.__dict__,
-                        "userLocation": location,
+                        "city": requestData["city"],
+                        "county": requestData["county"],
+                        "district": requestData["district"],
                         "game": requestData["game"],
                         "matchId": roomInfo}
             serializer = MatchingSerializer(data=requestData)
@@ -60,3 +61,22 @@ class MatchingRoomViewSet(viewsets.ViewSet):
                     in self.permission_classes_by_action[self.action]]
         except KeyError:
             return [permission() for permission in self.permission_classes]
+
+class MatchingRoomVoteViewSet(viewsets.ViewSet):
+    def create(self, request, **kwargs):
+        data = request.data
+
+        requestData = {"voteTitle": data["voteTitle"],
+                       "matchId": data["matchId"],
+                       "startTime": data["startTime"],
+                       "endTime": data["endTime"],
+                       "date": data["date"],
+                       "content": data["content"]} 
+
+        serializer = VoteSerializer(data=requestData)
+        if serializer.is_valid():
+            savedVote = serializer.save()
+            match = MatchingRoom.objects.get(matchId=data["matchId"])
+            match.voteInfo.add(savedVote)
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=400)

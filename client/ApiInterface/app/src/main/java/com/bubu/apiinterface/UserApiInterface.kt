@@ -1,6 +1,7 @@
 package com.bubu.apiinterface
 
 import android.util.Log
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -77,6 +78,9 @@ interface UserApiInterface {
         Log.d("response Message", err)
         errorMessages.add(err)
         return UserError(errorMessages)
+    }
+    suspend fun convertToClass(jsonString : String, className : Class<*>?) : Any? {
+        return Gson().fromJson(jsonString, className)
     }
 }
 /*

@@ -32,7 +32,7 @@ data class UserEditProfileData(
 class UserEditProfileModule(override val userData: UserEditProfileData) : UserApiInterface {
 
     interface UserEditProfileInterface {
-        @POST("/v1/user/")
+        @POST("/v1/profile/")
         fun get(
             @Body body: JsonObject
         ): Call<Any>
@@ -70,21 +70,27 @@ class UserEditProfileModule(override val userData: UserEditProfileData) : UserAp
                 }
             } else if (result is UserError) {
                 //Auth Error Handling
+                Log.d("error","AuthError")
                 return result
             } else if (result is UninitializedPropertyAccessException) {
                 //Auth Error Handling
+                Log.d("Exception","AuthError")
                 return result
             } else if (result is SocketTimeoutException) {
                 //Auth Error Handling
+                Log.d("Exception","AuthError")
                 return result
             } else if (result is EOFException) {
                 //Auth Error Handling
+                Log.d("Exception","AuthError")
                 return result
             } else if (result is Exception) {
                 //Auth Error Handling
+                Log.d("Exception","AuthError")
                 return result
             } else {
                 //What is This ?
+                Log.d("Exception","What is this? ${result.toString()}")
                 return result
             }
         } catch (e: SocketTimeoutException) {

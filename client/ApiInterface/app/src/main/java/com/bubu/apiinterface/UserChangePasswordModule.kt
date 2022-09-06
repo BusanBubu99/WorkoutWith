@@ -13,9 +13,7 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserChangePasswordResponseData(@SerializedName("code") val code : Int)
-
-data class UserChangePasswordData(val password : String)
+data class UserChangePasswordData(val password1 : String, val password2 : String)
 
 class UserChangePasswordModule(override val userData: UserChangePasswordData)
     : UserApiInterface {
@@ -36,7 +34,8 @@ class UserChangePasswordModule(override val userData: UserChangePasswordData)
         val retrofitObject = retrofit.create(UserChangePasswordInterface::class.java)
         try {
             val requestData = JsonObject()
-            requestData.addProperty("pw",userData.password)
+            requestData.addProperty("password1",userData.password1)
+            requestData.addProperty("password2",userData.password2)
             var resp = retrofitObject.get(requestData).execute()
             if (resp.code() in 100..199) {
                 return super.handle100(resp)

@@ -15,7 +15,7 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-class UserAuthModule(override val userData: JsonObject?) : UserApiInterface {
+class UserAuthModule(override val userData : Any?) : UserApiInterface {
     interface UserAuthModuleInterface {
         @Headers("Content-Type: application/json")
         @POST("/api/accounts/v1/token/verify/")

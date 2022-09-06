@@ -13,8 +13,6 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-//Http Response 만확인하면 될듯
-data class UserSendEmailResponse(@SerializedName("code") val code : Int)
 
 data class UserSendEmailData(val email : String)
 

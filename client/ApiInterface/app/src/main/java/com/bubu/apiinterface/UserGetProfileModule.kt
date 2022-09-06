@@ -29,7 +29,7 @@ data class UserGetProfileCommunityPostResponseData(
     @SerializedName("postUserId") val postUserId: String,
     @SerializedName("postId") val postId: Int,
     @SerializedName("title") val title: String,
-    @SerializedName("picture") val picture: String,//file
+    @SerializedName("picture") val picture: String,//URL
     @SerializedName("timestamp") val timestamp: String,
     @SerializedName("like") val like: Int
 )
@@ -39,6 +39,7 @@ class UserGetProfileModule(override val userData: UserGetProfileData) : UserApiI
     interface UserGetProfileInterface {
         @GET("/v1/profile")
         fun get(
+            @Query("token") accessToken : String,
             @Query("targetId") targetId: String
         ): Call<Any>
         //보내는 데이터 형식
@@ -54,13 +55,14 @@ class UserGetProfileModule(override val userData: UserGetProfileData) : UserApiI
                 val retrofit = ApiClient.getApiClient()
                 val retrofitObject = retrofit.create(UserGetProfileInterface::class.java)
                 try {
-                    var resp = retrofitObject.get(userData.targetId).execute()
+                    var resp = retrofitObject.get(userInformation.accessToken, userData.targetId).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
                         val responseBody = super.handle200(resp)
-                        val jsonObject: JsonObject = Gson().toJsonTree(responseBody).asJsonObject
-                        val userId = jsonObject.get("userId").toString()
+                        val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
+                        return convertToClass(jsonString, UserGetProfileResponseData::class.java)
+                        /*val userId = jsonObject.get("userId").toString()
                         val name = jsonObject.get("name").toString()
                         val profilePic = jsonObject.get("profilePic").toString()//must be Edit
                         val tags = jsonObject.get("tags").toString()
@@ -82,7 +84,7 @@ class UserGetProfileModule(override val userData: UserGetProfileData) : UserApiI
                                 )
                             )
                         }
-                        return UserGetProfileResponseData(userId,name,profilePic,tags,city,county,district,list)
+                        return UserGetProfileResponseData(userId,name,profilePic,tags,city,county,district,list)*/
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

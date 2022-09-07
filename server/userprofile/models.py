@@ -15,4 +15,3 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=10)
     county = models.CharField(max_length=10)
     district = models.CharField(max_length=10)
-

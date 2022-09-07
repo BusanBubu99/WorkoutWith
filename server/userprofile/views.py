@@ -6,8 +6,6 @@ from rest_framework.response import Response
 from .serializers import ProfileSerializer
 from .models import UserProfile
 
-import json
-
 
 class ProfileViewSet(viewsets.ViewSet):
     permission_classes_by_action = {'create': [IsAuthenticated]}

@@ -6,8 +6,6 @@ from rest_framework.response import Response
 from .serializers import ProfileSerializer
 from .models import UserProfile
 
-import json
-
 
 class ProfileViewSet(viewsets.ViewSet):
     permission_classes_by_action = {'create': [IsAuthenticated]}
@@ -42,12 +40,13 @@ class ProfileViewSet(viewsets.ViewSet):
             return Response(nullObject, status=400)
 
     def create(self, request, **kwargs):
-        location = json.loads(request.POST.get("userLocation", "{}"))
         requestData = {"userid": request.user.username,
                        "name": request.POST.get("name"),
                        "profilePic": request.FILES.get("profilePic"),
                        "tags": request.POST.get("tags"),
-                       "userLocation": location}
+                       "city": request.POST.get("city"),
+                       "county": request.POST.get("county"),
+                       "district": request.POST.get("district")}
 
         serializer = ProfileSerializer(data=requestData)
         if serializer.is_valid():

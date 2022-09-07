@@ -12,4 +12,6 @@ class UserProfile(models.Model):
         null=True,
         default='media/default_profileimage.png')
     tags = models.CharField(max_length=10)
-    userLocation = models.JSONField()
+    city = models.CharField(max_length=10)
+    county = models.CharField(max_length=10)
+    district = models.CharField(max_length=10)

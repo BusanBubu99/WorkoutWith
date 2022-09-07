@@ -1,6 +1,6 @@
 package com.bubu.apiinterface
 
-import android.location.LocationManager
+/*import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -9,20 +9,42 @@ import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Query
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
 
 lateinit var userInformation: UserData
 
+class ImageTestModule(override val userData: Any?) : UserApiInterface {
+
+    interface ImageTestInterface {
+        @GET("/v1/profile")
+        fun get(
+            @Query("token") token: String
+        ): Call<Any>
+        //보내는 데이터 형식
+    }
+    override suspend fun getApiData(): Any? {
+        TODO("Not yet implemented")
+    }
+}
+
 class MainActivity : AppCompatActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
         userInformation = UserData
+
+
+
         /**
          * get Address Module Usage
-         * */
-        CoroutineScope(Dispatchers.Default).launch {
+         *
+        /*CoroutineScope(Dispatchers.Default).launch {
             var testObject = UserGetAddressModule(null)
             val result = testObject.getApiData()
             if(result is List<*>) {
@@ -67,15 +89,14 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
 
 
 
 
-        /**
+
+        /
          * Any operation that requires authentication must run this procedure
-         * */
+         /
         binding.checkButton.setOnClickListener {
             CoroutineScope(Dispatchers.Default).launch {
                 var auth = UserAuthModule(null)
@@ -105,12 +126,12 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.button.setOnClickListener {
-            /**
+            /
              * {"username":"gbdngb12", "email":"gbdngb12@Naver.com", "password":"1919tkd2@"}
              *
              * UserLogin Usage
-             * */
-            /*CoroutineScope(Dispatchers.Default).launch {
+             /
+            CoroutineScope(Dispatchers.Default).launch {
                 val testObject = UserLoginModule()
                 when (val result = testObject.getApiData()) {
                     is UserLoginResponseData -> { // Successful
@@ -137,9 +158,9 @@ class MainActivity : AppCompatActivity() {
                         Log.d("result Exception", result.toString())
                     }
                 }
-            }*/
+            }
 
         }
 
     }
-}
+}*/

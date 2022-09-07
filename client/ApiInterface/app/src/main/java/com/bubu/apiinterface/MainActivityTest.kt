@@ -1,6 +1,6 @@
 package com.bubu.apiinterface
 
-/*import android.location.LocationManager
+/*/mport android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -13,12 +13,12 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 import java.io.EOFException
-import java.net.SocketTimeoutException
+import java.net.SocketTimeoutException*/
 
 
 lateinit var userInformation: UserData
 
-class ImageTestModule(override val userData: Any?) : UserApiInterface {
+/*class ImageTestModule(override val userData: Any?) : UserApiInterface {
 
     interface ImageTestInterface {
         @GET("/v1/profile")

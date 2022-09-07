@@ -62,6 +62,16 @@ class MatchingRoomViewSet(viewsets.ViewSet):
         except KeyError:
             return [permission() for permission in self.permission_classes]
 
+class MatchingDetailedInfo(viewsets.ViewSet):
+    def list(self, request, **kwargs):
+        matchid = request.GET.get("matchId", None)
+
+        match = MatchingRoom.objects.get(matchId=matchid)
+        matchUserInfo = match.userInfo.all().values()
+        matchVoteInfo = match.voteInfo.all().values()
+        respDict = {"userInfo": matchUserInfo, "voteInfo": matchVoteInfo}
+        return Response(respDict, status=200)
+
 class MatchingRoomVoteViewSet(viewsets.ViewSet):
     def create(self, request, **kwargs):
         data = request.data

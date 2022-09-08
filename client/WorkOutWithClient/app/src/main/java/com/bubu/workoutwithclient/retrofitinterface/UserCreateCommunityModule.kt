@@ -1,24 +1,23 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserLikeCommunityResponseData(val code: Int)
-data class UserLikeCommunityData(val postId: String)
+data class UserCreateCommunityData(
+    val token: String, val title: String, val picture: String/**/,
+    val content: String
+)
 
-class UserLikeCommunityModule(override val userData: UserLikeCommunityData) : UserApiInterface {
-    interface UserLikeCommunityInterface {
+class UserCreateCommunityModule(override val userData: UserCreateCommunityData) : UserApiInterface {
+
+    interface UserCreateCommunityInterface {
         @Headers("Content-Type: application/json")
-        @POST("/v1/community/like/")
+        @PUT("/v1/community/")
         fun get(
-            //@Query("token") token : String
             @Body body: JsonObject
         ): Call<Any>
         //보내는 데이터 형식
@@ -30,11 +29,13 @@ class UserLikeCommunityModule(override val userData: UserLikeCommunityData) : Us
             val result = auth.getApiData()
             if (result == true) {
                 val retrofit = ApiClient.getApiClient()
-                val retrofitObject = retrofit.create(UserLikeCommunityInterface::class.java)
+                val retrofitObject = retrofit.create(UserCreateCommunityInterface::class.java)
                 try {
                     val requestData = JsonObject()
                     requestData.addProperty("token", userInformation.accessToken)
-                    requestData.addProperty("postId", userData.postId)
+                    requestData.addProperty("title", userData.title)
+                    requestData.addProperty("picture", userData.picture)//
+                    requestData.addProperty("content", userData.content)
                     var resp = retrofitObject.get(requestData).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
@@ -93,5 +94,4 @@ class UserLikeCommunityModule(override val userData: UserLikeCommunityData) : Us
             return e
         }
     }
-
 }

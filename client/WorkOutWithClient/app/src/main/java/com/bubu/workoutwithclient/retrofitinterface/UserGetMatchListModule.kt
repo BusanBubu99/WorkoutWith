@@ -1,31 +1,24 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserCreateRoomVoteData(
-    val voteTitle: String, val matchId: Int, val startTime: String,
-    val endTime: String, val date: String, val content: String
+data class UserGetMatchListResponseData(
+    @SerializedName("matchId") val id: String,
+    @SerializedName("title") val title: String
 )
 
-class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : UserApiInterface {
+class UserGetMatchListModule(override val userData: Any?) : UserApiInterface {
 
-    interface UserCreateRoomVoteInterface {
-        @Headers("Content-Type: application/json")
-        @POST("/v1/matching/vote/")
+    interface UserGetMatchListInterface {
+        @GET("/v1/matching/")
         fun get(
-            @Body body: JsonObject
+            //@Query("token") token : String
         ): Call<Any>
         //보내는 데이터 형식
     }
@@ -35,22 +28,27 @@ class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : 
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
+                //Do Any Operation or Jobs..
                 val retrofit = ApiClient.getApiClient()
-                val retrofitObject = retrofit.create(UserCreateRoomVoteInterface::class.java)
+                val retrofitObject = retrofit.create(UserGetMatchListInterface::class.java)
                 try {
-                    val requestData = JsonObject()
-                    requestData.addProperty("token", userInformation.accessToken)
-                    requestData.addProperty("voteTitle", userData.voteTitle)
-                    requestData.addProperty("matchId", userData.matchId)
-                    requestData.addProperty("startTime", userData.startTime)
-                    requestData.addProperty("endTime", userData.endTime)
-                    requestData.addProperty("date", userData.date)
-                    requestData.addProperty("content", userData.content)
-                    var resp = retrofitObject.get(requestData).execute()
-                    if (resp.code() in 100..199) {
+                    var resp = retrofitObject.get().execute()
+                    if (resp.code() in 100..199) { //
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
-                        return resp.code()
+                        val responseBody = super.handle200(resp)
+                        val jsonString : String = Gson().toJsonTree(responseBody).asJsonArray.toString()
+                        return Gson().fromJson(jsonString,Array<UserGetMatchListResponseData>::class.java).toList()
+                        /*val list = mutableListOf<UserGetMatchLists>()
+                        jsonObject.forEach {
+                            list.add(
+                                UserGetMatchLists(
+                                    it.asJsonObject.get("matchId").toString(),
+                                    it.asJsonObject.get("title").toString()
+                                )
+                            )
+                        }
+                        return UserGetMatchListResponseData(list)*/
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {
@@ -104,4 +102,5 @@ class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : 
             return e
         }
     }
+
 }

@@ -1,16 +1,13 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
-import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
-import java.net.SocketTimeoutException
 
 
 /**
@@ -30,12 +27,12 @@ import java.net.SocketTimeoutException
  * if Server Closed then => SocketTimeoutException
  * else Exception
  *
-* */
-const val OK = 200
+ * */
+
 interface UserApiInterface {
     val userData : Any?
     val serverAddress: String
-        get() = "http://14.44.115.2:8000"
+        get() = "http://14.44.116.82:8000"
     suspend fun getApiData() : Any?
     suspend fun handle100(resp : retrofit2.Response<Any>) : UserError {
         var errorMessages = mutableListOf<String>()
@@ -86,7 +83,7 @@ interface UserApiInterface {
 /*
 * */
 object ApiClient {
-    private const val BASE_URL = "http://14.44.115.2:8000"
+    private const val BASE_URL = "http://14.44.116.82:8000"
     fun getApiClient(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -105,7 +102,7 @@ object ApiClient {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain) : Response = with(chain) {
             val newRequest = request().newBuilder()
-                //.addHeader("Auth", userInformation.token)
+                .addHeader("Authorization", "Bearer ${userInformation.accessToken}")
                 //.addHeader("Content","application/json")
                 //.addHeader("()","()")
                 .build()

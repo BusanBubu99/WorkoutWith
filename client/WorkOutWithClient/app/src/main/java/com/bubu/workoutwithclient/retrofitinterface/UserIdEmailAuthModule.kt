@@ -1,9 +1,7 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
-import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,12 +11,13 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserChangePasswordData(val password1 : String, val password2 : String)
+data class UserIdEmailAuthData(
+    val id: String, val email: String
+)
 
-class UserChangePasswordModule(override val userData: UserChangePasswordData)
-    : UserApiInterface {
+class UserIdEmailAuthModule(override val userData: UserIdEmailAuthData) : UserApiInterface {
 
-    interface UserChangePasswordInterface {
+    interface UserIdEmailAuthInterface {
         @Headers("Content-Type: application/json")
         @POST("/v1/user/")
         fun get(
@@ -26,16 +25,17 @@ class UserChangePasswordModule(override val userData: UserChangePasswordData)
         ): Call<Any>
         //보내는 데이터 형식
     }
+
     override suspend fun getApiData(): Any? {
         val retrofit = Retrofit.Builder()
             .baseUrl(super.serverAddress)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val retrofitObject = retrofit.create(UserChangePasswordInterface::class.java)
+        val retrofitObject = retrofit.create(UserIdEmailAuthInterface::class.java)
         try {
             val requestData = JsonObject()
-            requestData.addProperty("password1",userData.password1)
-            requestData.addProperty("password2",userData.password2)
+            requestData.addProperty("id", userData.id)
+            requestData.addProperty("email",userData.email)
             var resp = retrofitObject.get(requestData).execute()
             if (resp.code() in 100..199) {
                 return super.handle100(resp)

@@ -1,48 +1,26 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
-import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.annotations.SerializedName
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.Body
+import retrofit2.http.Headers
+import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserGetCommunityResponseData(
-    @SerializedName("userId") val userId: String,
-    @SerializedName("title") val title: String,
-    @SerializedName("picture") val picture: String,
-    @SerializedName("timestamp") val timestamp: String,
-    @SerializedName("content") val content: String,
-    @SerializedName("like") val like: List<LikeObj>
+data class UserCreateRoomVoteData(
+    val voteTitle: String, val matchId: Int, val startTime: String,
+    val endTime: String, val date: String, val content: String
 )
 
-data class LikeObj(
-    @SerializedName("userId") val userId: String
-)
+class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : UserApiInterface {
 
-data class UserGetCommunityData(val postId: String)
-//userId: 사용자 id
-//title : 게시글 제목
-//picture : 게시글 사진
-//timestamp : 게시글 작성 날짜
-//content : 게시글 내용
-//l//ike : {
-//    [
-//        userId: 좋아요 누른 사람의 id
-//    ]
-//}
-
-class UserGetCommunityModule(override val userData: UserGetCommunityData) : UserApiInterface {
-    interface UserGetCommunityInterface {
-        @GET("/v1/community/")
+    interface UserCreateRoomVoteInterface {
+        @Headers("Content-Type: application/json")
+        @POST("/v1/matching/vote/")
         fun get(
-            @Query("token") token:String,
-            @Query("postId") postId: String
+            @Body body: JsonObject
         ): Call<Any>
         //보내는 데이터 형식
     }
@@ -53,15 +31,21 @@ class UserGetCommunityModule(override val userData: UserGetCommunityData) : User
             val result = auth.getApiData()
             if (result == true) {
                 val retrofit = ApiClient.getApiClient()
-                val retrofitObject = retrofit.create(UserGetCommunityInterface::class.java)
+                val retrofitObject = retrofit.create(UserCreateRoomVoteInterface::class.java)
                 try {
-                    var resp = retrofitObject.get(userInformation.accessToken, userData.postId).execute()
+                    val requestData = JsonObject()
+                    requestData.addProperty("token", userInformation.accessToken)
+                    requestData.addProperty("voteTitle", userData.voteTitle)
+                    requestData.addProperty("matchId", userData.matchId)
+                    requestData.addProperty("startTime", userData.startTime)
+                    requestData.addProperty("endTime", userData.endTime)
+                    requestData.addProperty("date", userData.date)
+                    requestData.addProperty("content", userData.content)
+                    var resp = retrofitObject.get(requestData).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
-                        val responseBody = super.handle200(resp)
-                        val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
-                        return convertToClass(jsonString,UserGetCommunityResponseData::class.java)
+                        return resp.code()
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

@@ -1,27 +1,37 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserCreateCommunityData(
-    val token: String, val title: String, val picture: String/**/,
-    val content: String
+data class UserGetMatchRoomResponseData(
+    @SerializedName("userInfo") val userInfo: List<UserGetMatchRoomUserInfo>,
+    @SerializedName("voteInfo") val voteInfo: List<UserGetMatchRoomVoteInfo>
 )
 
-class UserCreateCommunityModule(override val userData: UserCreateCommunityData) : UserApiInterface {
+data class UserGetMatchRoomUserInfo(
+    @SerializedName("profilePic") val profilePic: String,//file
+    @SerializedName("name") val name: String
+)
 
-    interface UserCreateCommunityInterface {
-        @Headers("Content-Type: application/json")
-        @PUT("/v1/community/")
+data class UserGetMatchRoomVoteInfo(
+    @SerializedName("voteTitle") val voteTitle: String,
+    @SerializedName("voteId") val voteId: Int
+)
+
+data class UserGetMatchRoomData(val matchId: Int)
+
+class UserGetMatchRoomModule(override val userData: UserGetMatchRoomData) : UserApiInterface {
+    interface UserGetMatchRoomInterface {
+        //@Headers("Content-Type: application/json")
+        @GET("/v1/matching/info")
         fun get(
-            @Body body: JsonObject
+            @Query("token") token: String,
+            @Query("matchId") matchId: Int
         ): Call<Any>
         //보내는 데이터 형식
     }
@@ -32,18 +42,38 @@ class UserCreateCommunityModule(override val userData: UserCreateCommunityData) 
             val result = auth.getApiData()
             if (result == true) {
                 val retrofit = ApiClient.getApiClient()
-                val retrofitObject = retrofit.create(UserCreateCommunityInterface::class.java)
+                val retrofitObject = retrofit.create(UserGetMatchRoomInterface::class.java)
                 try {
-                    val requestData = JsonObject()
-                    requestData.addProperty("token", userInformation.accessToken)
-                    requestData.addProperty("title", userData.title)
-                    requestData.addProperty("picture", userData.picture)//
-                    requestData.addProperty("content", userData.content)
-                    var resp = retrofitObject.get(requestData).execute()
+                    var resp =
+                        retrofitObject.get(UserData.accessToken, userData.matchId).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
-                        return resp.code()
+                        val responseBody = super.handle200(resp)
+                        val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
+                        return convertToClass(jsonString, UserGetMatchRoomResponseData::class.java)
+                        /*val userInfoList = mutableListOf<UserGetMatchRoomUserInfo>()
+                        val voteInfoList = mutableListOf<UserGetMatchRoomVoteInfo>()
+
+                        val userInfoJsonArray = jsonObject.asJsonObject.getAsJsonArray("userInfo")
+                        val voteInfoJsonArray = jsonObject.asJsonObject.getAsJsonArray("voteInfo")
+                        userInfoJsonArray.forEach {
+                            userInfoList.add(
+                                UserGetMatchRoomUserInfo(
+                                    it.asJsonObject.get("profilePic").toString(),
+                                    it.asJsonObject.get("name").toString()
+                                )
+                            )
+                        }
+                        voteInfoJsonArray.forEach {
+                            voteInfoList.add(
+                                UserGetMatchRoomVoteInfo(
+                                    it.asJsonObject.get("voteTitle").toString(),
+                                    it.asJsonObject.get("voteId").toString().toInt()
+                                )
+                            )
+                        }
+                        return UserGetMatchRoomResponseData(userInfoList, voteInfoList)*/
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

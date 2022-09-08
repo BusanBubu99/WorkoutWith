@@ -1,8 +1,7 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.GET
@@ -10,53 +9,37 @@ import retrofit2.http.Query
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserGetRoomVoteResponseData(
-    @SerializedName("voteTitle") val voteTitle: String,
-    @SerializedName("time") val time: VoteTimeObject,
-    @SerializedName("content") val content: String,
-    @SerializedName("userList") val userList: List<UserListObject>,
-)
-
-data class VoteTimeObject(
-    @SerializedName("startTime") val startTime: String,
-    @SerializedName("endTime") val endTime: String,
-    @SerializedName("date") val date: String
-)
-
-data class UserListObject(
+data class UserGetCommunityResponseData(
     @SerializedName("userId") val userId: String,
-    @SerializedName("profilePic") val profilePic: String,//file
-    @SerializedName("like") val like: Int
+    @SerializedName("title") val title: String,
+    @SerializedName("picture") val picture: String,
+    @SerializedName("timestamp") val timestamp: String,
+    @SerializedName("content") val content: String,
+    @SerializedName("like") val like: List<LikeObj>
 )
 
+data class LikeObj(
+    @SerializedName("userId") val userId: String
+)
 
-data class UserGetRoomVoteData(val voteId: Int)
-
-//response
-//{
-//    voteTitle: 제목,
-//    time : {
-//    starttime: 시작 시간
-//    endtime: 끝 시간,
-//    date: 날짜
-//}
-//    content: 투표 내용,
-//    userlist : [
-//    {
-//        userid: 사용자id
-//        profilePic : 프로필 사진
-//        like : 좋아요 수
-//    }
+data class UserGetCommunityData(val postId: String)
+//userId: 사용자 id
+//title : 게시글 제목
+//picture : 게시글 사진
+//timestamp : 게시글 작성 날짜
+//content : 게시글 내용
+//l//ike : {
+//    [
+//        userId: 좋아요 누른 사람의 id
 //    ]
 //}
-// //
-class UserGetRoomVoteModule(override val userData: UserGetRoomVoteData) : UserApiInterface {
 
-    interface UserGetRoomVoteInterface {
-        @GET("/v1/matching/vote/")
+class UserGetCommunityModule(override val userData: UserGetCommunityData) : UserApiInterface {
+    interface UserGetCommunityInterface {
+        @GET("/v1/community/")
         fun get(
-            @Query("token") token: String,
-            @Query("voteId") voteId: Int
+            @Query("token") token:String,
+            @Query("postId") postId: String
         ): Call<Any>
         //보내는 데이터 형식
     }
@@ -67,17 +50,15 @@ class UserGetRoomVoteModule(override val userData: UserGetRoomVoteData) : UserAp
             val result = auth.getApiData()
             if (result == true) {
                 val retrofit = ApiClient.getApiClient()
-                val retrofitObject = retrofit.create(UserGetRoomVoteInterface::class.java)
+                val retrofitObject = retrofit.create(UserGetCommunityInterface::class.java)
                 try {
-                    var resp =
-                        retrofitObject.get(userInformation.accessToken, userData.voteId).execute()
+                    var resp = retrofitObject.get(UserData.accessToken, userData.postId).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
                         val responseBody = super.handle200(resp)
-                        val jsonString: String =
-                            Gson().toJsonTree(responseBody).asJsonObject.toString()
-                        return convertToClass(jsonString, UserGetRoomVoteResponseData::class.java)
+                        val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
+                        return convertToClass(jsonString, UserGetCommunityResponseData::class.java)
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

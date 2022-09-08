@@ -1,11 +1,8 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,7 +15,7 @@ import java.net.SocketTimeoutException
 class UserAuthModule(override val userData : Any?) : UserApiInterface {
     interface UserAuthModuleInterface {
         @Headers("Content-Type: application/json")
-        @POST("/api/accounts/v1/token/verify/")
+        @POST("/v1/token/verify/")
         fun get(
             @Body body: JsonObject
         ): Call<Any>
@@ -27,7 +24,7 @@ class UserAuthModule(override val userData : Any?) : UserApiInterface {
 
     interface UserRefreshTokenInterface {
         @Headers("Content-Type: application/json")
-        @POST("/api/accounts/v1/token/refresh/")
+        @POST("/v1/token/refresh/")
         fun get(
             @Body body: JsonObject
         ): Call<Any>

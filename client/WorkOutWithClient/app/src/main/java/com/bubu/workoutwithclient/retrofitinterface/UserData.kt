@@ -1,4 +1,4 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 object UserData {
     lateinit var accessToken : String

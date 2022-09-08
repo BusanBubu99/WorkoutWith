@@ -1,8 +1,7 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -12,7 +11,7 @@ import retrofit2.http.Query
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-class UserGetAddressModule(override val userData: Any?) : UserApiInterface{
+class UserGetAddressModule(override val userData: Any?) : UserApiInterface {
 
 
     lateinit var cityAccessToken : String

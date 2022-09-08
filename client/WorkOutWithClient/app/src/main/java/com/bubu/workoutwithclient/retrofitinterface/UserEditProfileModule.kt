@@ -1,18 +1,21 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
+import android.net.Uri
 import android.util.Log
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import java.io.EOFException
+import java.io.File
 import java.net.SocketTimeoutException
-
-data class UserEditProfileResponseData(@SerializedName("code") val code: Int)
 
 /*
 * name : 사용자 이름
@@ -21,7 +24,7 @@ tags : 관심사 태그
 userLocation : 동네 설정*/
 data class UserEditProfileData(
     val name: String,
-    val profilePic: String/*must be file!*/,
+    val profilePic: String/*uri!*/,
     val tags: String,
     val city: String,
     val country: String,
@@ -32,9 +35,15 @@ data class UserEditProfileData(
 class UserEditProfileModule(override val userData: UserEditProfileData) : UserApiInterface {
 
     interface UserEditProfileInterface {
-        @POST("/v1/profile/")
+        @Multipart
+        @POST("/v1/profile")
         fun get(
-            @Body body: JsonObject
+            @Part("name") name: String,
+            @Part file: MultipartBody.Part?,
+            @Part("tags") tags: String,
+            @Part("city") city: String,
+            @Part("county") county: String,
+            @Part("district") district: String
         ): Call<Any>
         //보내는 데이터 형식
     }
@@ -44,23 +53,23 @@ class UserEditProfileModule(override val userData: UserEditProfileData) : UserAp
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
+                val file = File(userData.profilePic)
+                val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
+                val body = MultipartBody.Part.createFormData("profilePic", file.name, requestFile)
+
                 //Do Any Operation or Jobs..
-                val requestData = JsonObject()
-                requestData.addProperty("token", userInformation.accessToken)
-                requestData.addProperty("name", userData.name)
-                requestData.addProperty("tags", userData.tags)
-                val userLocation = JsonObject()
-                userLocation.addProperty("city", userData.city)
-                userLocation.addProperty("country", userData.country)
-                userLocation.addProperty("district", userData.district)
-                requestData.add("userLocation", userLocation)
                 val retrofit = ApiClient.getApiClient()
                 val retrofitObject = retrofit.create(UserEditProfileInterface::class.java)
-                var resp = retrofitObject.get(requestData).execute()
+                var resp = retrofitObject.get(
+                    userData.name, body, userData.tags, userData.city, userData.country,
+                    userData.district
+                ).execute()
                 if (resp.code() in 100..199) {
                     return super.handle100(resp)
                 } else if (resp.code() in 200..299) {
-                    return resp.code()
+                    val responseBody = super.handle200(resp)
+                    val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
+                    return convertToClass(jsonString,UserEditProfileData::class.java)
                 } else if (resp.code() in 300..399) {
                     return super.handle300(resp)
                 } else if (resp.code() in 400..499) {
@@ -70,27 +79,27 @@ class UserEditProfileModule(override val userData: UserEditProfileData) : UserAp
                 }
             } else if (result is UserError) {
                 //Auth Error Handling
-                Log.d("error","AuthError")
+                Log.d("error", "AuthError")
                 return result
             } else if (result is UninitializedPropertyAccessException) {
                 //Auth Error Handling
-                Log.d("Exception","AuthError")
+                Log.d("Exception", "AuthError")
                 return result
             } else if (result is SocketTimeoutException) {
                 //Auth Error Handling
-                Log.d("Exception","AuthError")
+                Log.d("Exception", "AuthError")
                 return result
             } else if (result is EOFException) {
                 //Auth Error Handling
-                Log.d("Exception","AuthError")
+                Log.d("Exception", "AuthError")
                 return result
             } else if (result is Exception) {
                 //Auth Error Handling
-                Log.d("Exception","AuthError")
+                Log.d("Exception", "AuthError")
                 return result
             } else {
                 //What is This ?
-                Log.d("Exception","What is this? ${result.toString()}")
+                Log.d("Exception", "What is this? ${result.toString()}")
                 return result
             }
         } catch (e: SocketTimeoutException) {

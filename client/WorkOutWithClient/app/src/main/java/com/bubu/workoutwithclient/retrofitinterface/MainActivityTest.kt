@@ -1,4 +1,4 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 /*/mport android.location.LocationManager
 import android.os.Bundle

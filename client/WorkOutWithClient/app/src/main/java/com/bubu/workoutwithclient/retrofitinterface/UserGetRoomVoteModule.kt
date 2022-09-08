@@ -1,31 +1,61 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Query
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserStartMatchResponseData(@SerializedName("matchId") val matchId: Int)
-
-data class UserStartMatchData(
-    val city: String, val county: String, val district: String,
-    val game: Int
+data class UserGetRoomVoteResponseData(
+    @SerializedName("voteTitle") val voteTitle: String,
+    @SerializedName("time") val time: VoteTimeObject,
+    @SerializedName("content") val content: String,
+    @SerializedName("userList") val userList: List<UserListObject>,
 )
 
-class UserStartMatchModule(override val userData: UserStartMatchData) : UserApiInterface {
+data class VoteTimeObject(
+    @SerializedName("startTime") val startTime: String,
+    @SerializedName("endTime") val endTime: String,
+    @SerializedName("date") val date: String
+)
 
-    interface UserStartMatchInterface {
-        @Headers("Content-Type: application/json")
-        @POST("/v1/matching/")
+data class UserListObject(
+    @SerializedName("userId") val userId: String,
+    @SerializedName("profilePic") val profilePic: String,//file
+    @SerializedName("like") val like: Int
+)
+
+
+data class UserGetRoomVoteData(val voteId: Int)
+
+//response
+//{
+//    voteTitle: 제목,
+//    time : {
+//    starttime: 시작 시간
+//    endtime: 끝 시간,
+//    date: 날짜
+//}
+//    content: 투표 내용,
+//    userlist : [
+//    {
+//        userid: 사용자id
+//        profilePic : 프로필 사진
+//        like : 좋아요 수
+//    }
+//    ]
+//}
+// //
+class UserGetRoomVoteModule(override val userData: UserGetRoomVoteData) : UserApiInterface {
+
+    interface UserGetRoomVoteInterface {
+        @GET("/v1/matching/vote/")
         fun get(
-            @Body body: JsonObject
+            @Query("token") token: String,
+            @Query("voteId") voteId: Int
         ): Call<Any>
         //보내는 데이터 형식
     }
@@ -36,21 +66,17 @@ class UserStartMatchModule(override val userData: UserStartMatchData) : UserApiI
             val result = auth.getApiData()
             if (result == true) {
                 val retrofit = ApiClient.getApiClient()
-                val retrofitObject = retrofit.create(UserStartMatchInterface::class.java)
+                val retrofitObject = retrofit.create(UserGetRoomVoteInterface::class.java)
                 try {
-                    val requestData = JsonObject()
-                    requestData.addProperty("token", userInformation.accessToken)
-                    requestData.addProperty("city", userData.city)
-                    requestData.addProperty("county", userData.county)
-                    requestData.addProperty("district", userData.district)
-                    requestData.addProperty("game", userData.game)
-                    var resp = retrofitObject.get(requestData).execute()
+                    var resp =
+                        retrofitObject.get(UserData.accessToken, userData.voteId).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
                         val responseBody = super.handle200(resp)
-                        val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
-                        return convertToClass(jsonString,UserStartMatchResponseData::class.java)
+                        val jsonString: String =
+                            Gson().toJsonTree(responseBody).asJsonObject.toString()
+                        return convertToClass(jsonString, UserGetRoomVoteResponseData::class.java)
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {
@@ -103,6 +129,5 @@ class UserStartMatchModule(override val userData: UserStartMatchData) : UserApiI
             Log.d("Exception", e.toString())
             return e
         }
-
     }
 }

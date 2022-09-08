@@ -1,9 +1,7 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
-import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,13 +11,12 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserIdEmailAuthData(
-    val id: String, val email: String
-)
 
-class UserIdEmailAuthModule(override val userData: UserIdEmailAuthData) : UserApiInterface {
+data class UserSendEmailData(val email : String)
 
-    interface UserIdEmailAuthInterface {
+class UserSendEmailModule(override val userData: UserSendEmailData) : UserApiInterface {
+
+    interface UserSendEmailInterface {
         @Headers("Content-Type: application/json")
         @POST("/v1/user/")
         fun get(
@@ -28,15 +25,15 @@ class UserIdEmailAuthModule(override val userData: UserIdEmailAuthData) : UserAp
         //보내는 데이터 형식
     }
 
+
     override suspend fun getApiData(): Any? {
         val retrofit = Retrofit.Builder()
             .baseUrl(super.serverAddress)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val retrofitObject = retrofit.create(UserIdEmailAuthInterface::class.java)
+        val retrofitObject = retrofit.create(UserSendEmailInterface::class.java)
         try {
             val requestData = JsonObject()
-            requestData.addProperty("id", userData.id)
             requestData.addProperty("email",userData.email)
             var resp = retrofitObject.get(requestData).execute()
             if (resp.code() in 100..199) {

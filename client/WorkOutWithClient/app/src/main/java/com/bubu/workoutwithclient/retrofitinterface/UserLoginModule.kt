@@ -1,4 +1,4 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
 import com.google.gson.Gson
@@ -45,7 +45,7 @@ class UserLoginModule(override val userData: UserLoginData) : UserApiInterface {
 
     interface UserLoginInterface {
         @Headers("Content-Type: application/json")
-        @POST("/api/accounts/v1/login/")
+        @POST("/v1/login/")
         fun get(
             @Body body: JsonObject
         ): Call<Any>

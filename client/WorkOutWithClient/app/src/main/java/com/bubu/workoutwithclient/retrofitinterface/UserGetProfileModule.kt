@@ -1,12 +1,9 @@
-package com.bubu.workoutwithclient.userinterface
+package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.io.EOFException
 import java.net.SocketTimeoutException
@@ -55,7 +52,7 @@ class UserGetProfileModule(override val userData: UserGetProfileData) : UserApiI
                 val retrofit = ApiClient.getApiClient()
                 val retrofitObject = retrofit.create(UserGetProfileInterface::class.java)
                 try {
-                    var resp = retrofitObject.get(userInformation.accessToken, userData.targetId).execute()
+                    var resp = retrofitObject.get(UserData.accessToken, userData.targetId).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {

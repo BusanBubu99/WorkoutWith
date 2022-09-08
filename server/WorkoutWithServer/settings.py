@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     # created apps
     'accounts',
+    'board',
     'userprofile',
 ]
 
@@ -69,6 +70,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }
 
@@ -148,7 +152,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 # Email Verification
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

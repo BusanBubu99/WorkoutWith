@@ -1,28 +1,21 @@
 package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
-import com.google.gson.JsonObject
+import com.google.gson.Gson
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.GET
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserCreateRoomVoteData(
-    val voteTitle: String, val matchId: Int, val startTime: String,
-    val endTime: String, val date: String, val content: String
-)
 
-class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : UserApiInterface {
+data class UserIsProfileResponseData(val snsResult: String)
 
-    interface UserCreateRoomVoteInterface {
-        @Headers("Content-Type: application/json")
-        @POST("/v1/matching/vote/")
+class UserIsProfileModule(override val userData: Any? = null) : UserApiInterface {
+
+    interface UserIsProfileInterface {
+        @GET("/v1/profile?check=True")
         fun get(
-            @Body body: JsonObject
         ): Call<Any>
-        //보내는 데이터 형식
     }
 
     override suspend fun getApiData(): Any? {
@@ -31,20 +24,16 @@ class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : 
             val result = auth.getApiData()
             if (result == true) {
                 val retrofit = ApiTokenHeaderClient.getApiClient()
-                val retrofitObject = retrofit.create(UserCreateRoomVoteInterface::class.java)
+                val retrofitObject = retrofit.create(UserIsProfileInterface::class.java)
                 try {
-                    val requestData = JsonObject()
-                    requestData.addProperty("voteTitle", userData.voteTitle)
-                    requestData.addProperty("matchId", userData.matchId)
-                    requestData.addProperty("startTime", userData.startTime)
-                    requestData.addProperty("endTime", userData.endTime)
-                    requestData.addProperty("date", userData.date)
-                    requestData.addProperty("content", userData.content)
-                    var resp = retrofitObject.get(requestData).execute()
+                    var resp = retrofitObject.get().execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
-                        return resp.code()
+                        val responseBody = super.handle200(resp)
+                        val jsonString: String =
+                            Gson().toJsonTree(responseBody).asJsonObject.toString()
+                        return convertToClass(jsonString, UserIsProfileResponseData::class.java)
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

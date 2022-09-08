@@ -1,28 +1,17 @@
 package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
-import com.google.gson.JsonObject
+import com.google.gson.Gson
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.DELETE
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserCreateRoomVoteData(
-    val voteTitle: String, val matchId: Int, val startTime: String,
-    val endTime: String, val date: String, val content: String
-)
+class UserLogOutModule(override val userData: Any? = null) : UserApiInterface {
 
-class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : UserApiInterface {
-
-    interface UserCreateRoomVoteInterface {
-        @Headers("Content-Type: application/json")
-        @POST("/v1/matching/vote/")
-        fun get(
-            @Body body: JsonObject
-        ): Call<Any>
-        //보내는 데이터 형식
+    interface UserLogOutInterface {
+        @DELETE("/v1/user/logout")
+        fun get(): Call<Any>
     }
 
     override suspend fun getApiData(): Any? {
@@ -31,16 +20,9 @@ class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : 
             val result = auth.getApiData()
             if (result == true) {
                 val retrofit = ApiTokenHeaderClient.getApiClient()
-                val retrofitObject = retrofit.create(UserCreateRoomVoteInterface::class.java)
+                val retrofitObject = retrofit.create(UserLogOutInterface::class.java)
                 try {
-                    val requestData = JsonObject()
-                    requestData.addProperty("voteTitle", userData.voteTitle)
-                    requestData.addProperty("matchId", userData.matchId)
-                    requestData.addProperty("startTime", userData.startTime)
-                    requestData.addProperty("endTime", userData.endTime)
-                    requestData.addProperty("date", userData.date)
-                    requestData.addProperty("content", userData.content)
-                    var resp = retrofitObject.get(requestData).execute()
+                    var resp = retrofitObject.get().execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {

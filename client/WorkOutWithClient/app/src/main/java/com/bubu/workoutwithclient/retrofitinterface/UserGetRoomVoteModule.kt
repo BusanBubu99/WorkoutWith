@@ -11,50 +11,28 @@ import java.net.SocketTimeoutException
 
 data class UserGetRoomVoteResponseData(
     @SerializedName("voteTitle") val voteTitle: String,
-    @SerializedName("time") val time: VoteTimeObject,
+    @SerializedName("startTime") val startTime: String,
+    @SerializedName("endTime") val endTime : String,
+    @SerializedName("date") val date : String,
     @SerializedName("content") val content: String,
     @SerializedName("userList") val userList: List<UserListObject>,
 )
 
-data class VoteTimeObject(
-    @SerializedName("startTime") val startTime: String,
-    @SerializedName("endTime") val endTime: String,
-    @SerializedName("date") val date: String
-)
 
 data class UserListObject(
     @SerializedName("userId") val userId: String,
-    @SerializedName("profilePic") val profilePic: String,//file
+    @SerializedName("profilePic") val profilePic: String, //must be https Link
     @SerializedName("like") val like: Int
 )
 
 
 data class UserGetRoomVoteData(val voteId: Int)
 
-//response
-//{
-//    voteTitle: 제목,
-//    time : {
-//    starttime: 시작 시간
-//    endtime: 끝 시간,
-//    date: 날짜
-//}
-//    content: 투표 내용,
-//    userlist : [
-//    {
-//        userid: 사용자id
-//        profilePic : 프로필 사진
-//        like : 좋아요 수
-//    }
-//    ]
-//}
-// //
 class UserGetRoomVoteModule(override val userData: UserGetRoomVoteData) : UserApiInterface {
 
     interface UserGetRoomVoteInterface {
-        @GET("/v1/matching/vote/")
+        @GET("/v1/matching/vote")
         fun get(
-            @Query("token") token: String,
             @Query("voteId") voteId: Int
         ): Call<Any>
         //보내는 데이터 형식
@@ -65,11 +43,11 @@ class UserGetRoomVoteModule(override val userData: UserGetRoomVoteData) : UserAp
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserGetRoomVoteInterface::class.java)
                 try {
                     var resp =
-                        retrofitObject.get(UserData.accessToken, userData.voteId).execute()
+                        retrofitObject.get(userData.voteId).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {

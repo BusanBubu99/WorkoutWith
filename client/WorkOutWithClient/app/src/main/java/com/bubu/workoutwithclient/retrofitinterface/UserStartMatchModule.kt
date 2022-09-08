@@ -32,11 +32,10 @@ class UserStartMatchModule(override val userData: UserStartMatchData) : UserApiI
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserStartMatchInterface::class.java)
                 try {
                     val requestData = JsonObject()
-                    requestData.addProperty("token", UserData.accessToken)
                     requestData.addProperty("city", userData.city)
                     requestData.addProperty("county", userData.county)
                     requestData.addProperty("district", userData.district)

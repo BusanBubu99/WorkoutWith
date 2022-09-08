@@ -24,7 +24,7 @@ tags : 관심사 태그
 userLocation : 동네 설정*/
 data class UserEditProfileData(
     val name: String,
-    val profilePic: String/*uri!*/,
+    val profilePic: File, //Must be File
     val tags: String,
     val city: String,
     val country: String,
@@ -53,12 +53,12 @@ class UserEditProfileModule(override val userData: UserEditProfileData) : UserAp
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
-                val file = File(userData.profilePic)
-                val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
-                val body = MultipartBody.Part.createFormData("profilePic", file.name, requestFile)
+
+                val requestFile = RequestBody.create(MediaType.parse("image/*"), userData.profilePic)
+                val body = MultipartBody.Part.createFormData("profilePic", userData.profilePic.name+"test", requestFile)
 
                 //Do Any Operation or Jobs..
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserEditProfileInterface::class.java)
                 var resp = retrofitObject.get(
                     userData.name, body, userData.tags, userData.city, userData.country,

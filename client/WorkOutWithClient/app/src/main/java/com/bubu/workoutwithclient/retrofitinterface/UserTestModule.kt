@@ -25,7 +25,7 @@ class UserTestModule(override val userData: JsonObject) : UserApiInterface {
         //보내는 데이터 형식
     }
     override suspend fun getApiData(): Any? {
-        val retrofit = ApiClient.getApiClient()
+        val retrofit = ApiTokenHeaderClient.getApiClient()
         val retrofitObject = retrofit.create(UserTestInterface::class.java)
         try {
             var resp = retrofitObject.get(userData).execute()

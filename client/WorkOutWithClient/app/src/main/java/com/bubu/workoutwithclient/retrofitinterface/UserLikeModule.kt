@@ -1,6 +1,7 @@
 package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.Body
@@ -9,37 +10,31 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserCreateRoomVoteData(
-    val voteTitle: String, val matchId: Int, val startTime: String,
-    val endTime: String, val date: String, val content: String
+data class UserLikeData(
+    val targetId: String, val matchId: String
 )
 
-class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : UserApiInterface {
+class UserLikeModule(override val userData: UserLikeData) : UserApiInterface {
 
-    interface UserCreateRoomVoteInterface {
+    interface UserLikeInterface {
         @Headers("Content-Type: application/json")
-        @POST("/v1/matching/vote/")
+        @POST("/v1/matching/vote/like/")
         fun get(
             @Body body: JsonObject
         ): Call<Any>
-        //보내는 데이터 형식
     }
 
     override suspend fun getApiData(): Any? {
         try {
-            var auth = UserAuthModule()
+            var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
                 val retrofit = ApiTokenHeaderClient.getApiClient()
-                val retrofitObject = retrofit.create(UserCreateRoomVoteInterface::class.java)
+                val retrofitObject = retrofit.create(UserLikeInterface::class.java)
                 try {
                     val requestData = JsonObject()
-                    requestData.addProperty("voteTitle", userData.voteTitle)
+                    requestData.addProperty("targetId", userData.targetId)
                     requestData.addProperty("matchId", userData.matchId)
-                    requestData.addProperty("startTime", userData.startTime)
-                    requestData.addProperty("endTime", userData.endTime)
-                    requestData.addProperty("date", userData.date)
-                    requestData.addProperty("content", userData.content)
                     var resp = retrofitObject.get(requestData).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
@@ -97,5 +92,7 @@ class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : 
             Log.d("Exception", e.toString())
             return e
         }
+
     }
+
 }

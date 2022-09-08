@@ -7,7 +7,6 @@ import retrofit2.http.*
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserLikeCommunityResponseData(val code: Int)
 data class UserLikeCommunityData(val postId: String)
 
 class UserLikeCommunityModule(override val userData: UserLikeCommunityData) : UserApiInterface {
@@ -15,7 +14,6 @@ class UserLikeCommunityModule(override val userData: UserLikeCommunityData) : Us
         @Headers("Content-Type: application/json")
         @POST("/v1/community/like/")
         fun get(
-            //@Query("token") token : String
             @Body body: JsonObject
         ): Call<Any>
         //보내는 데이터 형식
@@ -26,11 +24,10 @@ class UserLikeCommunityModule(override val userData: UserLikeCommunityData) : Us
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserLikeCommunityInterface::class.java)
                 try {
                     val requestData = JsonObject()
-                    requestData.addProperty("token", userInformation.accessToken)
                     requestData.addProperty("postId", userData.postId)
                     var resp = retrofitObject.get(requestData).execute()
                     if (resp.code() in 100..199) {

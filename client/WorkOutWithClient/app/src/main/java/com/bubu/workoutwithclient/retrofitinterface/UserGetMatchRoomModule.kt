@@ -27,10 +27,8 @@ data class UserGetMatchRoomData(val matchId: Int)
 
 class UserGetMatchRoomModule(override val userData: UserGetMatchRoomData) : UserApiInterface {
     interface UserGetMatchRoomInterface {
-        //@Headers("Content-Type: application/json")
         @GET("/v1/matching/info")
         fun get(
-            @Query("token") token: String,
             @Query("matchId") matchId: Int
         ): Call<Any>
         //보내는 데이터 형식
@@ -41,39 +39,17 @@ class UserGetMatchRoomModule(override val userData: UserGetMatchRoomData) : User
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserGetMatchRoomInterface::class.java)
                 try {
                     var resp =
-                        retrofitObject.get(UserData.accessToken, userData.matchId).execute()
+                        retrofitObject.get(userData.matchId).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
                         val responseBody = super.handle200(resp)
                         val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
                         return convertToClass(jsonString, UserGetMatchRoomResponseData::class.java)
-                        /*val userInfoList = mutableListOf<UserGetMatchRoomUserInfo>()
-                        val voteInfoList = mutableListOf<UserGetMatchRoomVoteInfo>()
-
-                        val userInfoJsonArray = jsonObject.asJsonObject.getAsJsonArray("userInfo")
-                        val voteInfoJsonArray = jsonObject.asJsonObject.getAsJsonArray("voteInfo")
-                        userInfoJsonArray.forEach {
-                            userInfoList.add(
-                                UserGetMatchRoomUserInfo(
-                                    it.asJsonObject.get("profilePic").toString(),
-                                    it.asJsonObject.get("name").toString()
-                                )
-                            )
-                        }
-                        voteInfoJsonArray.forEach {
-                            voteInfoList.add(
-                                UserGetMatchRoomVoteInfo(
-                                    it.asJsonObject.get("voteTitle").toString(),
-                                    it.asJsonObject.get("voteId").toString().toInt()
-                                )
-                            )
-                        }
-                        return UserGetMatchRoomResponseData(userInfoList, voteInfoList)*/
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

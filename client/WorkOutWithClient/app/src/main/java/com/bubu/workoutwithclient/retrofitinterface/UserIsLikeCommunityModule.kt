@@ -17,7 +17,6 @@ class UserIsLikeCommunityModule(override val userData: UserLikeCommunityData) : 
     interface UserIsLikeCommunityInterface {
         @GET("/v1/community/like")
         fun get(
-            @Query("token") token: String,
             @Query("postId") postId: String
         ): Call<Any>
         //보내는 데이터 형식
@@ -28,11 +27,11 @@ class UserIsLikeCommunityModule(override val userData: UserLikeCommunityData) : 
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserIsLikeCommunityInterface::class.java)
                 try {
                     var resp =
-                        retrofitObject.get(userInformation.accessToken, userData.postId).execute()
+                        retrofitObject.get(userData.postId).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {

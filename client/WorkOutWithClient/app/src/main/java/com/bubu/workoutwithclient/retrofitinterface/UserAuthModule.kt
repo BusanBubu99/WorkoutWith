@@ -12,7 +12,7 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-class UserAuthModule(override val userData : Any?) : UserApiInterface {
+class UserAuthModule(override val userData : Any? = null) : UserApiInterface {
     interface UserAuthModuleInterface {
         @Headers("Content-Type: application/json")
         @POST("/v1/token/verify/")
@@ -116,6 +116,7 @@ class UserAuthModule(override val userData : Any?) : UserApiInterface {
             return e
         }
     }
+
 
 
 }

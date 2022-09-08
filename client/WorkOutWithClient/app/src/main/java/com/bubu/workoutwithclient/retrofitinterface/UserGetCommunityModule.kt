@@ -12,7 +12,7 @@ import java.net.SocketTimeoutException
 data class UserGetCommunityResponseData(
     @SerializedName("userId") val userId: String,
     @SerializedName("title") val title: String,
-    @SerializedName("picture") val picture: String,
+    @SerializedName("picture") val picture: String,//must be https Link
     @SerializedName("timestamp") val timestamp: String,
     @SerializedName("content") val content: String,
     @SerializedName("like") val like: List<LikeObj>
@@ -23,22 +23,12 @@ data class LikeObj(
 )
 
 data class UserGetCommunityData(val postId: String)
-//userId: 사용자 id
-//title : 게시글 제목
-//picture : 게시글 사진
-//timestamp : 게시글 작성 날짜
-//content : 게시글 내용
-//l//ike : {
-//    [
-//        userId: 좋아요 누른 사람의 id
-//    ]
-//}
+
 
 class UserGetCommunityModule(override val userData: UserGetCommunityData) : UserApiInterface {
     interface UserGetCommunityInterface {
-        @GET("/v1/community/")
+        @GET("/v1/community")
         fun get(
-            @Query("token") token:String,
             @Query("postId") postId: String
         ): Call<Any>
         //보내는 데이터 형식
@@ -49,10 +39,10 @@ class UserGetCommunityModule(override val userData: UserGetCommunityData) : User
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserGetCommunityInterface::class.java)
                 try {
-                    var resp = retrofitObject.get(UserData.accessToken, userData.postId).execute()
+                    var resp = retrofitObject.get(userData.postId).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {

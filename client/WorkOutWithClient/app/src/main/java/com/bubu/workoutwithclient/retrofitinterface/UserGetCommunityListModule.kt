@@ -9,13 +9,12 @@ import retrofit2.http.Query
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-data class UserGetCommunityListResponseData(@SerializedName("postList") val postList: List<PostList>)
 
-data class PostList(
+data class UserGetCommunityListResponseData(
     @SerializedName("id") val id: String,
     @SerializedName("postId") val postId: Int,
     @SerializedName("title") val title: String,
-    @SerializedName("picture") val picture: String,//file
+    @SerializedName("picture") val picture: String,//https link
     @SerializedName("timestamp") val timestamp: String,
     @SerializedName("likeCount") val likeCount: Int
 )
@@ -29,14 +28,11 @@ data class PostList(
 //likecount : 좋아요 수
 //]
 
-class UserGetCommunityListModule(override val userData: Any?) : UserApiInterface {
+class UserGetCommunityListModule(override val userData: Any? = null) : UserApiInterface {
 
     interface UserGetCommunityListInterface {
-        //@Headers("Content-Type: application/json")
-        @GET("/v1/community/")
-        fun get(
-            @Query("token") token : String
-        ): Call<Any>
+        @GET("/v1/community")
+        fun get(): Call<Any>
         //보내는 데이터 형식
     }
 
@@ -45,20 +41,20 @@ class UserGetCommunityListModule(override val userData: Any?) : UserApiInterface
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserGetCommunityListInterface::class.java)
                 try {
-                    var resp = retrofitObject.get(UserData.accessToken).execute()
+                    var resp = retrofitObject.get().execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
                         val responseBody = super.handle200(resp)
                         val jsonString: String =
                             Gson().toJsonTree(responseBody).asJsonObject.toString()
-                        return convertToClass(
+                        return Gson().fromJson(
                             jsonString,
-                            UserGetCommunityListResponseData::class.java
-                        )
+                            Array<UserGetCommunityListResponseData>::class.java
+                        ).toList()
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

@@ -36,7 +36,6 @@ class UserGetProfileModule(override val userData: UserGetProfileData) : UserApiI
     interface UserGetProfileInterface {
         @GET("/v1/profile")
         fun get(
-            @Query("token") accessToken : String,
             @Query("targetId") targetId: String
         ): Call<Any>
         //보내는 데이터 형식
@@ -49,10 +48,10 @@ class UserGetProfileModule(override val userData: UserGetProfileData) : UserApiI
             val result = auth.getApiData()
             if (result == true) {
                 //Do Any Operation or Jobs..
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserGetProfileInterface::class.java)
                 try {
-                    var resp = retrofitObject.get(UserData.accessToken, userData.targetId).execute()
+                    var resp = retrofitObject.get(userData.targetId).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {

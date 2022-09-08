@@ -16,9 +16,8 @@ data class UserGetMatchListResponseData(
 class UserGetMatchListModule(override val userData: Any?) : UserApiInterface {
 
     interface UserGetMatchListInterface {
-        @GET("/v1/matching/")
+        @GET("/v1/matching")
         fun get(
-            //@Query("token") token : String
         ): Call<Any>
         //보내는 데이터 형식
     }
@@ -29,7 +28,7 @@ class UserGetMatchListModule(override val userData: Any?) : UserApiInterface {
             val result = auth.getApiData()
             if (result == true) {
                 //Do Any Operation or Jobs..
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserGetMatchListInterface::class.java)
                 try {
                     var resp = retrofitObject.get().execute()

@@ -18,7 +18,6 @@ class UserStartRoomVoteModule(override val userData: UserStartRoomVoteData) : Us
         @Headers("Content-Type: application/json")
         @PUT("/v1/matching/vote/")
         fun get(
-            //@Query("targetId") targetId : String
             @Body body: JsonObject
         ): Call<Any>
         //보내는 데이터 형식
@@ -29,11 +28,10 @@ class UserStartRoomVoteModule(override val userData: UserStartRoomVoteData) : Us
             var auth = UserAuthModule(null)
             val result = auth.getApiData()
             if (result == true) {
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserStartRoomVoteInterface::class.java)
                 try {
                     val requestData = JsonObject()
-                    requestData.addProperty("token", userInformation.accessToken)
                     requestData.addProperty("matchId", userData.matchId)
                     requestData.addProperty("voteId", userData.voteId)
                     var resp = retrofitObject.get(requestData).execute()

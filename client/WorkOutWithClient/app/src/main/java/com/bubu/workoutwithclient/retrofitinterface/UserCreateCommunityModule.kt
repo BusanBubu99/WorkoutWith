@@ -2,41 +2,44 @@ package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
 import com.google.gson.JsonObject
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 import java.io.EOFException
+import java.io.File
 import java.net.SocketTimeoutException
 
 data class UserCreateCommunityData(
-    val token: String, val title: String, val picture: String/**/,
+    val title: String, val picture: File/*absolute File Path*/,
     val content: String
 )
 
 class UserCreateCommunityModule(override val userData: UserCreateCommunityData) : UserApiInterface {
 
     interface UserCreateCommunityInterface {
-        @Headers("Content-Type: application/json")
+        @Multipart
         @PUT("/v1/community/")
         fun get(
-            @Body body: JsonObject
+            @Part("title") name: String,
+            @Part file: MultipartBody.Part?,
+            @Part("content") content: String,
         ): Call<Any>
         //보내는 데이터 형식
     }
 
     override suspend fun getApiData(): Any? {
         try {
-            var auth = UserAuthModule(null)
+            var auth = UserAuthModule()
             val result = auth.getApiData()
             if (result == true) {
-                val retrofit = ApiClient.getApiClient()
+                val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserCreateCommunityInterface::class.java)
                 try {
-                    val requestData = JsonObject()
-                    requestData.addProperty("token", userInformation.accessToken)
-                    requestData.addProperty("title", userData.title)
-                    requestData.addProperty("picture", userData.picture)//
-                    requestData.addProperty("content", userData.content)
-                    var resp = retrofitObject.get(requestData).execute()
+                    val requestFile = RequestBody.create(MediaType.parse("image/*"), userData.picture)
+                    val profilePicture = MultipartBody.Part.createFormData("profilePic", userData.picture.name+"test", requestFile)
+                    var resp = retrofitObject.get(userData.title,profilePicture,userData.content).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {

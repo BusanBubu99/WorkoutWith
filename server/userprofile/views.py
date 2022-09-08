@@ -48,12 +48,26 @@ class ProfileViewSet(viewsets.ViewSet):
                        "county": request.POST.get("county"),
                        "district": request.POST.get("district")}
 
-        serializer = ProfileSerializer(data=requestData)
-        if serializer.is_valid():
-            print(serializer.validated_data)
-            serializer.save()
+        try:
+            ExistingProfile = UserProfile.objects.get(
+                userid=requestData["userid"])
+            ExistingProfile.name = requestData["name"]
+            ExistingProfile.profilePic = requestData["profilePic"]
+            ExistingProfile.tags = requestData["tags"]
+            ExistingProfile.city = requestData["city"]
+            ExistingProfile.county = requestData["county"]
+            ExistingProfile.district = requestData["district"]
+            ExistingProfile.save()
+            serializer = ProfileSerializer(ExistingProfile)
             return Response(serializer.data, status=200)
-        return Response(serializer.errors, status=400)
+        except ObjectDoesNotExist:
+            serializer = ProfileSerializer(data=requestData)
+
+            if serializer.is_valid():
+                print(serializer.validated_data)
+                serializer.save()
+                return Response(serializer.data, status=200)
+            return Response(serializer.errors, status=400)
 
     def get_permissions(self):
         try:

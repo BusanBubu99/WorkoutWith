@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .serializers import MatchingSerializer, VoteSerializer
+from .serializers import MatchingSerializer, VoteSerializer, VoteProfileSerializer
 from .models import MatchingRoom
 from userprofile.models import UserProfile
 
@@ -66,14 +66,13 @@ class MatchingDetailedInfo(viewsets.ViewSet):
     def list(self, request, **kwargs):
         matchid = request.GET.get("matchId", None)
 
-        match = MatchingRoom.objects.get(matchId=matchid)
-        matchUserInfo = match.userInfo.all().values()
-        matchVoteInfo = match.voteInfo.all().values()
-        respDict = {"userInfo": matchUserInfo, "voteInfo": matchVoteInfo}
-        return Response(respDict, status=200)
+        match = MatchingRoom.objects.filter(matchId=matchid)
+        serializer = MatchingSerializer(match, many=True)
+        return Response(serializer.data, status=200)
 
 class MatchingRoomVoteViewSet(viewsets.ViewSet):
     def create(self, request, **kwargs):
+        userdata = UserProfile.objects.get(userid=request.user.username)
         data = request.data
 
         requestData = {"voteTitle": data["voteTitle"],
@@ -86,7 +85,16 @@ class MatchingRoomVoteViewSet(viewsets.ViewSet):
         serializer = VoteSerializer(data=requestData)
         if serializer.is_valid():
             savedVote = serializer.save()
+            userinfodata = {"vote": savedVote.id,
+                            "name": userdata.name,
+                            "like": 0}
+            voteserializer = VoteProfileSerializer(data = userinfodata)
+            if(voteserializer.is_valid()):
+                voteserializer.save()
+            else:
+                return Response(voteserializer.errors)
             match = MatchingRoom.objects.get(matchId=data["matchId"])
             match.voteInfo.add(savedVote)
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
+        

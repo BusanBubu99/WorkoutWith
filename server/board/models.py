@@ -12,7 +12,7 @@ class Post(models.Model):
     picture = models.ImageField(blank=True, null=True, upload_to = "Post/images")
     contents = models.TextField()
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
-    date = models.DateTimeField(default=now, editable=False)
+    timestamp = models.DateTimeField(default=now, editable=False)
 
     def __str__(self):
         return self.title
@@ -21,7 +21,7 @@ class Comment(models.Model):
     id = models.AutoField(primary_key=True, null=False, blank=False)
     post = models.ForeignKey(Post, null=False, blank=False, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
-    date = models.DateTimeField(default=now, editable=False)
+    timestamp = models.DateTimeField(default=now, editable=False)
     comment = models.TextField()
 
     def __str__(self):

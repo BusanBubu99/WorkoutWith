@@ -15,8 +15,9 @@ class MatchingRoom(models.Model):
 # user info list who joined vote
 class VoteUserinfo(models.Model):
     vote = models.ForeignKey("Vote", on_delete=models.CASCADE, related_name="userList", db_column="userList")
-    like = models.IntegerField()
     userId = models.CharField(max_length=20)
+    profilePic = models.CharField(max_length=100)
+    like = models.IntegerField()
 
 # vote model
 class Vote(models.Model):

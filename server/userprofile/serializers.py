@@ -1,4 +1,4 @@
-from userprofile.models import UserProfile
+from .models import UserProfile
 from rest_framework import serializers
 
 

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'accounts',
     'board',
     'userprofile',
+    'matching',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -175,6 +176,7 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 
 ACCOUNT_EMAIL_SUBJECT_PRFEIX = "WorkoutWith"
+
 
 # settings related to image
 MEDIA_URL = "/media/"

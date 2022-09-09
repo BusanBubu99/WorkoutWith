@@ -19,8 +19,8 @@ class UserGetAddressModule(override val userData: Any?) : UserApiInterface {
     interface UserGetCityAccessKeyInterface {
         @GET("/OpenAPI3/auth/authentication.json")
         fun get(
-            @Query("consumer_key") consumerKey : String = "c30940feb989472cb36c",
-            @Query("consumer_secret") consumerSecret : String = "981432ae72154a95b59b"
+            @Query("consumer_key") consumerKey : String = "91b8646a2a7041f18394",
+            @Query("consumer_secret") consumerSecret : String = "e8ab5df1f96249dcbc15"
         ) : Call<Any>
     }
 

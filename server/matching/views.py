@@ -72,7 +72,6 @@ class MatchingDetailedInfo(viewsets.ViewSet):
 
 class MatchingRoomVoteViewSet(viewsets.ViewSet):
     def create(self, request, **kwargs):
-        userdata = UserProfile.objects.get(userid=request.user.username)
         data = request.data
 
         requestData = {"voteTitle": data["voteTitle"],
@@ -86,7 +85,7 @@ class MatchingRoomVoteViewSet(viewsets.ViewSet):
         if serializer.is_valid():
             savedVote = serializer.save()
             userinfodata = {"vote": savedVote.voteId,
-                            "name": userdata.name,
+                            "userId": request.user.username,
                             "like": 0}
             voteserializer = VoteProfileSerializer(data = userinfodata)
             if(voteserializer.is_valid()):

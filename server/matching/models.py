@@ -14,16 +14,12 @@ class MatchingRoom(models.Model):
 
 # user info list who joined vote
 class VoteUserinfo(models.Model):
-    # TODO : change name to userId
-    # TODO : add new field for profilePic
-    #        or add new field for receive UserProfile
     vote = models.ForeignKey("Vote", on_delete=models.CASCADE, related_name="userList", db_column="userList")
     like = models.IntegerField()
-    name = models.CharField(max_length=20)
+    userId = models.CharField(max_length=20)
 
 # vote model
 class Vote(models.Model):
-    # TODO : add VoteId with random string
     voteId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     voteTitle = models.CharField(max_length=30)
     startTime = models.TimeField()

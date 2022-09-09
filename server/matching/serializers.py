@@ -17,7 +17,7 @@ class SimplifiedProfileSerializer(ProfileSerializer):
 class VoteProfileSerializer(serializers.ModelSerializer):
     class Meta(ProfileSerializer.Meta):
         model = VoteUserinfo
-        fields = ('vote', 'userId', 'profilePic', 'like')
+        fields = ('vote', 'userId', 'profilePic', 'like', 'liker')
 
 # serializer for vote
 class VoteSerializer(serializers.ModelSerializer):

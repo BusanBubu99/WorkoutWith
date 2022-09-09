@@ -108,7 +108,8 @@ class MatchingRoomVoteViewSet(viewsets.ViewSet):
             userinfodata = {"vote": savedVote.voteId,
                             "userId": userdata.userid,
                             "profilePic": str(userdata.profilePic),
-                            "like": 0}
+                            "like": 0,
+                            "liker": []}
             voteserializer = VoteProfileSerializer(data = userinfodata)
             if(voteserializer.is_valid()):
                 voteserializer.save()
@@ -126,9 +127,30 @@ class MatchingRoomVoteViewSet(viewsets.ViewSet):
         userinfodata = {"vote": data["voteId"],
                         "userId": userdata.userid,
                         "profilePic": str(userdata.profilePic),
-                        "like": 0}
+                        "like": 0,
+                        "liker": []}
         voteserializer = VoteProfileSerializer(data = userinfodata)
 
         if(voteserializer.is_valid()):
             voteserializer.save()
         return Response(voteserializer.errors)
+
+class LikeViewSet(viewsets.ViewSet):
+    def create(self, request, **kwargs):
+        data = request.data
+
+        targetId = data["targetId"]
+        voteId = data["voteId"]
+
+        vote = Vote.objects.get(voteId=voteId)
+        votetarget = vote.userList.get(userId=targetId)
+
+        if request.user.username == targetId:
+            return Response({"error": "You can't add like yourself."}, status=400)
+        if request.user.username in votetarget.liker:
+            return Response({"error": "You aleady liked this user."}, status=400)
+
+        votetarget.like += 1
+        votetarget.liker.append(request.user.username)
+        votetarget.save()
+        return Response("", status=200)

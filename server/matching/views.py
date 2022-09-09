@@ -6,11 +6,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .serializers import MatchingSerializer, VoteSerializer, VoteProfileSerializer
-from .models import MatchingRoom
+from .models import MatchingRoom, Vote
 from userprofile.models import UserProfile
 
 import json
 import hashlib
+import uuid
 
 
 # Create your views here.
@@ -98,4 +99,17 @@ class MatchingRoomVoteViewSet(viewsets.ViewSet):
             match.voteInfo.add(savedVote)
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
-        
+
+    def update(self, request, **kwargs):
+        data = request.data
+        userdata = UserProfile.objects.get(userid=request.user.username)
+
+        userinfodata = {"vote": data["voteId"],
+                        "userId": userdata.userid,
+                        "profilePic": str(userdata.profilePic),
+                        "like": 0}
+        voteserializer = VoteProfileSerializer(data = userinfodata)
+
+        if(voteserializer.is_valid()):
+            voteserializer.save()
+        return Response(voteserializer.errors)

@@ -8,6 +8,7 @@ matchingView = MatchingRoomViewSet.as_view({
 
 voteView = MatchingRoomVoteViewSet.as_view({
     "post": "create",
+    "put": "update",
 })
 
 matchInfoView = MatchingDetailedInfo.as_view({

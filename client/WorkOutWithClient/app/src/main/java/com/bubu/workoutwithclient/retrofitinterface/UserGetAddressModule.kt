@@ -11,25 +11,47 @@ import retrofit2.http.Query
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-class UserGetAddressModule(override val userData: Any?) : UserApiInterface {
+/**
+ * UserGetAddressModule
+ * Search for city, county, district.
+ *
+ * Parameter :
+ * fun getApiData() : None
+ * fun getCity() : None
+ * fun getDetailCity() : City Code(String)
+ *
+ *
+ * Return Value : UserError / UserCityResponseData
+ * If communication is successful UserCityResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
 
 
-    lateinit var cityAccessToken : String
+data class UserCityResponseData(val cityName: String, val cityCode: String)
+
+class UserGetAddressModule(override val userData: Any? = null) : UserApiInterface {
+
+
+    lateinit var cityAccessToken: String
 
     interface UserGetCityAccessKeyInterface {
         @GET("/OpenAPI3/auth/authentication.json")
         fun get(
-            @Query("consumer_key") consumerKey : String = "91b8646a2a7041f18394",
-            @Query("consumer_secret") consumerSecret : String = "e8ab5df1f96249dcbc15"
-        ) : Call<Any>
+            @Query("consumer_key") consumerKey: String = "91b8646a2a7041f18394",
+            @Query("consumer_secret") consumerSecret: String = "e8ab5df1f96249dcbc15"
+        ): Call<Any>
     }
 
     interface UserGetCityInterface {
-        //accessToken=7974f399-072c-414a-b064-8b15755279ea
-        //
         @GET("/OpenAPI3/addr/stage.json")
         fun get(
-            @Query("accessToken") accessToken : String
+            @Query("accessToken") accessToken: String
         ): Call<Any>
         //보내는 데이터 형식
     }
@@ -37,10 +59,11 @@ class UserGetAddressModule(override val userData: Any?) : UserApiInterface {
     interface UserGetDetailCityInterface {
         @GET("/OpenAPI3/addr/stage.json")
         fun get(
-            @Query("accessToken") accessToken : String,
-            @Query("cd") cd : String
-        ) : Call<Any>
+            @Query("accessToken") accessToken: String,
+            @Query("cd") cd: String
+        ): Call<Any>
     }
+
     override suspend fun getApiData(): Any? {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://sgisapi.kostat.go.kr")
@@ -53,11 +76,11 @@ class UserGetAddressModule(override val userData: Any?) : UserApiInterface {
                 return super.handle100(resp)
             } else if (resp.code() in 200..299) { //Successful!!
                 var responseBody = super.handle200(resp)
-                Log.d("response",responseBody.toString())
+                Log.d("response", responseBody.toString())
                 val result = Gson().toJsonTree(responseBody).asJsonObject
                 val tmp = result.getAsJsonObject("result")
-                cityAccessToken = tmp.asJsonObject.get("accessToken").toString().replace("\"","")
-                Log.d("citiyadd",cityAccessToken)
+                cityAccessToken = tmp.asJsonObject.get("accessToken").toString().replace("\"", "")
+                Log.d("citiyadd", cityAccessToken)
                 return getCity()
             } else if (resp.code() in 300..399) {
                 return super.handle300(resp)
@@ -78,7 +101,7 @@ class UserGetAddressModule(override val userData: Any?) : UserApiInterface {
         }
     }
 
-    private suspend fun getCity() : Any? {
+    private suspend fun getCity(): Any? {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://sgisapi.kostat.go.kr")
             .addConverterFactory(GsonConverterFactory.create())
@@ -90,15 +113,17 @@ class UserGetAddressModule(override val userData: Any?) : UserApiInterface {
                 return super.handle100(resp)
             } else if (resp.code() in 200..299) { //Successful!!
                 var responseBody = super.handle200(resp)
-                Log.d("response",responseBody.toString())
+                Log.d("response", responseBody.toString())
                 val result = Gson().toJsonTree(responseBody).asJsonObject
                 val tmp = result.getAsJsonArray("result")
-                var list = mutableListOf<JsonObject>()
+                var list = mutableListOf<UserCityResponseData>()
                 tmp.forEach {
-                    var json = JsonObject()
-                    json.addProperty("name",it.asJsonObject.get("addr_name").toString().replace("\"",""))
-                    json.addProperty("cd",it.asJsonObject.get("cd").toString().replace("\"",""))
-                    list.add(json)
+                    list.add(
+                        UserCityResponseData(
+                            it.asJsonObject.get("addr_name").toString().replace("\"", ""),
+                            it.asJsonObject.get("cd").toString().replace("\"", "")
+                        )
+                    )
                 }
                 return list
             } else if (resp.code() in 300..399) {
@@ -120,27 +145,29 @@ class UserGetAddressModule(override val userData: Any?) : UserApiInterface {
         }
     }
 
-    suspend fun getDetailCity(code : String) : Any? {
+    suspend fun getDetailCity(code: String): Any? {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://sgisapi.kostat.go.kr")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitObject = retrofit.create(UserGetDetailCityInterface::class.java)
         try {
-            var resp = retrofitObject.get(cityAccessToken,code).execute()
+            var resp = retrofitObject.get(cityAccessToken, code).execute()
             if (resp.code() in 100..199) {
                 return super.handle100(resp)
             } else if (resp.code() in 200..299) { //Successful!!
                 var responseBody = super.handle200(resp)
-                Log.d("response",responseBody.toString())
+                Log.d("response", responseBody.toString())
                 val result = Gson().toJsonTree(responseBody).asJsonObject
                 val tmp = result.getAsJsonArray("result")
-                var list = mutableListOf<JsonObject>()
+                var list = mutableListOf<UserCityResponseData>()
                 tmp.forEach {
-                    var json = JsonObject()
-                    json.addProperty("name",it.asJsonObject.get("addr_name").toString().replace("\"",""))
-                    json.addProperty("cd",it.asJsonObject.get("cd").toString().replace("\"",""))
-                    list.add(json)
+                    list.add(
+                        UserCityResponseData(
+                            it.asJsonObject.get("addr_name").toString().replace("\"", ""),
+                            it.asJsonObject.get("cd").toString().replace("\"", "")
+                        )
+                    )
                 }
                 return list
             } else if (resp.code() in 300..399) {

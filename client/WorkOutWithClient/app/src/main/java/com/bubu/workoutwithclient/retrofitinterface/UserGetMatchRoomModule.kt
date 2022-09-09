@@ -8,6 +8,25 @@ import retrofit2.http.*
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserGetMatchRoomModule
+ * View specific Match rooms
+ *
+ * Parameter : UserGetMatchRoomData
+ * shown below
+ *
+ *
+ * Return Value : UserError / UserGetMatchRoomResponseData
+ * If communication is successful UserGetMatchRoomResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserGetMatchRoomResponseData(
     @SerializedName("userInfo") val userInfo: List<UserGetMatchRoomUserInfo>,
     @SerializedName("voteInfo") val voteInfo: List<UserGetMatchRoomVoteInfo>

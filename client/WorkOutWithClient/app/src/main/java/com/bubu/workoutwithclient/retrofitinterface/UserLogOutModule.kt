@@ -8,6 +8,24 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserLogOutModule
+ * Send User logout Data
+ *
+ * Parameter : None
+ *
+ *
+ * Return Value : UserError / Http Code
+ * If communication is successful Http Code that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 class UserLogOutModule(override val userData: Any? = null) : UserApiInterface {
 
     interface UserLogOutInterface {

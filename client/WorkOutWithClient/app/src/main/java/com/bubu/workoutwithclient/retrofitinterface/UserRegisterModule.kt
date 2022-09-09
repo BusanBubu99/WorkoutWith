@@ -12,19 +12,22 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
-
 /**
- * {
- *  "access_token": "",
- *  "refresh_token": "",
- *  "user": {
- *  "pk": 1,
- *  "username": "gbdngb12",
- *  "email": "gbdngb12@Naver.com",
- *  "first_name": "",
- *  "last_name": ""
- *  }
- * }
+ * UserRegisterModule
+ * Send User Register Data
+ *
+ * Parameter : UserRegisterData
+ * shown below
+ *
+ * Return Value : UserError / Http Code
+ * If communication is successful Http Code that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
  * */
 
 data class UserRegisterData(
@@ -44,13 +47,6 @@ class UserRegisterModule(override val userData: UserRegisterData) : UserApiInter
         ): Call<Any>
         //보내는 데이터 형식
     }
-
-    /**
-     * "username"
-     * "email"
-     * "password1"
-     * "password2"
-     * */
 
     override suspend fun getApiData(): Any? {
         val retrofit = Retrofit.Builder()

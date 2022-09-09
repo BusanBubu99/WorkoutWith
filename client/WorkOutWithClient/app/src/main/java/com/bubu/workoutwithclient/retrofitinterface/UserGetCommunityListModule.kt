@@ -9,6 +9,23 @@ import retrofit2.http.Query
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserGetCommunityListModule
+ * Search the list of community posts.
+ *
+ * Parameter : None
+ *
+ *
+ * Return Value : UserError / UserGetCommunityListResponseData
+ * If communication is successful UserGetCommunityListResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
 
 data class UserGetCommunityListResponseData(
     @SerializedName("id") val id: String,
@@ -18,15 +35,6 @@ data class UserGetCommunityListResponseData(
     @SerializedName("timestamp") val timestamp: String,
     @SerializedName("likeCount") val likeCount: Int
 )
-
-//postlist : [
-//id : 게시글 작성자 id
-//postid : 게시글 id
-//title : 제목
-//picture : 게시글 사진
-//timestamp : 게시글 작성 시간
-//likecount : 좋아요 수
-//]
 
 class UserGetCommunityListModule(override val userData: Any? = null) : UserApiInterface {
 

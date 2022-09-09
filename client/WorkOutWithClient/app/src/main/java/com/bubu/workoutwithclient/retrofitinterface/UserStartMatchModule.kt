@@ -9,6 +9,24 @@ import retrofit2.http.*
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserStartMatchModule
+ * Start the Match
+ *
+ * Parameter : UserStartMatchData
+ * shown below
+ *
+ * Return Value : UserError / UserStartMatchResponseData
+ * If communication is successful UserStartMatchResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserStartMatchResponseData(@SerializedName("matchId") val matchId: Int)
 
 data class UserStartMatchData(

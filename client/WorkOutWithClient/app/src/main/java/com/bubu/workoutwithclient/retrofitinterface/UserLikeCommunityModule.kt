@@ -7,6 +7,24 @@ import retrofit2.http.*
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserLikeCommunityModule
+ *
+ *
+ * Parameter : UserLikeCommunityData
+ * Like the post
+ *
+ * Return Value : UserError / Http Code
+ * If communication is successful Http Code that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserLikeCommunityData(val postId: String)
 
 class UserLikeCommunityModule(override val userData: UserLikeCommunityData) : UserApiInterface {

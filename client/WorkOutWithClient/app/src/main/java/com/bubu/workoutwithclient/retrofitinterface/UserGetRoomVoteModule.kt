@@ -9,6 +9,24 @@ import retrofit2.http.Query
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserGetRoomVoteModule
+ * Inquire user's profile information.
+ *
+ * Parameter : UserGetRoomVoteData
+ * shown below
+ *
+ *
+ * Return Value : UserError / UserGetRoomVoteResponseData
+ * If communication is successful UserGetRoomVoteResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
 data class UserGetRoomVoteResponseData(
     @SerializedName("voteTitle") val voteTitle: String,
     @SerializedName("startTime") val startTime: String,

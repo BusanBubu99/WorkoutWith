@@ -8,6 +8,24 @@ import retrofit2.http.*
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserGetProfileModule
+ * Inquire user's profile information.
+ *
+ * Parameter : UserGetProfileData
+ * shown below
+ *
+ *
+ * Return Value : UserError / UserGetProfileResponseData
+ * If communication is successful UserGetProfileResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
 
 data class UserGetProfileData(val targetId: String)
 

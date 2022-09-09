@@ -11,6 +11,25 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserChangePasswordModule
+ * Perform password change operation
+ *
+ * Parameter : UserChangePasswordData
+ * shown below
+ *
+ *
+ * Return Value : UserError / Http Response Code
+ * If communication is successful Response Code
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserChangePasswordData(val password1: String, val password2: String)
 
 class UserChangePasswordModule(override val userData: UserChangePasswordData) : UserApiInterface {

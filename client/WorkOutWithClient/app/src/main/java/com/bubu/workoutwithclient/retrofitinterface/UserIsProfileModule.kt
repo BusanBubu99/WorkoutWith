@@ -7,6 +7,23 @@ import retrofit2.http.GET
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserIsProfileModule
+ * Check if the user has a profile.
+ *
+ * Parameter : None
+ *
+ *
+ * Return Value : UserError / UserIsProfileResponseData
+ * If communication is successful UserIsProfileResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
 
 data class UserIsProfileResponseData(val snsResult: String)
 

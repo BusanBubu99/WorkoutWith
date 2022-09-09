@@ -11,6 +11,25 @@ import java.io.EOFException
 import java.io.File
 import java.net.SocketTimeoutException
 
+/**
+ * UserCreateCommunityModule
+ * create community posts
+ *
+ * Parameter : UserChangePasswordData
+ * shown below
+ *
+ *
+ * Return Value : UserError / Http Response Code
+ * If communication is successful Response Code
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserCreateCommunityData(
     val title: String, val picture: File/*absolute File Path*/,
     val content: String
@@ -38,7 +57,7 @@ class UserCreateCommunityModule(override val userData: UserCreateCommunityData) 
                 val retrofitObject = retrofit.create(UserCreateCommunityInterface::class.java)
                 try {
                     val requestFile = RequestBody.create(MediaType.parse("image/*"), userData.picture)
-                    val profilePicture = MultipartBody.Part.createFormData("profilePic", userData.picture.name+"test", requestFile)
+                    val profilePicture = MultipartBody.Part.createFormData("profilePic", userData.picture.name, requestFile)
                     var resp = retrofitObject.get(userData.title,profilePicture,userData.content).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)

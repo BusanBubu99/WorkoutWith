@@ -12,6 +12,24 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserAuthModule
+ * Perform actions related to authentication tokens
+ *
+ * Parameter : no parameters required
+ *
+ *
+ * Return Value : UserError / Http Response Code
+ * If communication is successful Response Code
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 class UserAuthModule(override val userData : Any? = null) : UserApiInterface {
     interface UserAuthModuleInterface {
         @Headers("Content-Type: application/json")
@@ -30,16 +48,6 @@ class UserAuthModule(override val userData : Any? = null) : UserApiInterface {
         ): Call<Any>
         //보내는 데이터 형식
     }
-
-    /**
-     *
-     * {
-    "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYyMjA5Nzc3LCJpYXQiOjE2NjIyMDg4MTcsImp0aSI6ImQ0Y2ZlNDZiNTExNzQ5YmE5YWJmY2NhNDcwNGRlN2JiIiwidXNlcl9pZCI6MTZ9.DK8tSdwFYqHWC8UMNMzhPMv4n7COq0r5flayAko3-JM",
-    "access_token_expiration": "2022-09-03T12:56:17.841231Z"
-    }
-     */
-
-    //{"refresh" : "" }
 
 
     private suspend fun refreshTokenData(): Any {

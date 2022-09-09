@@ -9,6 +9,25 @@ import retrofit2.http.Query
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserIsLikeCommunityModule
+ * Check like the post
+ *
+ * Parameter : UserLikeCommunityData
+ * shown in UserLikeCommunityModule
+ *
+ *
+ * Return Value : UserError / UserIsLikeCommunityResponseData
+ * If communication is successful UserIsLikeCommunityResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserIsLikeCommunityResponseData(@SerializedName("likeable") val likeable: Boolean)
 
 

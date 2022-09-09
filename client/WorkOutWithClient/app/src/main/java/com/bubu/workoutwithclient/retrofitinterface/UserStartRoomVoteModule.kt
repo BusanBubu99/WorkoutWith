@@ -9,6 +9,23 @@ import retrofit2.http.PUT
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserStartRoomVoteModule
+ * Start the Match
+ *
+ * Parameter : UserStartRoomVoteData
+ * shown below
+ *
+ * Return Value : UserError / Http Code
+ * If communication is successful Http Code that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
 
 data class UserStartRoomVoteData(val matchId: String, val voteId: String)
 

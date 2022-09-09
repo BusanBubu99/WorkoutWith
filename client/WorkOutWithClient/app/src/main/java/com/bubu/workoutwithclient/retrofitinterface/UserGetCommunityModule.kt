@@ -9,6 +9,25 @@ import retrofit2.http.Query
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserGetCommunityListModule
+ * View specific community posts
+ *
+ * Parameter : UserGetCommunityData
+ * shown below
+ *
+ *
+ * Return Value : UserError / UserGetCommunityResponseData
+ * If communication is successful UserGetCommunityResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserGetCommunityResponseData(
     @SerializedName("userId") val userId: String,
     @SerializedName("title") val title: String,

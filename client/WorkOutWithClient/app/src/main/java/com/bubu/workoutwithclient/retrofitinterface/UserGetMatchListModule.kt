@@ -8,6 +8,24 @@ import retrofit2.http.GET
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserGetMatchListModule
+ * Shows a list of matching rooms
+ *
+ * Parameter : None
+ *
+ *
+ * Return Value : UserError / UserGetMatchListResponseData
+ * If communication is successful UserGetMatchListResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserGetMatchListResponseData(
     @SerializedName("matchId") val id: String,
     @SerializedName("title") val title: String
@@ -24,7 +42,7 @@ class UserGetMatchListModule(override val userData: Any?) : UserApiInterface {
 
     override suspend fun getApiData(): Any? {
         try {
-            var auth = UserAuthModule(null)
+            var auth = UserAuthModule()
             val result = auth.getApiData()
             if (result == true) {
                 //Do Any Operation or Jobs..
@@ -38,16 +56,6 @@ class UserGetMatchListModule(override val userData: Any?) : UserApiInterface {
                         val responseBody = super.handle200(resp)
                         val jsonString : String = Gson().toJsonTree(responseBody).asJsonArray.toString()
                         return Gson().fromJson(jsonString,Array<UserGetMatchListResponseData>::class.java).toList()
-                        /*val list = mutableListOf<UserGetMatchLists>()
-                        jsonObject.forEach {
-                            list.add(
-                                UserGetMatchLists(
-                                    it.asJsonObject.get("matchId").toString(),
-                                    it.asJsonObject.get("title").toString()
-                                )
-                            )
-                        }
-                        return UserGetMatchListResponseData(list)*/
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

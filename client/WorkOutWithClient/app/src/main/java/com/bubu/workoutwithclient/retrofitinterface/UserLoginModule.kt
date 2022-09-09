@@ -13,27 +13,28 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserLoginModule
+ * Send User Login Data
+ *
+ * Parameter : UserLoginData
+ *
+ *
+ * Return Value : UserError / UserLoginResponseData
+ * If communication is successful UserLoginResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
 
 data class UserLoginResponseData(
     @SerializedName("access_token") val accessToken: String,
     @SerializedName("refresh_token") val refreshToken: String
 )
-
-/**
- *
- * {
- *  "access_token": "",
- *  "refresh_token": "",
- *  "user": {
- *          "pk": 7,
- *          "username": "gbdngb50000",
- *          "email": "gbdngb50000@naver.com",
- *          "first_name": "",
- *          "last_name": ""
- *      }
- * }
- *
- * */
 
 data class UserLoginData(
     val username: String,
@@ -52,8 +53,6 @@ class UserLoginModule(override val userData: UserLoginData) : UserApiInterface {
         //보내는 데이터 형식
     }
 
-    /**
-    {"username":"gbdngb12", "email":"gbdngb12@Naver.com", "password":"1919tkd2@"}*/
     override suspend fun getApiData(): Any? {
         val retrofit = Retrofit.Builder()
             .baseUrl(super.serverAddress)

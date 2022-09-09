@@ -12,27 +12,26 @@ import java.io.IOException
 
 /**
  * UserApiInterface
- * Defines the interface for the client's retrofit API.
+ * define essential retrofit Interface
  *
- * Generic : <R> :
- * R : ResponseUserData
+ * Parameter : userData
+ * predefined UserData class
  *
- * Parameter :
- * userData : Json UserData
- *
- * Return Value : R
- * R : Retrofit Response Value
+ * Return Value : UserError / UserData
+ * If communication is successful UserData
+ * else UserError
  *
  * Exception :
- * if Server Closed then => SocketTimeoutException
- * else Exception
- *
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
  * */
 
 interface UserApiInterface {
     val userData : Any?
     val serverAddress: String
-        get() = "http://192.168.36.205:8000"
+        get() = "http://192.168.200.103:8000"
     suspend fun getApiData() : Any?
     suspend fun handle100(resp : retrofit2.Response<Any>) : UserError {
         var errorMessages = mutableListOf<String>()
@@ -83,7 +82,7 @@ interface UserApiInterface {
 /*
 * */
 object ApiTokenHeaderClient {
-    private const val BASE_URL = "http://192.168.36.205:8000"
+    private const val BASE_URL = "http://192.168.200.103:8000"
     fun getApiClient(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)

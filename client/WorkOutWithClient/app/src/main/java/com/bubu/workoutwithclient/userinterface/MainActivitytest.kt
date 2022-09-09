@@ -24,19 +24,26 @@ lateinit var storagePermission: ActivityResultLauncher<String>
 
 fun register() {
     CoroutineScope(Dispatchers.Default).launch {
-        val registerObject = UserRegisterModule(UserRegisterData("ehdrjs7789","gbdngb12@naver.com","1616tkd2","1616tkd2"))
-        val result =  registerObject.getApiData()
-        if(result in 200..299) {
-            Log.d("successful!","Check the Email!")
-        } else if(result is UserError) {
+        val registerObject = UserRegisterModule(
+            UserRegisterData(
+                "gbdngb12",
+                "gbdngb12@naver.com",
+                "1616tkd2",
+                "1616tkd2"
+            )
+        )
+        val result = registerObject.getApiData()
+        if (result in 200..299) {
+            Log.d("successful!", "Check the Email!")
+        } else if (result is UserError) {
             result.message.forEach {
-                Log.d("result Error",it)
+                Log.d("result Error", it)
             }
-        } else if(result is SocketTimeoutException) {
+        } else if (result is SocketTimeoutException) {
 
-        } else if(result is EOFException) {
+        } else if (result is EOFException) {
 
-        } else if(result is Exception) {
+        } else if (result is Exception) {
 
         }
     }
@@ -44,21 +51,22 @@ fun register() {
 
 fun login() {
     CoroutineScope(Dispatchers.Default).launch {
-        val loginObject = UserLoginModule(UserLoginData("ehdrjs7789","gbdngb12@Naver.com","1616tkd2@"))
-        val result =  loginObject.getApiData()
-        if(result is UserLoginResponseData) {
+        val loginObject =
+            UserLoginModule(UserLoginData("gbdngb12", "gbdngb12@Naver.com", "1616tkd2"))
+        val result = loginObject.getApiData()
+        if (result is UserLoginResponseData) {
             Log.d("successful!", userInformation.accessToken)
             Log.d("successful!", userInformation.refreshToken)
             Log.d("successful!", userInformation.userId)
-        } else if(result is UserError) {
+        } else if (result is UserError) {
             result.message.forEach {
-                Log.d("result Error",it)
+                Log.d("result Error", it)
             }
-        } else if(result is SocketTimeoutException) {
+        } else if (result is SocketTimeoutException) {
 
-        } else if(result is EOFException) {
+        } else if (result is EOFException) {
 
-        } else if(result is Exception) {
+        } else if (result is Exception) {
 
         }
     }
@@ -67,18 +75,18 @@ fun login() {
 fun isProfile() {
     CoroutineScope(Dispatchers.Default).launch {
         val isProfileObject = UserIsProfileModule()
-        val result =  isProfileObject.getApiData()
-        if(result is UserIsProfileResponseData) {
+        val result = isProfileObject.getApiData()
+        if (result is UserIsProfileResponseData) {
             Log.d("successful!", result.snsResult)
-        } else if(result is UserError) {
+        } else if (result is UserError) {
             result.message.forEach {
-                Log.d("result Error",it)
+                Log.d("result Error", it)
             }
-        } else if(result is SocketTimeoutException) {
+        } else if (result is SocketTimeoutException) {
 
-        } else if(result is EOFException) {
+        } else if (result is EOFException) {
 
-        } else if(result is Exception) {
+        } else if (result is Exception) {
 
         }
     }
@@ -86,19 +94,19 @@ fun isProfile() {
 
 fun logout() {
     CoroutineScope(Dispatchers.Default).launch {
-        val logoutObject =UserLogOutModule()
+        val logoutObject = UserLogOutModule()
         val result = logoutObject.getApiData()
-        if(result in 200 .. 299) {
+        if (result in 200..299) {
             Log.d("successful!", result.toString())
-        } else if(result is UserError) {
+        } else if (result is UserError) {
             result.message.forEach {
-                Log.d("result Error",it)
+                Log.d("result Error", it)
             }
-        } else if(result is SocketTimeoutException) {
+        } else if (result is SocketTimeoutException) {
 
-        } else if(result is EOFException) {
+        } else if (result is EOFException) {
 
-        } else if(result is Exception) {
+        } else if (result is Exception) {
 
         }
     }
@@ -106,19 +114,20 @@ fun logout() {
 
 fun changePassword() {
     CoroutineScope(Dispatchers.Default).launch {
-        val logoutObject = UserChangePasswordModule(UserChangePasswordData("1616tkd2@","1616tkd2@"))
+        val logoutObject =
+            UserChangePasswordModule(UserChangePasswordData("1616tkd2@", "1616tkd2@"))
         val result = logoutObject.getApiData()
-        if(result in 200 .. 299) {
+        if (result in 200..299) {
             Log.d("successful!", result.toString())
-        } else if(result is UserError) {
+        } else if (result is UserError) {
             result.message.forEach {
-                Log.d("result Error",it)
+                Log.d("result Error", it)
             }
-        } else if(result is SocketTimeoutException) {
+        } else if (result is SocketTimeoutException) {
 
-        } else if(result is EOFException) {
+        } else if (result is EOFException) {
 
-        } else if(result is Exception) {
+        } else if (result is Exception) {
 
         }
     }
@@ -133,17 +142,17 @@ fun editProfile() {
             )
         )
         val result = editProfile.getApiData()
-        if(result is UserEditProfileResponseData) {
+        if (result is UserEditProfileResponseData) {
             Log.d("successful!", result.toString())
-        } else if(result is UserError) {
+        } else if (result is UserError) {
             result.message.forEach {
-                Log.d("result Error",it)
+                Log.d("result Error", it)
             }
-        } else if(result is SocketTimeoutException) {
+        } else if (result is SocketTimeoutException) {
 
-        } else if(result is EOFException) {
+        } else if (result is EOFException) {
 
-        } else if(result is Exception) {
+        } else if (result is Exception) {
 
         }
     }
@@ -153,17 +162,17 @@ fun getProfile() {
     CoroutineScope(Dispatchers.Default).launch {
         val getProfileObject = UserGetProfileModule(UserGetProfileData("ehdrjs7789"))
         val result = getProfileObject.getApiData()
-        if(result is UserGetProfileResponseData) {
+        if (result is UserGetProfileResponseData) {
             Log.d("successful!", result.toString())
-        } else if(result is UserError) {
+        } else if (result is UserError) {
             result.message.forEach {
-                Log.d("result Error",it)
+                Log.d("result Error", it)
             }
-        } else if(result is SocketTimeoutException) {
+        } else if (result is SocketTimeoutException) {
 
-        } else if(result is EOFException) {
+        } else if (result is EOFException) {
 
-        } else if(result is Exception) {
+        } else if (result is Exception) {
 
         }
     }
@@ -171,23 +180,112 @@ fun getProfile() {
 
 fun startMatch() {
     CoroutineScope(Dispatchers.Default).launch {
-        val startMatchObject = UserStartMatchModule(UserStartMatchData("부산","진구","개금","20"))
+        val startMatchObject = UserStartMatchModule(UserStartMatchData("부산", "진구", "개금", "20"))
         val result = startMatchObject.getApiData()
-        if(result is UserStartMatchResponseData) {
+        if (result is UserStartMatchResponseData) {
             Log.d("successful!", result.toString())
-        } else if(result is UserError) {
+        } else if (result is UserError) {
             result.message.forEach {
-                Log.d("result Error",it)
+                Log.d("result Error", it)
             }
-        } else if(result is SocketTimeoutException) {
+        } else if (result is SocketTimeoutException) {
 
-        } else if(result is EOFException) {
+        } else if (result is EOFException) {
 
-        } else if(result is Exception) {
+        } else if (result is Exception) {
 
         }
     }
 }
+
+fun createCommunity() {
+    CoroutineScope(Dispatchers.Default).launch {
+        val createCommunityObject = UserCreateCommunityModule(
+            UserCreateCommunityData(
+                "title!",
+                File("/storage/0B0A-1E06/Download/test.png"),
+                "Test String!"
+            )
+        )
+        val result = createCommunityObject.getApiData()
+        if (result is UserStartMatchResponseData) {
+            Log.d("successful!", result.toString())
+        } else if (result is UserError) {
+            result.message.forEach {
+                Log.d("result Error", it)
+            }
+        } else if (result is SocketTimeoutException) {
+
+        } else if (result is EOFException) {
+
+        } else if (result is Exception) {
+
+        }
+    }
+}
+
+fun getAddress() {
+    CoroutineScope(Dispatchers.Default).launch {
+        val addressObject = UserGetAddressModule()
+        val result = addressObject.getApiData()
+        if (result is List<*>) {
+            result as List<UserCityResponseData>
+            result.forEach {
+                Log.d("cityName", it.cityName)
+                Log.d("cityCode", it.cityCode)
+            }
+            val result2 = addressObject.getDetailCity(result[1].cityCode)
+            if (result2 is List<*>) {
+                result2 as List<UserCityResponseData>
+                result2.forEach {
+                    Log.d("name", it.cityName)
+                    Log.d("code", it.cityCode)
+                }
+                val result3 = addressObject.getDetailCity(result2[6].cityCode)
+                if (result3 is List<*>) {
+                    result3 as List<UserCityResponseData>
+                    result3.forEach {
+                        Log.d("name",it.cityName)
+                        Log.d("code",it.cityCode)
+                    }
+                } else if (result3 is UserError) {
+                    result3.message.forEach {
+                        Log.d("result Error", it)
+                    }
+                } else if (result3 is SocketTimeoutException) {
+
+                } else if (result3 is EOFException) {
+
+                } else if (result3 is Exception) {
+
+                }
+            } else if (result2 is UserError) {
+                result2.message.forEach {
+                    Log.d("result Error", it)
+                }
+            } else if (result2 is SocketTimeoutException) {
+
+            } else if (result2 is EOFException) {
+
+            } else if (result2 is Exception) {
+
+            }
+        } else if (result is UserError) {
+            result.message.forEach {
+                Log.d("result Error", it)
+            }
+        } else if (result is SocketTimeoutException) {
+
+        } else if (result is EOFException) {
+
+        } else if (result is Exception) {
+
+        }
+
+    }
+}
+
+
 class MainActivity : AppCompatActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -213,9 +311,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.testButton.setOnClickListener {
-            startMatch()
+            getAddress()
         }
-
+        binding.register.setOnClickListener {
+            register()
+        }
 
 
         /*binding.login.setOnClickListener {
@@ -284,7 +384,6 @@ class MainActivity : AppCompatActivity() {
             } else if (result is Exception) {
             }
         }*/
-
 
 
     }

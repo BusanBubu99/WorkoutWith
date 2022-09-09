@@ -10,6 +10,24 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserLikeModule
+ * Like the User Profile
+ *
+ * Parameter : UserLikeData
+ *
+ *
+ * Return Value : UserError / Http Code
+ * If communication is successful Http Code that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserLikeData(
     val targetId: String, val matchId: String
 )

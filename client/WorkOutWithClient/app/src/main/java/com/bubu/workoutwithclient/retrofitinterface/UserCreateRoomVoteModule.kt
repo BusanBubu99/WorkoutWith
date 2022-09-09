@@ -9,6 +9,25 @@ import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
+/**
+ * UserCreateRoomVoteModule
+ * create a Vote in Match Room
+ *
+ * Parameter : UserCreateRoomVoteData
+ * shown below
+ *
+ *
+ * Return Value : UserError / Http Response Code
+ * If communication is successful Response Code
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserCreateRoomVoteData(
     val voteTitle: String, val matchId: Int, val startTime: String,
     val endTime: String, val date: String, val content: String

@@ -17,11 +17,25 @@ import java.io.EOFException
 import java.io.File
 import java.net.SocketTimeoutException
 
-/*
-* name : 사용자 이름
-profilePic : 프로필 사진
-tags : 관심사 태그
-userLocation : 동네 설정*/
+/**
+ * UserEditProfileModule
+ * Edit user's profile
+ *
+ * Parameter : UserEditProfileData
+ * shown below
+ *
+ *
+ * Return Value : UserError / UserEditProfileResponseData
+ * If communication is successful UserEditProfileResponseData that is defined below
+ * else UserError
+ *
+ * Exception :
+ * SocketTimeOutException : if Server is closed
+ * EOFException : Response Type Mismatch
+ * Exception :
+ * Exceptions we don't know yet
+ * */
+
 data class UserEditProfileData(
     val name: String,
     val profilePic: File, //Must be File
@@ -34,7 +48,7 @@ data class UserEditProfileData(
 data class UserEditProfileResponseData(
     @SerializedName("userid") val userId : String,
     @SerializedName("name") val name: String,
-    @SerializedName("profilePic") val profilePic: String, //Must be File
+    @SerializedName("profilePic") val profilePic: String,
     @SerializedName("tags") val tags: String,
     @SerializedName("city") val city: String,
     @SerializedName("county") val county: String,

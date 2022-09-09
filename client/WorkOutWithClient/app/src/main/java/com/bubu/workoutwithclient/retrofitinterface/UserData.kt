@@ -1,5 +1,9 @@
 package com.bubu.workoutwithclient.retrofitinterface
 
+/**
+ * UserData Object
+ * Define UserData
+ * */
 
 lateinit var userInformation: UserData
 

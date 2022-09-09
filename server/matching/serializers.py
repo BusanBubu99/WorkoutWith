@@ -25,7 +25,7 @@ class VoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vote
-        fields = ("voteTitle", "startTime", "endTime", "date", "content", "userList", "matchId")
+        fields = ("voteTitle", "startTime", "endTime", "date", "content", "userList", "matchId", "voteId")
 
 
 # serializer for matching

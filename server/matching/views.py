@@ -85,7 +85,7 @@ class MatchingRoomVoteViewSet(viewsets.ViewSet):
         serializer = VoteSerializer(data=requestData)
         if serializer.is_valid():
             savedVote = serializer.save()
-            userinfodata = {"vote": savedVote.id,
+            userinfodata = {"vote": savedVote.voteId,
                             "name": userdata.name,
                             "like": 0}
             voteserializer = VoteProfileSerializer(data = userinfodata)

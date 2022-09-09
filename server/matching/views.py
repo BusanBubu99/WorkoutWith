@@ -9,6 +9,8 @@ from .serializers import MatchingSerializer, VoteSerializer, VoteProfileSerializ
 from .models import MatchingRoom, Vote
 from userprofile.models import UserProfile
 
+from .matchAlgorithm import findNearbyLocation
+
 import json
 import hashlib
 import uuid
@@ -29,11 +31,28 @@ class MatchingRoomViewSet(viewsets.ViewSet):
     def create(self, request, **kwargs):
         requestData = request.data
         userId = request.user.username
+        reqCity = requestData["city"]
+        reqCounty = requestData["county"]
+        reqDistrict = requestData["district"]
+        matchlistQuery = MatchingRoom.objects.all().values_list('city', 'county', 'district')
+        matchlist = []
+        for matchloc in matchlistQuery:
+            matchlist.append(' '.join(matchloc))
+
+        nearLoc = findNearbyLocation(reqCity+" "+reqCounty+" "+reqDistrict,
+                                     matchlist)
+
+        if nearLoc is not None:
+            loclist = nearLoc.split(" ")
+            reqCity = loclist[0]
+            reqCounty = loclist[1]
+            reqDistrict = loclist[2]
+
         try:
             userInfo = UserProfile.objects.get(userid=userId)
         except ObjectDoesNotExist:
             return Response({"error": "can't find user information from given credentials."}, status=400)
-        roomInfo = requestData["city"] + requestData["county"] + requestData["district"] + requestData["game"]
+        roomInfo = reqCity + reqCounty + reqDistrict + requestData["game"]
         roomInfo = hashlib.sha1(roomInfo.encode('utf-8')).hexdigest()
 
         try:
@@ -44,9 +63,9 @@ class MatchingRoomViewSet(viewsets.ViewSet):
             return Response({"matchId": roomInfo}, status=200)
         except ObjectDoesNotExist:
             requestData = {"userInfo": userInfo.__dict__,
-                        "city": requestData["city"],
-                        "county": requestData["county"],
-                        "district": requestData["district"],
+                        "city": reqCity,
+                        "county": reqCounty,
+                        "district": reqDistrict,
                         "game": requestData["game"],
                         "matchId": roomInfo}
             serializer = MatchingSerializer(data=requestData)

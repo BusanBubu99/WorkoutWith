@@ -13,7 +13,7 @@ data class UserStartMatchResponseData(@SerializedName("matchId") val matchId: In
 
 data class UserStartMatchData(
     val city: String, val county: String, val district: String,
-    val game: Int
+    val game: String
 )
 
 class UserStartMatchModule(override val userData: UserStartMatchData) : UserApiInterface {

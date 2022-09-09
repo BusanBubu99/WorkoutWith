@@ -4,13 +4,14 @@ import android.util.Log
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.http.DELETE
+import retrofit2.http.POST
 import java.io.EOFException
 import java.net.SocketTimeoutException
 
 class UserLogOutModule(override val userData: Any? = null) : UserApiInterface {
 
     interface UserLogOutInterface {
-        @DELETE("/v1/user/logout")
+        @POST("/v1/logout/")
         fun get(): Call<Any>
     }
 

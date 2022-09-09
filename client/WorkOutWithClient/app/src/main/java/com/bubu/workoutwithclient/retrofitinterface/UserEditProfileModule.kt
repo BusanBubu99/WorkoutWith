@@ -27,8 +27,18 @@ data class UserEditProfileData(
     val profilePic: File, //Must be File
     val tags: String,
     val city: String,
-    val country: String,
+    val county: String,
     val district: String
+)
+
+data class UserEditProfileResponseData(
+    @SerializedName("userid") val userId : String,
+    @SerializedName("name") val name: String,
+    @SerializedName("profilePic") val profilePic: String, //Must be File
+    @SerializedName("tags") val tags: String,
+    @SerializedName("city") val city: String,
+    @SerializedName("county") val county: String,
+    @SerializedName("district") val district: String
 )
 
 
@@ -50,18 +60,23 @@ class UserEditProfileModule(override val userData: UserEditProfileData) : UserAp
 
     override suspend fun getApiData(): Any? {
         try {
-            var auth = UserAuthModule(null)
+            var auth = UserAuthModule()
             val result = auth.getApiData()
             if (result == true) {
 
-                val requestFile = RequestBody.create(MediaType.parse("image/*"), userData.profilePic)
-                val body = MultipartBody.Part.createFormData("profilePic", userData.profilePic.name+"test", requestFile)
+                val requestFile =
+                    RequestBody.create(MediaType.parse("image/*"), userData.profilePic)
+                val body = MultipartBody.Part.createFormData(
+                    "profilePic",
+                    userInformation.userId + userData.profilePic.name,
+                    requestFile
+                )
 
                 //Do Any Operation or Jobs..
                 val retrofit = ApiTokenHeaderClient.getApiClient()
                 val retrofitObject = retrofit.create(UserEditProfileInterface::class.java)
                 var resp = retrofitObject.get(
-                    userData.name, body, userData.tags, userData.city, userData.country,
+                    userData.name, body, userData.tags, userData.city, userData.county,
                     userData.district
                 ).execute()
                 if (resp.code() in 100..199) {
@@ -69,7 +84,9 @@ class UserEditProfileModule(override val userData: UserEditProfileData) : UserAp
                 } else if (resp.code() in 200..299) {
                     val responseBody = super.handle200(resp)
                     val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
-                    return convertToClass(jsonString,UserEditProfileData::class.java)
+                    Log.d("jsonString", jsonString)
+                    Log.d("After jsonString",jsonString.replace("\"",""))
+                    return convertToClass(jsonString, UserEditProfileResponseData::class.java)
                 } else if (resp.code() in 300..399) {
                     return super.handle300(resp)
                 } else if (resp.code() in 400..499) {

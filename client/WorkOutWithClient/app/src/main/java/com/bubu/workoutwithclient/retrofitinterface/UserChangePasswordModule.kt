@@ -32,8 +32,8 @@ class UserChangePasswordModule(override val userData: UserChangePasswordData) : 
                 val retrofitObject = retrofit.create(UserChangePasswordInterface::class.java)
                 try {
                     val requestData = JsonObject()
-                    requestData.addProperty("password", userData.password1)
-                    //requestData.addProperty("password2",userData.password2)
+                    requestData.addProperty("new_password1", userData.password1)
+                    requestData.addProperty("new_password2",userData.password2)
                     var resp = retrofitObject.get(requestData).execute()
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)

@@ -12,7 +12,7 @@ import java.net.SocketTimeoutException
 data class UserGetProfileData(val targetId: String)
 
 data class UserGetProfileResponseData(
-    @SerializedName("userId") val userId: String,
+    @SerializedName("userid") val userId: String,
     @SerializedName("name") val name: String,
     @SerializedName("profilePic") val profilePic: String,//file
     @SerializedName("tags") val tags: String,

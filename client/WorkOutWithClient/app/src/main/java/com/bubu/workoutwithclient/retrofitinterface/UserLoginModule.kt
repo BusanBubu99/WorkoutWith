@@ -73,7 +73,9 @@ class UserLoginModule(override val userData: UserLoginData) : UserApiInterface {
                 val jsonObject: JsonObject = Gson().toJsonTree(responseBody).asJsonObject
                 val accessToken = jsonObject.get("access_token").toString().replace("\"", "")
                 val refreshToken = jsonObject.get("refresh_token").toString().replace("\"", "")
-                userInformation.userId = userData.username
+                val userJson = jsonObject.getAsJsonObject("user")
+                val userId = userJson.get("username").toString().replace("\"", "")
+                userInformation.userId = userId
                 userInformation.accessToken = accessToken
                 userInformation.refreshToken = refreshToken
                 return UserLoginResponseData(accessToken, refreshToken)

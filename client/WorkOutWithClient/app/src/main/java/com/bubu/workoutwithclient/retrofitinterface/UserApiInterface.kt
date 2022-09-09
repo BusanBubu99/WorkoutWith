@@ -32,7 +32,7 @@ import java.io.IOException
 interface UserApiInterface {
     val userData : Any?
     val serverAddress: String
-        get() = "http://14.44.112.160:8000"
+        get() = "http://192.168.36.205:8000"
     suspend fun getApiData() : Any?
     suspend fun handle100(resp : retrofit2.Response<Any>) : UserError {
         var errorMessages = mutableListOf<String>()
@@ -83,7 +83,7 @@ interface UserApiInterface {
 /*
 * */
 object ApiTokenHeaderClient {
-    private const val BASE_URL = "http://14.44.112.160:8000"
+    private const val BASE_URL = "http://192.168.36.205:8000"
     fun getApiClient(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)

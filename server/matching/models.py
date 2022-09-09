@@ -18,6 +18,7 @@ class VoteUserinfo(models.Model):
     userId = models.CharField(max_length=20)
     profilePic = models.CharField(max_length=100)
     like = models.IntegerField()
+    liker = models.JSONField()
 
 # vote model
 class Vote(models.Model):

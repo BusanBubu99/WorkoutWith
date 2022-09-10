@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .serializers import MatchingSerializer, VoteSerializer, VoteProfileSerializer
+from .serializers import MatchingSerializer, VoteSerializer, VoteProfileSerializer, SimplifiedMatchingSerializer
 from .models import MatchingRoom, Vote
 from userprofile.models import UserProfile
 
@@ -25,7 +25,7 @@ class MatchingRoomViewSet(viewsets.ViewSet):
         userId = request.user.username
         user = UserProfile.objects.get(userid=userId)
         queryset = MatchingRoom.objects.filter(userInfo=user)
-        serializer = MatchingSerializer(queryset, many=True)
+        serializer = SimplifiedMatchingSerializer(queryset, many=True)
         return Response(serializer.data, status=200)
 
     def create(self, request, **kwargs):

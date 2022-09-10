@@ -36,3 +36,8 @@ class MatchingSerializer(serializers.ModelSerializer):
     class Meta:
         model = MatchingRoom
         fields = ("city", "county", "district", "userInfo", "game", "matchId", "voteInfo")
+
+
+class SimplifiedMatchingSerializer(MatchingSerializer):
+    class Meta(MatchingSerializer.Meta):
+        fields = ("city", "county", "district", "game", "matchId")

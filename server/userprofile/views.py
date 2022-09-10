@@ -5,6 +5,8 @@ from rest_framework.response import Response
 
 from .serializers import ProfileSerializer
 from .models import UserProfile
+from board.models import Post
+from accounts.models import User
 
 
 class ProfileViewSet(viewsets.ViewSet):
@@ -33,9 +35,14 @@ class ProfileViewSet(viewsets.ViewSet):
                             "to get user profile."},
                             status=400)
         try:
-            profileObject = UserProfile.objects.get(userid=targetId)
-            serializer = ProfileSerializer(profileObject)
-            return Response(serializer.data, status=200)
+            profileObject = UserProfile.objects.filter(userid=targetId)
+            post = Post.objects.filter(user=User.objects.get(username=targetId))
+            postlist = []
+            for p in post.values():
+                postlist.append(p)
+            profile = profileObject.values()[0]
+            profile["communityPost"] = postlist
+            return Response(profile, status=200)
         except ObjectDoesNotExist:
             return Response(nullObject, status=400)
 

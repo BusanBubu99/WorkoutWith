@@ -15,12 +15,12 @@ import com.bubu.workoutwithclient.databinding.FragmentMatchingStartBinding
 import com.bubu.workoutwithclient.retrofitinterface.UserCityResponseData
 
 
-class CityAdapter(context: Context, @LayoutRes private val layoutResource: Int, private val hotels: List<UserCityResponseData>):
-    ArrayAdapter<UserCityResponseData>(context, layoutResource, hotels) {
+class CityAdapter(context: Context, @LayoutRes private val layoutResource: Int, private val cities: List<UserCityResponseData>):
+    ArrayAdapter<UserCityResponseData>(context, layoutResource, cities) {
 
 
     override fun getItemId(position: Int): Long {
-        return hotels[position].cityCode.toLong()
+        return cities[position].cityCode.toLong()
     }
 
 
@@ -34,7 +34,7 @@ class CityAdapter(context: Context, @LayoutRes private val layoutResource: Int, 
 
     private fun createViewFromResource(position: Int, convertView: View?, parent: ViewGroup?): View{
         val view: TextView = convertView as TextView? ?: LayoutInflater.from(context).inflate(layoutResource, parent, false) as TextView
-        view.text = hotels[position].cityName
+        view.text = cities[position].cityName
         return view
     }
 }

@@ -80,6 +80,7 @@ class MatchingStartFragment : Fragment() {
                 Log.d("test", "Selected: ${cityCode}, ${cityName}")
                 binding.spinnerCounty.isVisible = true
                 CoroutineScope(Dispatchers.Default).launch {
+                    binding.btnMatchingStart.isClickable = false
                     val countyList = getCity.getDetailCity(cityCode)
                     if (countyList is List<*>) {
                         countyList as MutableList<UserCityResponseData>
@@ -91,12 +92,14 @@ class MatchingStartFragment : Fragment() {
                             var regionAdapter =
                                 CityAdapter(majorScreen, R.layout.simple_list_item_1, countyList)
                             binding.spinnerCounty.adapter = regionAdapter
+                            binding.btnMatchingStart.isClickable = true
                         }
                     } else if (countyList is UserError) {
 
                     } else {
 
                     }
+
                 }
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -119,6 +122,7 @@ class MatchingStartFragment : Fragment() {
                 Log.d("countyName", countyName)
                 binding.spinnerDistrict.isVisible = true
                 CoroutineScope(Dispatchers.Default).launch {
+                    binding.btnMatchingStart.isClickable = false
                     val countyList = getCity.getDetailCity(countyCode)
                     if (countyList is List<*>) {
                         countyList as MutableList<UserCityResponseData>
@@ -130,12 +134,14 @@ class MatchingStartFragment : Fragment() {
                             var regionAdapter =
                                 CityAdapter(majorScreen, R.layout.simple_list_item_1, countyList)
                             binding.spinnerDistrict.adapter = regionAdapter
+                            binding.btnMatchingStart.isClickable = true
                         }
                     } else if (countyList is UserError) {
 
                     } else {
 
                     }
+
                 }
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -162,9 +168,11 @@ class MatchingStartFragment : Fragment() {
 
 
         CoroutineScope(Dispatchers.Default).launch {
+            binding.btnMatchingStart.isClickable = false
             val cityList = getCity() //as List<UserCityResponseData>
             if (cityList is List<*>) {
                 cityList as MutableList<UserCityResponseData>
+                //cityList.add(0,UserCityResponseData("Select Region",""))
                 var selectRegion = mutableListOf<String>()
                 cityList.forEach {
                     selectRegion.add(it.cityName)
@@ -173,6 +181,7 @@ class MatchingStartFragment : Fragment() {
                     var regionAdapter =
                         CityAdapter(majorScreen, R.layout.simple_list_item_1, cityList)
                     binding.spinnerCity.adapter = regionAdapter
+                    binding.btnMatchingStart.isClickable = true
                 }
             } else if (cityList is UserError) {
 
@@ -197,8 +206,6 @@ class MatchingStartFragment : Fragment() {
                     val matchRoomData = getMatchRoom(matchIdObject.matchId)
                     if(matchRoomData is UserGetMatchRoomResponseData) {
                         CoroutineScope(Dispatchers.Main).launch {
-                            //val bundle = bundleOf("matchId" to matchIdObject.matchId)
-                            //setFragmentResult("request", bundle)
                             intent.putExtra("matchRoom", matchRoomData as Serializable)
                             startActivity(intent)
                         }

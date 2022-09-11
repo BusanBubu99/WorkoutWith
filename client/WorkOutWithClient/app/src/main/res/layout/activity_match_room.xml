@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/matchRoomLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
@@ -21,7 +22,7 @@
         android:id="@+id/editSendMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
+        android:layout_marginStart="80dp"
         android:layout_marginBottom="10dp"
         android:ems="10"
         android:hint="메시지를 입력하세요"
@@ -37,29 +38,9 @@
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="10dp"
         android:text="전송"
+        android:stateListAnimator="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageButton
-        android:id="@+id/btnCreateSchedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/image_add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerProfile"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-    <Button
-        android:id="@+id/btnJoinSchedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="75dp"
-        android:text="일정 참여하기"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerProfile" />
 
     <ImageView
         android:id="@+id/imageHideRecycler"
@@ -77,17 +58,20 @@
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/editSendMessage"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerProfile" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerProfile"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <Button
-        android:id="@+id/voteTest"
+
+    <ImageButton
+        android:id="@+id/createVoteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/btnSendMessage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/recyclerMemberChat"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerMemberChat" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editSendMessage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerMemberChat"
+        app:srcCompat="@drawable/image_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

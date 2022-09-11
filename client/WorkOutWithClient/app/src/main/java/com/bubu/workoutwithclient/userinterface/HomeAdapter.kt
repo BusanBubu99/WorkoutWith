@@ -21,7 +21,7 @@ class HomeAdapter(context : Context) : RecyclerView.Adapter<HomeAdapter.Holder>(
     var userMatchList = mutableListOf<UserGetMatchListResponseData>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val binding = RecyclerHomeBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = com.bubu.workoutwithclient.databinding.RecyclerHomeBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return Holder(binding)
     }
 

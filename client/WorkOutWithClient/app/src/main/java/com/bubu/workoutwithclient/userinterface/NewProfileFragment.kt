@@ -182,9 +182,9 @@ class NewProfileFragment : Fragment() {
                             editId,
                             File(filePath),
                             editContent,
-                            "부산광역시",
-                            "부산진구",
-                            "개금3동"
+                            "",
+                            "",
+                            ""
                         )
                     )
                     if (result is UserEditProfileResponseData) {

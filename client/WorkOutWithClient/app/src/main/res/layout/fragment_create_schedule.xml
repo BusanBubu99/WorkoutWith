@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:clickable="true"
     tools:context=".userinterface.CreateScheduleFragment">
 
     <EditText
-        android:id="@+id/editTextLocation"
+        android:id="@+id/editLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -16,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toEndOf="@+id/textScheduleTime"
-        app:layout_constraintTop_toBottomOf="@+id/editScheduleTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/editTitle" />
 
     <TextView
         android:id="@+id/textScheduleLocation"
@@ -26,10 +28,10 @@
         android:text="장소"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextLocation" />
+        app:layout_constraintTop_toTopOf="@+id/editLocation" />
 
     <EditText
-        android:id="@+id/editScheduleTitle"
+        android:id="@+id/editTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -41,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editScheduleTime"
+        android:id="@+id/editTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -50,7 +52,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toEndOf="@+id/textScheduleTime"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/editLocation" />
 
     <TextView
         android:id="@+id/textScheduleTitle"
@@ -60,7 +62,7 @@
         android:text="제목"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editScheduleTitle" />
+        app:layout_constraintTop_toTopOf="@+id/editTitle" />
 
     <TextView
         android:id="@+id/textScheduleTime"
@@ -70,7 +72,7 @@
         android:text="시간"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/editScheduleTime" />
+        app:layout_constraintTop_toTopOf="@id/editTime" />
 
     <TextView
         android:id="@+id/textView4"
@@ -80,10 +82,10 @@
         android:text="내용"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName4" />
+        app:layout_constraintTop_toTopOf="@+id/editContent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName4"
+        android:id="@+id/editContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -92,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/editScheduleTime" />
+        app:layout_constraintTop_toBottomOf="@+id/editTime" />
 
     <Button
         android:id="@+id/btnSubmitSchedule"

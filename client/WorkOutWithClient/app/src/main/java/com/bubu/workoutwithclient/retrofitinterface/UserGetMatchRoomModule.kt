@@ -35,19 +35,13 @@ data class UserGetMatchRoomResponseData(
     @SerializedName("district") val district: String,
     @SerializedName("userInfo") val userInfo: List<UserGetMatchRoomUserInfo>,
     @SerializedName("game") val game : String ,
-    @SerializedName("matchId") val matchId : String,
-    @SerializedName("voteInfo") val voteInfo: List<UserGetMatchRoomVoteInfo>
+    @SerializedName("matchId") val matchId : String
 ) : Serializable
 
 data class UserGetMatchRoomUserInfo(
     @SerializedName("userid") val userid: String,//file
     @SerializedName("profilePic") val profilePic: String,
     @SerializedName("bitmap") val bitmap: Bitmap
-) : Serializable
-
-data class UserGetMatchRoomVoteInfo(
-    @SerializedName("voteTitle") val voteTitle: String,
-    @SerializedName("voteId") val voteId: Int
 ) : Serializable
 
 data class UserGetMatchRoomData(val matchId: String)

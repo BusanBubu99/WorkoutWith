@@ -32,13 +32,15 @@ fun sendMessage(userId: String, matchId: String, messageString: String) {
 fun startVote(
     userId: String,
     matchId: String,
+    voteTitle : String,
+    voteId:String,
     startTime: String,
     endTime: String,
     date: String,
     content: String
 ) {
     val startVoteObject =
-        UserFirebaseVoteChatModule(userId, matchId, startTime, endTime, date, content)
+        UserFirebaseVoteChatModule(userId, matchId,voteTitle,voteId, startTime, endTime, date, content)
     startVoteObject.sendChat()
 }
 
@@ -49,17 +51,31 @@ suspend fun downloadProfilePic(uri: String): Bitmap {
     return BitmapFactory.decodeStream(stream)
 }
 
+/**
+ *
+ * startVote()*/
 class MatchRoomActivity : AppCompatActivity() {
     val binding by lazy { ActivityMatchRoomBinding.inflate(layoutInflater) }
     lateinit var list: MutableList<ChatMessage>
     lateinit var adapter: ChatListAdapter
     lateinit var matchRoomData: UserGetMatchRoomResponseData
+
+    fun goBack() {
+        onBackPressed()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         list = mutableListOf<ChatMessage>()
         val intent = intent
         matchRoomData = intent.getSerializableExtra("matchRoom") as UserGetMatchRoomResponseData
         setContentView(binding.root)
+
+
+        binding.createVoteButton.setOnClickListener {
+            goCreateScheduleFragment()
+        }
+
+
 
         var profileAdapter = MatchingTeamAdapter(this)
         CoroutineScope(Dispatchers.Main).launch {
@@ -87,16 +103,7 @@ class MatchRoomActivity : AppCompatActivity() {
         binding.recyclerMemberChat.layoutManager = LinearLayoutManager(baseContext)
 
 
-        binding.voteTest.setOnClickListener {
-            startVote(
-                userInformation.userId,
-                matchRoomData.matchId,
-                "startTime",
-                "endTime",
-                "date",
-                "자전거타기"
-            )
-        }
+
         binding.btnSendMessage.setOnClickListener {
             if (binding.editSendMessage.text.isNotEmpty()) {
                 sendMessage(
@@ -117,6 +124,19 @@ class MatchRoomActivity : AppCompatActivity() {
             adapter, binding
         )
         firebaseChatObject.receiveChat()
+    }
+    fun goCreateScheduleFragment() {
+
+        val createScheduleFragment = CreateScheduleFragment()
+        val bundle = Bundle()
+        bundle.putString("matchId",matchRoomData.matchId)
+        createScheduleFragment.arguments = bundle
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.matchRoomLayout,createScheduleFragment)
+        transaction.addToBackStack("test")
+
+        transaction.commit()
     }
 
 }

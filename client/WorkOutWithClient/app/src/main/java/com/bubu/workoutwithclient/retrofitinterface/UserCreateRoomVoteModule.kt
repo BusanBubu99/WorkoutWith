@@ -29,7 +29,7 @@ import java.net.SocketTimeoutException
  * */
 
 data class UserCreateRoomVoteData(
-    val voteTitle: String, val matchId: Int, val startTime: String,
+    val voteTitle: String, val matchId: String, val startTime: String,
     val endTime: String, val date: String, val content: String
 )
 
@@ -37,7 +37,7 @@ class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : 
 
     interface UserCreateRoomVoteInterface {
         @Headers("Content-Type: application/json")
-        @POST("/v1/matching/vote/")
+        @POST("/v1/matching/vote")
         fun get(
             @Body body: JsonObject
         ): Call<Any>

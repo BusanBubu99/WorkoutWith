@@ -23,6 +23,8 @@ class UserFirebaseSendChatModule(
 class UserFirebaseVoteChatModule(
     val userId: String,
     val matchId: String,
+    val voteTitle : String,
+    val voteId : String,
     val startTime: String,
     val endTime: String,
     val date: String,
@@ -32,7 +34,7 @@ class UserFirebaseVoteChatModule(
         Firebase.database("https://workoutwith-81ab7-default-rtdb.asia-southeast1.firebasedatabase.app/")
     val msgRef = database.getReference("rooms/${matchId}/messages")
     fun sendChat() {
-        val message = ChatVoteMessage(userId,"voteId","자전거타기!", startTime, endTime, date, content)
+        val message = ChatVoteMessage(userId,voteId, voteTitle, startTime, endTime, date, content)
         val msgId = msgRef.push().key!!
         msgRef.child(msgId).setValue(message)
     }

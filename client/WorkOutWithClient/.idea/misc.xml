@@ -3,7 +3,59 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../../home/dong/Android/Sdk/platforms/android-32/data/res/layout/simple_list_item_1.xml" value="0.2869791666666667" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/drawable/border.xml" value="0.286" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/drawable/image_add.xml" value="0.286" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/drawable/image_community.xml" value="0.286" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/drawable/image_good_choiced.xml" value="0.286" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/drawable/image_myprofile.xml" value="0.286" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/drawable/view_round_white_6.xml" value="0.286" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/activity_detail.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/activity_main.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/activity_main_test.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/activity_major_screen.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/custom_dialog.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_community.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_completed.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_create_schedule.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_edit_profile.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_find_id.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_find_password.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_home.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_join_schedule.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_login.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_matching_start.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_matching_team.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_my_profile.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_post_new.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_ranking.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/fragment_register.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/recycler_community.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/recycler_home.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/recycler_matching_team.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/layout/recycler_mypost.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/menu/bottom_nav_menu.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/kjgho/Documents/WorkoutWith/client/WorkOutWithClient/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.29" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.5076992753623188" />
+        <entry key="app/src/main/res/layout/activity_major_screen.xml" value="0.4759963768115942" />
+        <entry key="app/src/main/res/layout/activity_match_room.xml" value="0.6" />
+        <entry key="app/src/main/res/layout/cityspinnerlayout.xml" value="0.284375" />
+        <entry key="app/src/main/res/layout/customcitylist.xml" value="0.284375" />
+        <entry key="app/src/main/res/layout/fragment_community.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/layout/fragment_completed.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/layout/fragment_find_id.xml" value="0.2600908173562059" />
+        <entry key="app/src/main/res/layout/fragment_find_password.xml" value="0.24722222222222223" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.24722222222222223" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.6" />
+        <entry key="app/src/main/res/layout/fragment_matching_start.xml" value="0.536" />
+        <entry key="app/src/main/res/layout/fragment_matching_team.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/layout/fragment_my_profile.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/layout/fragment_new_profile.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/layout/fragment_post_new.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/layout/fragment_ranking.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.24722222222222223" />
+        <entry key="app/src/main/res/layout/recycler_community.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/layout/recycler_home.xml" value="0.4" />
         <entry key="app/src/main/res/xml/filepaths.xml" value="0.5369791666666667" />
       </map>
     </option>

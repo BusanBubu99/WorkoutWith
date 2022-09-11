@@ -64,6 +64,7 @@ class UserRegisterModule(override val userData: UserRegisterData) : UserApiInter
             if (resp.code() in 100..199) {
                 return super.handle100(resp)
             } else if (resp.code() in 200..299) { //Successful!!
+                userInformation.userEmail = userData.email
                 return resp.code()
             } else if (resp.code() in 300..399) {
                 return super.handle300(resp)

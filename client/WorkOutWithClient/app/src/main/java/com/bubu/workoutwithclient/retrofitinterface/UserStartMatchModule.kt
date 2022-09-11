@@ -27,7 +27,7 @@ import java.net.SocketTimeoutException
  * Exceptions we don't know yet
  * */
 
-data class UserStartMatchResponseData(@SerializedName("matchId") val matchId: Int)
+data class UserStartMatchResponseData(@SerializedName("matchId") val matchId: String)
 
 data class UserStartMatchData(
     val city: String, val county: String, val district: String,
@@ -38,7 +38,7 @@ class UserStartMatchModule(override val userData: UserStartMatchData) : UserApiI
 
     interface UserStartMatchInterface {
         @Headers("Content-Type: application/json")
-        @POST("/v1/matching/")
+        @POST("/v1/matching")
         fun get(
             @Body body: JsonObject
         ): Call<Any>

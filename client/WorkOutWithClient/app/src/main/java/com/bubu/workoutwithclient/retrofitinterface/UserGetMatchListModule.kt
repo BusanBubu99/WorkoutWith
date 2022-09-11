@@ -27,11 +27,15 @@ import java.net.SocketTimeoutException
  * */
 
 data class UserGetMatchListResponseData(
-    @SerializedName("matchId") val id: String,
-    @SerializedName("title") val title: String
+    @SerializedName("city") val city : String,
+    @SerializedName("county") val county : String,
+    @SerializedName("district") val district : String,
+    @SerializedName("game") val game : String,
+    @SerializedName("matchId") val matchId: String,
 )
 
-class UserGetMatchListModule(override val userData: Any?) : UserApiInterface {
+
+class UserGetMatchListModule(override val userData: Any? = null) : UserApiInterface {
 
     interface UserGetMatchListInterface {
         @GET("/v1/matching")
@@ -55,6 +59,7 @@ class UserGetMatchListModule(override val userData: Any?) : UserApiInterface {
                     } else if (resp.code() in 200..299) {
                         val responseBody = super.handle200(resp)
                         val jsonString : String = Gson().toJsonTree(responseBody).asJsonArray.toString()
+                        Log.d("MatchList jsonString",jsonString)
                         return Gson().fromJson(jsonString,Array<UserGetMatchListResponseData>::class.java).toList()
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)

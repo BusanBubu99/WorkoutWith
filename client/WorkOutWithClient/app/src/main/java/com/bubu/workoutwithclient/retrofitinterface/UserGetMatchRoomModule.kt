@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.*
 import java.io.EOFException
+import java.io.Serializable
 import java.net.SocketTimeoutException
 
 /**
@@ -28,27 +29,32 @@ import java.net.SocketTimeoutException
  * */
 
 data class UserGetMatchRoomResponseData(
+    @SerializedName("city") val city: String,
+    @SerializedName("county") val county: String,
+    @SerializedName("district") val district: String,
     @SerializedName("userInfo") val userInfo: List<UserGetMatchRoomUserInfo>,
+    @SerializedName("game") val game : String ,
+    @SerializedName("matchId") val matchId : String,
     @SerializedName("voteInfo") val voteInfo: List<UserGetMatchRoomVoteInfo>
-)
+) : Serializable
 
 data class UserGetMatchRoomUserInfo(
-    @SerializedName("profilePic") val profilePic: String,//file
-    @SerializedName("name") val name: String
-)
+    @SerializedName("userid") val userid: String,//file
+    @SerializedName("profilePic") val profilePic: String
+) : Serializable
 
 data class UserGetMatchRoomVoteInfo(
     @SerializedName("voteTitle") val voteTitle: String,
     @SerializedName("voteId") val voteId: Int
-)
+) : Serializable
 
-data class UserGetMatchRoomData(val matchId: Int)
+data class UserGetMatchRoomData(val matchId: String)
 
 class UserGetMatchRoomModule(override val userData: UserGetMatchRoomData) : UserApiInterface {
     interface UserGetMatchRoomInterface {
         @GET("/v1/matching/info")
         fun get(
-            @Query("matchId") matchId: Int
+            @Query("matchId") matchId: String
         ): Call<Any>
         //보내는 데이터 형식
     }
@@ -67,7 +73,12 @@ class UserGetMatchRoomModule(override val userData: UserGetMatchRoomData) : User
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
                         val responseBody = super.handle200(resp)
-                        val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
+                        val jsonString: String =
+                            Gson().toJsonTree(responseBody).asJsonObject.toString()
+                        /*return Gson().fromJson(
+                            jsonString,
+                            Array<UserGetMatchRoomResponseData>::class.java
+                        ).toList()*/
                         return convertToClass(jsonString, UserGetMatchRoomResponseData::class.java)
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)

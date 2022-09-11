@@ -9,6 +9,7 @@ lateinit var userInformation: UserData
 
 object UserData {
     lateinit var userId : String
+    lateinit var userEmail : String
     lateinit var accessToken : String
     lateinit var refreshToken : String
 }

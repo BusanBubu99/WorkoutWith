@@ -1,13 +1,12 @@
 package com.bubu.workoutwithclient.userinterface
 
-import android.Manifest
+/* import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.bubu.workoutwithclient.R
 import com.bubu.workoutwithclient.databinding.ActivityMainBinding
 import com.bubu.workoutwithclient.retrofitinterface.*
 import kotlinx.coroutines.CoroutineScope
@@ -17,10 +16,9 @@ import java.io.EOFException
 import java.io.File
 import java.lang.Exception
 import java.net.SocketTimeoutException
-import kotlin.math.log
+import kotlin.math.log */
 
-
-lateinit var storagePermission: ActivityResultLauncher<String>
+/* lateinit var storagePermission: ActivityResultLauncher<String>
 
 fun register() {
     CoroutineScope(Dispatchers.Default).launch {
@@ -286,7 +284,7 @@ fun getAddress() {
 }
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivitytest : AppCompatActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -318,7 +316,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        /*binding.login.setOnClickListener {
+        binding.login.setOnClickListener {
             CoroutineScope(Dispatchers.Default).launch {
                 var loginObject = UserLoginModule(UserLoginData("ehdrjs6593","gbdngb12@naver.com","1616tkd2"))
                 val result = loginObject.getApiData()
@@ -383,8 +381,8 @@ class MainActivity : AppCompatActivity() {
             } else if (result is EOFException) {
             } else if (result is Exception) {
             }
-        }*/
+        }
 
 
     }
-}
+}*/

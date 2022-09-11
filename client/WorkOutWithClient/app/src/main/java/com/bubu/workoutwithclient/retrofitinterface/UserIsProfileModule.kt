@@ -25,7 +25,7 @@ import java.net.SocketTimeoutException
  * Exceptions we don't know yet
  * */
 
-data class UserIsProfileResponseData(val snsResult: String)
+data class UserIsProfileResponseData(val snsResult: Int)
 
 class UserIsProfileModule(override val userData: Any? = null) : UserApiInterface {
 
@@ -54,7 +54,10 @@ class UserIsProfileModule(override val userData: Any? = null) : UserApiInterface
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {
-                        return super.handle400(resp)
+                        val responseBody =  super.handle400(resp)
+                        val jsonString: String =
+                            Gson().toJsonTree(responseBody).asJsonObject.toString()
+                        return convertToClass(jsonString, UserIsProfileResponseData::class.java)
                     } else {
                         return super.handle500(resp)
                     }

@@ -86,9 +86,13 @@ class MatchingDetailedInfo(viewsets.ViewSet):
     def list(self, request, **kwargs):
         matchid = request.GET.get("matchId", None)
 
-        match = MatchingRoom.objects.filter(matchId=matchid)
-        serializer = MatchingSerializer(match, many=True)
-        return Response(serializer.data, status=200)
+        try:
+            match = MatchingRoom.objects.get(matchId=matchid)
+            serializer = MatchingSerializer(match)
+            return Response(serializer.data, status=200)
+        except ObjectDoesNotExist:
+            return Response({"error": "given matchId does not exist."},
+                            status=400)
 
 class MatchingRoomVoteViewSet(viewsets.ViewSet):
     def create(self, request, **kwargs):

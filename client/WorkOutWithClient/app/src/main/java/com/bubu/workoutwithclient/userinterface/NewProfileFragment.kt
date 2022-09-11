@@ -58,7 +58,10 @@ class URIPathHelper {
 
             } else if (isDownloadsDocument(uri)) {
                 val id = DocumentsContract.getDocumentId(uri)
-                val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
+                val contentUri = ContentUris.withAppendedId(
+                    Uri.parse("content://downloads/public_downloads"),
+                    java.lang.Long.valueOf(id)
+                )
                 return getDataColumn(context, contentUri, null, null)
             } else if (isMediaDocument(uri)) {
                 val docId = DocumentsContract.getDocumentId(uri)
@@ -84,12 +87,18 @@ class URIPathHelper {
         return null
     }
 
-    fun getDataColumn(context: Context, uri: Uri?, selection: String?, selectionArgs: Array<String>?): String? {
+    fun getDataColumn(
+        context: Context,
+        uri: Uri?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): String? {
         var cursor: Cursor? = null
         val column = "_data"
         val projection = arrayOf(column)
         try {
-            cursor = context.getContentResolver().query(uri!!, projection, selection, selectionArgs,null)
+            cursor = context.getContentResolver()
+                .query(uri!!, projection, selection, selectionArgs, null)
             if (cursor != null && cursor.moveToFirst()) {
                 val column_index: Int = cursor.getColumnIndexOrThrow(column)
                 return cursor.getString(column_index)
@@ -164,22 +173,30 @@ class NewProfileFragment : Fragment() {
             setFragmentResult("request", bundleOf("editId" to editId))
             val editContent = binding.EditNewProfileContent.text.toString()
             setFragmentResult("request", bundleOf("editContent" to editContent))
+            if (filePath != null && editId.isNotEmpty() && editContent.isNotEmpty()) {
 
-            CoroutineScope(Dispatchers.Default).launch {
-                Log.d("id", editId)
-                val result = editProfile(
-                    UserEditProfileData(editId, File(filePath), editContent, "부산광역시", "부산진구", "개금3동")
-                )
-                if (result is UserEditProfileResponseData) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        Log.d("res", "succeesful!")
-                        mainActivity?.startActivity(intent)
+                CoroutineScope(Dispatchers.Default).launch {
+                    Log.d("id", editId)
+                    val result = editProfile(
+                        UserEditProfileData(
+                            editId,
+                            File(filePath),
+                            editContent,
+                            "부산광역시",
+                            "부산진구",
+                            "개금3동"
+                        )
+                    )
+                    if (result is UserEditProfileResponseData) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Log.d("res", "succeesful!")
+                            mainActivity?.startActivity(intent)
+                        }
+                    } else {
+
                     }
-                } else {
-
                 }
             }
-
 
         }
         setFragmentResultListener("request") { key, bundle ->
@@ -219,6 +236,7 @@ class NewProfileFragment : Fragment() {
     }
 
     var filePath = ""
+
     //lateinit var picFile : File
     private val getContentImage =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -226,8 +244,10 @@ class NewProfileFragment : Fragment() {
                 binding.editNewProfileImage.setImageURI(uri)
 
                 val uriPathHelper = URIPathHelper()
-                filePath = this.context?.let { it1 -> uriPathHelper.getPath(it1, uri!!) }.toString()
-                Log.d("umm",filePath)
+                if (uri != null)
+                    filePath =
+                        this.context?.let { it1 -> uriPathHelper.getPath(it1, uri!!) }.toString()
+                Log.d("umm", filePath)
                 //testUri = uri
                 //picFile = File(uri.toString())
                 //testUri = uri
@@ -241,9 +261,13 @@ class NewProfileFragment : Fragment() {
     var pictureUri: Uri? = null
     private val getTakePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) {
         if (it) {
-            pictureUri.let { binding.editNewProfileImage.setImageURI(pictureUri)
+            pictureUri.let {
+                binding.editNewProfileImage.setImageURI(pictureUri)
                 val uriPathHelper = URIPathHelper()
-                filePath = this.context?.let { it1 -> uriPathHelper.getPath(it1, pictureUri!!) }.toString() }
+                if (pictureUri != null)
+                    filePath = this.context?.let { it1 -> uriPathHelper.getPath(it1, pictureUri!!) }
+                        .toString()
+            }
         }
     }
 

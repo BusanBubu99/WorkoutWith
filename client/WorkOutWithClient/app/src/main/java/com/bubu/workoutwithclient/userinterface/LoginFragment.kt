@@ -74,20 +74,7 @@ class LoginFragment : Fragment() {
         val intent = Intent(activity, MajorScreen::class.java)
         val binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        binding.testBut.setOnClickListener {
-            //val testObject = UserFirebaseLoginModule()
-            //testObject.startLogin()
-            //val testObject = UserFirebaseCreateRoomModule("12345","부산광역시 부산진구 개금동")
-            //testObject.createChatRoom()
-            //val testObject = UserFirebaseSendChatModule("gbdngb12","12345","hello World!")
-            //testObject.sendChat()
-            val testObject = UserFirebaseCheckChatRoomModule("2222","서울특별시")
 
-        }
-        binding.tstBtn2.setOnClickListener{
-            val testObject = UserFirebaseReceiveChatModule("gbdngb8","12345")
-            testObject.receiveChat()
-        }
         with(binding) {
             btnRegister.setOnClickListener { mainActivity?.goRegisterFragment() }
             btnFindId.setOnClickListener { mainActivity?.goFindIdFragment() }

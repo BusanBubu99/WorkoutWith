@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bubu.workoutwithclient.databinding.FragmentMatchingTeamBinding
 
-class MatchingTeamFragment : Fragment() {
+/*class MatchingTeamFragment : Fragment() {
     private lateinit var callback: OnBackPressedCallback
 
     lateinit var majorScreen: MajorScreen
@@ -71,13 +71,13 @@ class MatchingTeamFragment : Fragment() {
     }
 
     fun loadMatchingTeamData() : MutableList<MatchingTeam> {
-
         val data : MutableList<MatchingTeam> = mutableListOf()
-        for(no in 1..30) {
-            val title = "팀원 ${no}"
-            var matchingTeam = MatchingTeam(title)
-            data.add(matchingTeam)
-        }
+        
+        //for(no in 1..30) {
+        //    val title = "팀원 ${no}"
+        //    var matchingTeam = MatchingTeam(title)
+        //    data.add(matchingTeam)
+        //}
         return data
     }
-}
+}*/

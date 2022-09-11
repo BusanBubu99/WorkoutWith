@@ -23,12 +23,12 @@ class JoinScheduleFragment : Fragment() {
     ): View? {
         binding = FragmentJoinScheduleBinding.inflate(inflater, container, false)
         val data : MutableList<MatchingTeam> = loadJoinedTeamData()
-        var adapter = MatchingTeamAdapter()
-        adapter.listMatchingTeamData = data
+        //var adapter = MatchingTeamAdapter(majorScreen)
+        //adapter.listMatchingTeamData = data
         val builder = AlertDialog.Builder(majorScreen)
         builder.setMessage("참가 신청이 완료되었습니다!")
         with(binding) {
-            recyclerJoinedProfile.adapter = adapter
+            //recyclerJoinedProfile.adapter = adapter
             recyclerJoinedProfile.layoutManager = GridLayoutManager(majorScreen, 5)
 
             btnSubmitJoinSchedule.setOnClickListener {
@@ -50,8 +50,8 @@ class JoinScheduleFragment : Fragment() {
         val data : MutableList<MatchingTeam> = mutableListOf()
         for(no in 1..30) {
             val title = "팀원 ${no}"
-            var matchingTeam = MatchingTeam(title)
-            data.add(matchingTeam)
+            //var matchingTeam = MatchingTeam(title)
+            //data.add(matchingTeam)
         }
         return data
     }

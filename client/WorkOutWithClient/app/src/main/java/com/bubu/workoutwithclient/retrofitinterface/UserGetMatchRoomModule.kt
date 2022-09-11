@@ -1,5 +1,6 @@
 package com.bubu.workoutwithclient.retrofitinterface
 
+import android.graphics.Bitmap
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
@@ -40,7 +41,8 @@ data class UserGetMatchRoomResponseData(
 
 data class UserGetMatchRoomUserInfo(
     @SerializedName("userid") val userid: String,//file
-    @SerializedName("profilePic") val profilePic: String
+    @SerializedName("profilePic") val profilePic: String,
+    @SerializedName("bitmap") val bitmap: Bitmap
 ) : Serializable
 
 data class UserGetMatchRoomVoteInfo(

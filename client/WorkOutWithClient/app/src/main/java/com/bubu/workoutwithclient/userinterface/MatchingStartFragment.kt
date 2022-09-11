@@ -22,6 +22,7 @@ import com.bubu.workoutwithclient.retrofitinterface.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.Serializable
 
 val getCity = UserGetAddressModule()
 
@@ -193,10 +194,14 @@ class MatchingStartFragment : Fragment() {
             CoroutineScope(Dispatchers.Default).launch {
                 val matchIdObject = startMatch(cityName,countyName,districtName,"30")
                 if(matchIdObject is UserStartMatchResponseData){
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val bundle = bundleOf("matchId" to matchIdObject.matchId)
-                        setFragmentResult("request", bundle)
-                        startActivity(intent)
+                    val matchRoomData = getMatchRoom(matchIdObject.matchId)
+                    if(matchRoomData is UserGetMatchRoomResponseData) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            //val bundle = bundleOf("matchId" to matchIdObject.matchId)
+                            //setFragmentResult("request", bundle)
+                            intent.putExtra("matchRoom", matchRoomData as Serializable)
+                            startActivity(intent)
+                        }
                     }
                 } else if(matchIdObject is UserError) {
 

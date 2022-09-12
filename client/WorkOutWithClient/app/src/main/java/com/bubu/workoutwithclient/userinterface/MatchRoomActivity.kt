@@ -16,6 +16,7 @@ import com.bubu.workoutwithclient.databinding.ActivityMatchRoomBinding
 import com.bubu.workoutwithclient.databinding.RecyclerMyChatBinding
 import com.bubu.workoutwithclient.databinding.RecyclerOpChatBinding
 import com.bubu.workoutwithclient.firebasechat.ChatMessage
+import com.bubu.workoutwithclient.firebasechat.ChatVoteMessage
 import com.bubu.workoutwithclient.retrofitinterface.*
 import kotlinx.coroutines.*
 import java.net.URL
@@ -29,7 +30,7 @@ fun sendMessage(userId: String, matchId: String, messageString: String) {
     sendMessageObject.sendChat()
 }
 
-fun startVote(
+fun createVote(
     userId: String,
     matchId: String,
     voteTitle: String,
@@ -39,7 +40,7 @@ fun startVote(
     date: String,
     content: String
 ) {
-    val startVoteObject =
+    val createVoteObject =
         UserFirebaseVoteChatModule(
             userId,
             matchId,
@@ -50,12 +51,16 @@ fun startVote(
             date,
             content
         )
-    startVoteObject.sendChat()
+    createVoteObject.sendChat()
 }
 
 
 suspend fun downloadProfilePic(uri: String): Bitmap {
-    val url = URL(baseurl + uri)
+    lateinit var url : URL
+    if(!uri.contains("http://"))
+        url = URL(baseurl + uri)
+    else
+        url = URL(uri)
     val stream = url.openStream()
     return BitmapFactory.decodeStream(stream)
 }
@@ -81,10 +86,6 @@ fun updateUserProfilePicture(
         }
     }
 }
-
-/**
- *
- * startVote()*/
 
 
 lateinit var matchRoomData: UserGetMatchRoomResponseData
@@ -178,58 +179,85 @@ class MatchRoomActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-}
+    fun goJoinScheduleFragment(msg: ChatMessage) {
 
-class ChatListAdapter(private val chatList: MutableList<ChatMessage>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        val joinScheduleFragment = JoinScheduleFragment()
+        val bundle = Bundle()
+        bundle.putString("voteId", (msg as ChatVoteMessage).voteId)
+        joinScheduleFragment.arguments = bundle
 
-    override fun getItemViewType(position: Int): Int {
-        if (chatList[position].id != userInformation.userId) {
-            return 0
-        } else {
-            return 1
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.matchRoomLayout, joinScheduleFragment)
+        transaction.addToBackStack("")
+
+        transaction.commit()
+    }
+
+    inner class ChatListAdapter(private val chatList: MutableList<ChatMessage>) :
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+
+
+        override fun getItemViewType(position: Int): Int {
+            if (chatList[position].id != userInformation.userId) {
+                return 0
+            } else {
+                return 1
+            }
         }
-    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if (viewType == 0) {
-            val binding =
-                RecyclerOpChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return HolderOp(binding)
-        } else {
-            val binding =
-                RecyclerMyChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return HolderMy(binding)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            if (viewType == 0) {
+                val binding =
+                    RecyclerOpChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return HolderOp(binding)
+            } else {
+                val binding =
+                    RecyclerMyChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                return HolderMy(binding)
+            }
         }
-    }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val msg = chatList[position]
-        if (msg.id != userInformation.userId) {
-            (holder as HolderOp).setMsg(msg)
-        } else {
-            (holder as HolderMy).setMsg(msg)
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val msg = chatList[position]
+            if (msg.id != userInformation.userId) {
+                (holder as HolderOp).setMsg(msg)
+            } else {
+                (holder as HolderMy).setMsg(msg)
+            }
         }
-    }
 
-    override fun getItemCount(): Int {
-        return chatList.size
-    }
-
-    inner class HolderOp(val binding: RecyclerOpChatBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun setMsg(msg: ChatMessage) {
-            binding.textName.text = msg.id
-            binding.textMsg.text = msg.msg
-            binding.textDate.text = "${msg.timestamp}"
+        override fun getItemCount(): Int {
+            return chatList.size
         }
-    }
 
-    inner class HolderMy(val binding: RecyclerMyChatBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun setMsg(msg: ChatMessage) {
-            binding.textMsg.text = msg.msg
-            binding.textDate.text = "${msg.timestamp}"
+        inner class HolderOp(val binding: RecyclerOpChatBinding) :
+            RecyclerView.ViewHolder(binding.root) {
+            fun setMsg(msg: ChatMessage) {
+                if(msg.type == "1"){
+                    binding.textMsg.setOnClickListener {
+                        Log.d("voteClick",(msg as ChatVoteMessage).voteId)
+                        goJoinScheduleFragment(msg)
+                    }
+                }
+                binding.textName.text = msg.id
+                binding.textMsg.text = msg.msg
+                binding.textDate.text = "${msg.timestamp}"
+            }
+        }
+
+        inner class HolderMy(val binding: RecyclerMyChatBinding) :
+            RecyclerView.ViewHolder(binding.root) {
+            fun setMsg(msg: ChatMessage) {
+                if(msg.type == "1"){
+                    binding.textMsg.setOnClickListener {
+                        Log.d("voteClick",(msg as ChatVoteMessage).voteId)
+                        goJoinScheduleFragment(msg)
+                    }
+                }
+                binding.textMsg.text = msg.msg
+                binding.textDate.text = "${msg.timestamp}"
+            }
         }
     }
 }

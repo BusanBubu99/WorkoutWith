@@ -5,7 +5,6 @@ import android.util.Log
 import com.bubu.workoutwithclient.databinding.ActivityMatchRoomBinding
 import com.bubu.workoutwithclient.firebasechat.ChatMessage
 import com.bubu.workoutwithclient.firebasechat.ChatVoteMessage
-import com.bubu.workoutwithclient.userinterface.ChatListAdapter
 import com.bubu.workoutwithclient.userinterface.MatchRoomActivity
 import com.bubu.workoutwithclient.userinterface.downloadProfilePic
 import com.bubu.workoutwithclient.userinterface.getMatchRoom
@@ -22,7 +21,7 @@ import java.io.Serializable
 
 class UserFirebaseReceiveChatModule(
     val userId: String, val matchId: String, val list: MutableList<ChatMessage>,
-    val adapter: ChatListAdapter, val binding: ActivityMatchRoomBinding
+    val adapter: MatchRoomActivity.ChatListAdapter, val binding: ActivityMatchRoomBinding
 ) {
     val database =
         Firebase.database("https://workoutwith-81ab7-default-rtdb.asia-southeast1.firebasedatabase.app/")

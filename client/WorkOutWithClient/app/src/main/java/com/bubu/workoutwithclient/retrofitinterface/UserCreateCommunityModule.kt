@@ -43,7 +43,7 @@ class UserCreateCommunityModule(override val userData: UserCreateCommunityData) 
         fun get(
             @Part("title") name: String,
             @Part file: MultipartBody.Part?,
-            @Part("content") content: String,
+            @Part("contents") content: String,
         ): Call<Any>
         //보내는 데이터 형식
     }
@@ -54,6 +54,7 @@ class UserCreateCommunityModule(override val userData: UserCreateCommunityData) 
             val result = auth.getApiData()
             if (result == true) {
                 val retrofit = ApiTokenHeaderClient.getApiClient()
+                Log.d("userInformation in create", userInformation.accessToken)
                 val retrofitObject = retrofit.create(UserCreateCommunityInterface::class.java)
                 try {
                     val requestFile = RequestBody.create(MediaType.parse("image/*"), userData.picture)

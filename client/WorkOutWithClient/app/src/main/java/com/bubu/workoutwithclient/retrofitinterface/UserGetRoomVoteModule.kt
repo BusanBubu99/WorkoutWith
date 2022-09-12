@@ -34,24 +34,28 @@ data class UserGetRoomVoteResponseData(
     @SerializedName("date") val date : String,
     @SerializedName("content") val content: String,
     @SerializedName("userList") val userList: List<UserListObject>,
+    @SerializedName("matchId") val matchId : String,
+    @SerializedName("voteId") val voteId : String
 )
 
 
 data class UserListObject(
     @SerializedName("userId") val userId: String,
     @SerializedName("profilePic") val profilePic: String, //must be https Link
-    @SerializedName("like") val like: Int
+    @SerializedName("like") val like: String,
+    @SerializedName("liker") val liker : List<VoteUser>
 )
+data class VoteUser(@SerializedName("userId") val userId : String)
 
 
-data class UserGetRoomVoteData(val voteId: Int)
+data class UserGetRoomVoteData(val voteId: String)
 
 class UserGetRoomVoteModule(override val userData: UserGetRoomVoteData) : UserApiInterface {
 
     interface UserGetRoomVoteInterface {
         @GET("/v1/matching/vote")
         fun get(
-            @Query("voteId") voteId: Int
+            @Query("voteId") voteId: String
         ): Call<Any>
         //보내는 데이터 형식
     }

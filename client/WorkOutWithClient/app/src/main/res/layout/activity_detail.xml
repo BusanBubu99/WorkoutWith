@@ -6,6 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".userinterface.DetailActivity">
 
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="350dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewHr">
+
+        <ImageView
+            android:id="@+id/postPictureView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="350dp"
+            android:maxHeight="350dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/border" />
+    </FrameLayout>
+
     <TextView
         android:id="@+id/detailTitle"
         android:layout_width="wrap_content"
@@ -29,13 +48,14 @@
 
     <TextView
         android:id="@+id/detailContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_width="4dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="5dp"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.46"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewHr" />
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

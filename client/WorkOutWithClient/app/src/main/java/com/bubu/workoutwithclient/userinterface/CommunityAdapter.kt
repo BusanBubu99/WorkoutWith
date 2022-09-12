@@ -49,9 +49,10 @@ class CommunityAdapter : RecyclerView.Adapter<CommunityAdapter.CommunityHolder>(
 			binding.textCommunityContent.text = community.content
 			binding.textCommunityEditor.text = community.editor
 
-			var sdf = SimpleDateFormat("yyyy/MM/dd")
-			var formattedData = sdf.format(community.editTime)
-			binding.textCommunityTime.text = formattedData
+			//var sdf = SimpleDateFormat("yyyy/MM/dd")
+			//var formattedData = sdf.format(community.editTime)
+			binding.textCommunityTime.text = community.editTime
+			binding.imageCommunityView.setImageBitmap(community.picture)
 		}
 	}
 }

@@ -31,7 +31,7 @@ class UserProfileActivity : AppCompatActivity() {
                 Log.d("result!!!!",result.toString())
                 CoroutineScope(Dispatchers.Main).launch {
                     val bitmap = withContext(Dispatchers.IO) {
-                        downloadProfilePic("/media/"+result.profilePic)
+                        downloadProfilePic(result.profilePic)
                     }
                     binding.profileImage.setImageBitmap(bitmap)
                     //if(userInformation.userId != result.userId)

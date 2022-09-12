@@ -30,4 +30,11 @@ class MajorScreen : AppCompatActivity() {
 		if(state) mBinding.majorScreenNav.visibility = View.GONE else mBinding.majorScreenNav.visibility = View.VISIBLE
 	}
 
+	fun goNewProfileFragment() {
+		//val newProfileFragment = NewProfileFragment()
+		//val transaction = supportFragmentManager.beginTransaction().replace(R.id.LinearLay, newProfileFragment)
+		//transaction.addToBackStack("detail")
+		//transaction.commit()
+	}
+
 }

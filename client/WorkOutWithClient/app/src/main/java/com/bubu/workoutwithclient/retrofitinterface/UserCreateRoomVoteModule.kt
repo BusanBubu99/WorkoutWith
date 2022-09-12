@@ -1,7 +1,9 @@
 package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -31,6 +33,10 @@ import java.net.SocketTimeoutException
 data class UserCreateRoomVoteData(
     val voteTitle: String, val matchId: String, val startTime: String,
     val endTime: String, val date: String, val content: String
+)
+
+data class UserCreateRoomVoteResponseData(
+    @SerializedName("voteId") val voteId: String
 )
 
 class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : UserApiInterface {
@@ -63,7 +69,11 @@ class UserCreateRoomVoteModule(override val userData: UserCreateRoomVoteData) : 
                     if (resp.code() in 100..199) {
                         return super.handle100(resp)
                     } else if (resp.code() in 200..299) {
-                        return resp.code()
+                        val responseBody = super.handle200(resp)
+                        val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
+                        Log.d("jsonString", jsonString)
+                        Log.d("After jsonString",jsonString.replace("\"",""))
+                        return convertToClass(jsonString, UserCreateRoomVoteResponseData::class.java)
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

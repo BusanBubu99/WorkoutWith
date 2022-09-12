@@ -28,12 +28,12 @@ import java.net.SocketTimeoutException
  * */
 
 data class UserGetCommunityListResponseData(
-    @SerializedName("id") val id: String,
-    @SerializedName("postId") val postId: Int,
+    @SerializedName("id") val postId: String,
     @SerializedName("title") val title: String,
-    @SerializedName("picture") val picture: String,//https link
-    @SerializedName("timestamp") val timestamp: String,
-    @SerializedName("likeCount") val likeCount: Int
+    @SerializedName("picture") val picture: String,
+    @SerializedName("user") val userId: String,//https link
+    @SerializedName("contents") val contents: String,
+    @SerializedName("timestamp") val timestamp: String
 )
 
 class UserGetCommunityListModule(override val userData: Any? = null) : UserApiInterface {
@@ -58,7 +58,7 @@ class UserGetCommunityListModule(override val userData: Any? = null) : UserApiIn
                     } else if (resp.code() in 200..299) {
                         val responseBody = super.handle200(resp)
                         val jsonString: String =
-                            Gson().toJsonTree(responseBody).asJsonObject.toString()
+                            Gson().toJsonTree(responseBody).asJsonArray.toString()
                         return Gson().fromJson(
                             jsonString,
                             Array<UserGetCommunityListResponseData>::class.java

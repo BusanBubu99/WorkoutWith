@@ -88,23 +88,4 @@
         app:layout_constraintStart_toEndOf="@+id/btnFindId"
         app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
 
-    <Button
-        android:id="@+id/testBut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnFindPassword" />
-
-    <Button
-        android:id="@+id/tstBtn2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/testBut" />
 </androidx.constraintlayout.widget.ConstraintLayout>

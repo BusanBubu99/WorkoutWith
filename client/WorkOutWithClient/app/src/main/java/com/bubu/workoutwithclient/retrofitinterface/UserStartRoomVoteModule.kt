@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import java.io.EOFException
 import java.net.SocketTimeoutException
@@ -33,7 +34,7 @@ class UserStartRoomVoteModule(override val userData: UserStartRoomVoteData) : Us
 
     interface UserStartRoomVoteInterface {
         @Headers("Content-Type: application/json")
-        @PUT("/v1/matching/vote/")
+        @PUT("/v1/matching/vote")
         fun get(
             @Body body: JsonObject
         ): Call<Any>
@@ -42,7 +43,7 @@ class UserStartRoomVoteModule(override val userData: UserStartRoomVoteData) : Us
 
     override suspend fun getApiData(): Any? {
         try {
-            var auth = UserAuthModule(null)
+            var auth = UserAuthModule()
             val result = auth.getApiData()
             if (result == true) {
                 val retrofit = ApiTokenHeaderClient.getApiClient()

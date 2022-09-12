@@ -42,6 +42,7 @@ class ProfileViewSet(viewsets.ViewSet):
                 postlist.append(p)
             profile = profileObject.values()[0]
             profile["communityPost"] = postlist
+            profile["profilePic"] = "/media/" + profile["profilePic"]
             return Response(profile, status=200)
         except ObjectDoesNotExist:
             return Response(nullObject, status=400)

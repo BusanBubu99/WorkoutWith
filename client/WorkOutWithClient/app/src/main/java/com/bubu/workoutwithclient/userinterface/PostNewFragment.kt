@@ -75,7 +75,6 @@ class PostNewFragment : Fragment() {
                             binding.editPostContent.text.toString()
                         )
                     }
-
                 }
                 val direction =
                     PostNewFragmentDirections.actionPostNewFragmentToCommunityFragment()

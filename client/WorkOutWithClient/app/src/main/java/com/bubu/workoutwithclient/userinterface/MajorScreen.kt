@@ -31,10 +31,10 @@ class MajorScreen : AppCompatActivity() {
 	}
 
 	fun goNewProfileFragment() {
-		//val newProfileFragment = NewProfileFragment()
-		//val transaction = supportFragmentManager.beginTransaction().replace(R.id.LinearLay, newProfileFragment)
-		//transaction.addToBackStack("detail")
-		//transaction.commit()
+		val newProfileFragment = NewProfileFragment()
+		val transaction = supportFragmentManager.beginTransaction().replace(R.id.LinearLay, newProfileFragment)
+		transaction.addToBackStack("detail")
+		transaction.commit()
 	}
 
 }

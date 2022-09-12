@@ -43,9 +43,8 @@ data class UserListObject(
     @SerializedName("userId") val userId: String,
     @SerializedName("profilePic") val profilePic: String, //must be https Link
     @SerializedName("like") val like: String,
-    @SerializedName("liker") val liker : List<VoteUser>
+    @SerializedName("liker") val liker : List<String>
 )
-data class VoteUser(@SerializedName("userId") val userId : String)
 
 
 data class UserGetRoomVoteData(val voteId: String)

@@ -7,11 +7,10 @@ class ChatVoteMessage : ChatMessage {
     var content : String = ""
     var voteId : String = ""
 
-
     constructor()
 
 
-    constructor(id: String,voteId : String,voteTitle : String,startTime:String, endTime: String,date : String,content:String,type : String = "1") { // creator = 방 생성자
+    constructor(id: String,voteId : String,voteTitle : String,startTime:String, endTime: String,date : String,content:String,type : String = "1",) { // creator = 방 생성자
         super.id = id
         this.voteId = voteId
         this.startTime = startTime

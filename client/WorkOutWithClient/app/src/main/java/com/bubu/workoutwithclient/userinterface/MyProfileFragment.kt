@@ -31,8 +31,6 @@ open class MyProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
-
         binding = FragmentMyProfileBinding.inflate(inflater, container, false)
 
         var data : MutableList<Community> = mutableListOf<Community>()
@@ -88,8 +86,8 @@ open class MyProfileFragment : Fragment() {
             }
             communityAdapter.listCommunityData = data
             CoroutineScope(Dispatchers.Main).launch {
-                binding.RecyclerMyPost .adapter = communityAdapter
-                binding.RecyclerMyPost.layoutManager = LinearLayoutManager(majorScreen)
+                binding.RecyclerPostList.adapter = communityAdapter
+                binding.RecyclerPostList.layoutManager = LinearLayoutManager(majorScreen)
             }
         }
 
@@ -116,9 +114,8 @@ open class MyProfileFragment : Fragment() {
 
 
         binding.btnEditProfile.setOnClickListener {
-            majorScreen?.goNewProfileFragment()
-            //val direction = MyProfileFragmentDirections.actionMyProfileFragmentToEditProfileFragment2()
-            //findNavController().navigate(direction)
+            val direction = MyProfileFragmentDirections.actionMyProfileFragmentToEditProfileFragment2()
+            findNavController().navigate(direction)
         }
         return binding.root
     }

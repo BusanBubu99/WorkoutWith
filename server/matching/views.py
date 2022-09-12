@@ -140,6 +140,15 @@ class MatchingRoomVoteViewSet(viewsets.ViewSet):
         data = request.data
         userdata = UserProfile.objects.get(userid=request.user.username)
 
+        try:
+            vote = Vote.objects.get(voteId=data["voteId"])
+        except ObjectDoesNotExist:
+            return Response({"error": "can't find vote from given voteId."}, status=400)
+        voteuser = vote.userList
+        voteuser = voteuser.filter(userId=request.user.username)
+        if voteuser.values().exists() is True:
+            return Response({"error": "You've aleady joined this vote."}, status=400)
+
         userinfodata = {"vote": data["voteId"],
                         "userId": userdata.userid,
                         "profilePic": str(userdata.profilePic),

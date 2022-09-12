@@ -95,6 +95,13 @@ class MatchingDetailedInfo(viewsets.ViewSet):
                             status=400)
 
 class MatchingRoomVoteViewSet(viewsets.ViewSet):
+    def list(self, request, **kwargs):
+        voteid = request.GET.get("voteId", None)
+
+        vote = Vote.objects.filter(voteId=voteid)
+        serializer =VoteSerializer(vote, many=True)
+        return Response(serializer.data, status=200)
+
     def create(self, request, **kwargs):
         userdata = UserProfile.objects.get(userid=request.user.username)
         data = request.data

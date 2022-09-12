@@ -94,9 +94,12 @@ class MatchingRoomVoteViewSet(viewsets.ViewSet):
     def list(self, request, **kwargs):
         voteid = request.GET.get("voteId", None)
 
-        vote = Vote.objects.filter(voteId=voteid)
-        serializer =VoteSerializer(vote, many=True)
-        return Response(serializer.data, status=200)
+        try:
+            vote = Vote.objects.get(voteId=voteid)
+            serializer =VoteSerializer(vote)
+            return Response(serializer.data, status=200)
+        except ObjectDoesNotExist:
+            return Response({"error": "can't find vote from given voteId."}, status=400)
 
     def create(self, request, **kwargs):
         userdata = UserProfile.objects.get(userid=request.user.username)

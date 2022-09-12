@@ -1,5 +1,6 @@
 package com.bubu.workoutwithclient.retrofitinterface
 
+import android.content.Intent
 import android.util.Log
 import com.bubu.workoutwithclient.databinding.ActivityMatchRoomBinding
 import com.bubu.workoutwithclient.firebasechat.ChatMessage
@@ -7,6 +8,7 @@ import com.bubu.workoutwithclient.firebasechat.ChatVoteMessage
 import com.bubu.workoutwithclient.userinterface.ChatListAdapter
 import com.bubu.workoutwithclient.userinterface.MatchRoomActivity
 import com.bubu.workoutwithclient.userinterface.downloadProfilePic
+import com.bubu.workoutwithclient.userinterface.getMatchRoom
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -16,23 +18,23 @@ import kotlinx.android.synthetic.main.activity_match_room.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.Serializable
 
-class UserFirebaseReceiveChatModule(val userId: String, val matchId: String, val list : MutableList<ChatMessage>,
-val adapter : ChatListAdapter, val binding : ActivityMatchRoomBinding
+class UserFirebaseReceiveChatModule(
+    val userId: String, val matchId: String, val list: MutableList<ChatMessage>,
+    val adapter: ChatListAdapter, val binding: ActivityMatchRoomBinding
 ) {
     val database =
         Firebase.database("https://workoutwith-81ab7-default-rtdb.asia-southeast1.firebasedatabase.app/")
     val msgRef = database.getReference("rooms/${matchId}/messages")
 
-    fun receiveChat(){
+    fun receiveChat() {
         msgRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 list.clear()
                 for (item in snapshot.children) {
                     Log.d("item", item.toString())
                     item.getValue(ChatVoteMessage::class.java)?.let { msg ->
-                        //Log.d("msgtype",msg.type)
-                        //result.add(msg)
                         list.add(msg)
                         if (msg.type == "1") {
                             Log.d("this is Vote date", msg.date)
@@ -52,7 +54,7 @@ val adapter : ChatListAdapter, val binding : ActivityMatchRoomBinding
                 }
 
 
-                Log.d("list!",list.toString())
+                Log.d("list!", list.toString())
             }
 
             override fun onCancelled(error: DatabaseError) {

@@ -20,8 +20,8 @@ import com.bubu.workoutwithclient.retrofitinterface.*
 import kotlinx.coroutines.*
 import java.net.URL
 
-fun checkChatRoom(matchId: String, title: String) {
-    val checkChatObject = UserFirebaseCheckChatRoomModule(matchId, title)
+fun checkChatRoom(matchId: String, title: String,profileAdapter: MatchingTeamAdapter,binding: ActivityMatchRoomBinding) {
+    val checkChatObject = UserFirebaseCheckChatRoomModule(matchId, title,profileAdapter,binding)
 }
 
 fun sendMessage(userId: String, matchId: String, messageString: String) {
@@ -32,15 +32,24 @@ fun sendMessage(userId: String, matchId: String, messageString: String) {
 fun startVote(
     userId: String,
     matchId: String,
-    voteTitle : String,
-    voteId:String,
+    voteTitle: String,
+    voteId: String,
     startTime: String,
     endTime: String,
     date: String,
     content: String
 ) {
     val startVoteObject =
-        UserFirebaseVoteChatModule(userId, matchId,voteTitle,voteId, startTime, endTime, date, content)
+        UserFirebaseVoteChatModule(
+            userId,
+            matchId,
+            voteTitle,
+            voteId,
+            startTime,
+            endTime,
+            date,
+            content
+        )
     startVoteObject.sendChat()
 }
 
@@ -51,18 +60,44 @@ suspend fun downloadProfilePic(uri: String): Bitmap {
     return BitmapFactory.decodeStream(stream)
 }
 
+fun updateUserProfilePicture(
+    profileAdapter: MatchingTeamAdapter,
+    binding: ActivityMatchRoomBinding
+) {
+    var data = mutableListOf<MatchingTeam>()
+    CoroutineScope(Dispatchers.Default).launch {
+        matchRoomData = getMatchRoom(matchRoomData.matchId) as UserGetMatchRoomResponseData
+        Log.d("updated!!", matchRoomData.toString())
+        CoroutineScope(Dispatchers.Main).launch {
+            Log.d("inner!", matchRoomData.toString())
+            matchRoomData.userInfo.forEach {
+                val bitmap = withContext(Dispatchers.IO) {
+                    downloadProfilePic(it.profilePic)
+                }
+                data.add(MatchingTeam(it.userid, bitmap))
+            }
+            profileAdapter.listMatchingTeamData = data
+            binding.recyclerProfile.adapter = profileAdapter
+        }
+    }
+}
+
 /**
  *
  * startVote()*/
+
+
+lateinit var matchRoomData: UserGetMatchRoomResponseData
+
 class MatchRoomActivity : AppCompatActivity() {
     val binding by lazy { ActivityMatchRoomBinding.inflate(layoutInflater) }
     lateinit var list: MutableList<ChatMessage>
     lateinit var adapter: ChatListAdapter
-    lateinit var matchRoomData: UserGetMatchRoomResponseData
 
     fun goBack() {
         onBackPressed()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         list = mutableListOf<ChatMessage>()
@@ -76,23 +111,26 @@ class MatchRoomActivity : AppCompatActivity() {
         }
 
 
-
         var profileAdapter = MatchingTeamAdapter(this)
+
+        var data = mutableListOf<MatchingTeam>()
         CoroutineScope(Dispatchers.Main).launch {
-            var data = mutableListOf<MatchingTeam>()
-            matchRoomData.userInfo.forEach{
+            matchRoomData.userInfo.forEach {
                 val bitmap = withContext(Dispatchers.IO) {
                     downloadProfilePic(it.profilePic)
                 }
-                data.add(MatchingTeam(it.userid,bitmap))
+                data.add(MatchingTeam(it.userid, bitmap))
             }
             profileAdapter.listMatchingTeamData = data
             binding.recyclerProfile.adapter = profileAdapter
-            Log.d("data@@", data.toString())
         }
 
+        Log.d("data@@", data.toString())
 
 
+        binding.testUpdate.setOnClickListener {
+            updateUserProfilePicture(profileAdapter,binding)
+        }
 
         binding.recyclerProfile.layoutManager = GridLayoutManager(this, 5)
 
@@ -116,7 +154,7 @@ class MatchRoomActivity : AppCompatActivity() {
         }
         Log.d("match!!!!", matchRoomData.toString())
         val title = matchRoomData.city + " " + matchRoomData.county + " " + matchRoomData.district
-        checkChatRoom(matchRoomData.matchId, title)
+        checkChatRoom(matchRoomData.matchId, title,profileAdapter,binding)
         val firebaseChatObject = UserFirebaseReceiveChatModule(
             userInformation.userId,
             matchRoomData.matchId,
@@ -125,15 +163,16 @@ class MatchRoomActivity : AppCompatActivity() {
         )
         firebaseChatObject.receiveChat()
     }
+
     fun goCreateScheduleFragment() {
 
         val createScheduleFragment = CreateScheduleFragment()
         val bundle = Bundle()
-        bundle.putString("matchId",matchRoomData.matchId)
+        bundle.putString("matchId", matchRoomData.matchId)
         createScheduleFragment.arguments = bundle
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.matchRoomLayout,createScheduleFragment)
+        transaction.add(R.id.matchRoomLayout, createScheduleFragment)
         transaction.addToBackStack("test")
 
         transaction.commit()
@@ -145,7 +184,7 @@ class ChatListAdapter(private val chatList: MutableList<ChatMessage>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
-        if(chatList[position].id != userInformation.userId) {
+        if (chatList[position].id != userInformation.userId) {
             return 0
         } else {
             return 1
@@ -153,7 +192,7 @@ class ChatListAdapter(private val chatList: MutableList<ChatMessage>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if(viewType == 0){
+        if (viewType == 0) {
             val binding =
                 RecyclerOpChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return HolderOp(binding)
@@ -166,7 +205,7 @@ class ChatListAdapter(private val chatList: MutableList<ChatMessage>) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val msg = chatList[position]
-        if(msg.id != userInformation.userId) {
+        if (msg.id != userInformation.userId) {
             (holder as HolderOp).setMsg(msg)
         } else {
             (holder as HolderMy).setMsg(msg)
@@ -177,7 +216,8 @@ class ChatListAdapter(private val chatList: MutableList<ChatMessage>) :
         return chatList.size
     }
 
-    inner class HolderOp(val binding: RecyclerOpChatBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class HolderOp(val binding: RecyclerOpChatBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun setMsg(msg: ChatMessage) {
             binding.textName.text = msg.id
             binding.textMsg.text = msg.msg
@@ -185,7 +225,8 @@ class ChatListAdapter(private val chatList: MutableList<ChatMessage>) :
         }
     }
 
-    inner class HolderMy(val binding: RecyclerMyChatBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class HolderMy(val binding: RecyclerMyChatBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun setMsg(msg: ChatMessage) {
             binding.textMsg.text = msg.msg
             binding.textDate.text = "${msg.timestamp}"

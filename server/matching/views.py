@@ -117,7 +117,7 @@ class MatchingRoomVoteViewSet(viewsets.ViewSet):
                 return Response(voteserializer.errors)
             match = MatchingRoom.objects.get(matchId=data["matchId"])
             match.voteInfo.add(savedVote)
-            return Response(serializer.data, status=200)
+            return Response({"voteId": serializer.data["voteId"]}, status=200)
         return Response(serializer.errors, status=400)
 
     def update(self, request, **kwargs):

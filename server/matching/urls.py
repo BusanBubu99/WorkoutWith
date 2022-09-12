@@ -7,6 +7,7 @@ matchingView = MatchingRoomViewSet.as_view({
 })
 
 voteView = MatchingRoomVoteViewSet.as_view({
+    "get": "list",
     "post": "create",
     "put": "update",
 })

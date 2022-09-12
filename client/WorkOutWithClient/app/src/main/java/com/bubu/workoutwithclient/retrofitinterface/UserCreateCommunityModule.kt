@@ -31,7 +31,7 @@ import java.net.SocketTimeoutException
  * */
 
 data class UserCreateCommunityData(
-    val title: String, val picture: File/*absolute File Path*/,
+    val title: String, val picture: File?/*absolute File Path*/,
     val content: String
 )
 
@@ -39,7 +39,7 @@ class UserCreateCommunityModule(override val userData: UserCreateCommunityData) 
 
     interface UserCreateCommunityInterface {
         @Multipart
-        @PUT("/v1/community/")
+        @POST("/v1/community/")
         fun get(
             @Part("title") name: String,
             @Part file: MultipartBody.Part?,
@@ -48,38 +48,85 @@ class UserCreateCommunityModule(override val userData: UserCreateCommunityData) 
         //보내는 데이터 형식
     }
 
+    interface UserCreateCommunityNoPictureInterface : UserCreateCommunityInterface {
+        @Headers("Content-Type: application/json")
+        @POST("/v1/community/")
+        fun get(
+            @Body body: JsonObject
+        ): Call<Any>
+    }
+
     override suspend fun getApiData(): Any? {
         try {
             var auth = UserAuthModule()
             val result = auth.getApiData()
+            val retrofit = ApiTokenHeaderClient.getApiClient()
             if (result == true) {
-                val retrofit = ApiTokenHeaderClient.getApiClient()
                 Log.d("userInformation in create", userInformation.accessToken)
-                val retrofitObject = retrofit.create(UserCreateCommunityInterface::class.java)
-                try {
-                    val requestFile = RequestBody.create(MediaType.parse("image/*"), userData.picture)
-                    val profilePicture = MultipartBody.Part.createFormData("profilePic", userData.picture.name, requestFile)
-                    var resp = retrofitObject.get(userData.title,profilePicture,userData.content).execute()
-                    if (resp.code() in 100..199) {
-                        return super.handle100(resp)
-                    } else if (resp.code() in 200..299) {
-                        return resp.code()
-                    } else if (resp.code() in 300..399) {
-                        return super.handle300(resp)
-                    } else if (resp.code() in 400..499) {
-                        return super.handle400(resp)
-                    } else {
-                        return super.handle500(resp)
+                if (userData.picture == null) {
+                    var retrofitObject =
+                        retrofit.create(UserCreateCommunityNoPictureInterface::class.java)
+                    try {
+                        var requestBody = JsonObject()
+                        requestBody.addProperty("title", userData.title)
+                        requestBody.addProperty("contents", userData.content)
+                        var resp = retrofitObject.get(requestBody).execute()
+                        if (resp.code() in 100..199) {
+                            return super.handle100(resp)
+                        } else if (resp.code() in 200..299) {
+                            return resp.code()
+                        } else if (resp.code() in 300..399) {
+                            return super.handle300(resp)
+                        } else if (resp.code() in 400..499) {
+                            return super.handle400(resp)
+                        } else {
+                            return super.handle500(resp)
+                        }
+                    } catch (e: SocketTimeoutException) {
+                        Log.d("TimeOutException", e.toString())
+                        return e
+                    } catch (e: Exception) {
+                        Log.d("Exception", e.toString())
+                        return e
+                    } catch (e: EOFException) {
+                        Log.d("EOFException Maybe Response Data Type Mismatch", e.toString())
+                        return e
                     }
-                } catch (e: SocketTimeoutException) {
-                    Log.d("TimeOutException", e.toString())
-                    return e
-                } catch (e: Exception) {
-                    Log.d("Exception", e.toString())
-                    return e
-                } catch (e: EOFException) {
-                    Log.d("EOFException Maybe Response Data Type Mismatch", e.toString())
-                    return e
+                } else {
+                    try {
+                        var retrofitObject =
+                            retrofit.create(UserCreateCommunityInterface::class.java)
+                        val requestFile =
+                            RequestBody.create(MediaType.parse("image/*"), userData.picture)
+                        var profilePicture = MultipartBody.Part.createFormData(
+                            "picture",
+                            userData.picture.name,
+                            requestFile
+                        )
+                        var resp =
+                            retrofitObject.get(userData.title, profilePicture, userData.content)
+                                .execute()
+                        if (resp.code() in 100..199) {
+                            return super.handle100(resp)
+                        } else if (resp.code() in 200..299) {
+                            return resp.code()
+                        } else if (resp.code() in 300..399) {
+                            return super.handle300(resp)
+                        } else if (resp.code() in 400..499) {
+                            return super.handle400(resp)
+                        } else {
+                            return super.handle500(resp)
+                        }
+                    } catch (e: SocketTimeoutException) {
+                        Log.d("TimeOutException", e.toString())
+                        return e
+                    } catch (e: Exception) {
+                        Log.d("Exception", e.toString())
+                        return e
+                    } catch (e: EOFException) {
+                        Log.d("EOFException Maybe Response Data Type Mismatch", e.toString())
+                        return e
+                    }
                 }
             } else if (result is UserError) {
                 //Auth Error Handling

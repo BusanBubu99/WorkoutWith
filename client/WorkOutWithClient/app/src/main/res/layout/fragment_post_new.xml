@@ -10,10 +10,11 @@
         android:id="@+id/editPostTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
+        android:hint="제목"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,20 +22,64 @@
         android:id="@+id/editPostContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
+        android:hint="내용"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPostTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/viewHr" />
 
     <Button
         android:id="@+id/btnPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Button"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="작성"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/viewHr"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPostContent" />
+        app:layout_constraintTop_toBottomOf="@+id/editPostTitle" />
+
+    <ImageButton
+        android:id="@+id/btnUploadCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewHr2"
+        app:srcCompat="@drawable/image_camera" />
+
+    <View
+        android:id="@+id/viewHr2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="70dp"
+        android:background="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imagePostView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/viewHr2"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:src="@tools:sample/avatars" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bubu.workoutwithclient.R
-import com.bubu.workoutwithclient.databinding.ActivityMainBinding
 import com.bubu.workoutwithclient.databinding.ActivityMatchRoomBinding
 import com.bubu.workoutwithclient.databinding.RecyclerMyChatBinding
 import com.bubu.workoutwithclient.databinding.RecyclerOpChatBinding
@@ -56,11 +55,10 @@ fun createVote(
 
 
 suspend fun downloadProfilePic(uri: String): Bitmap {
-    lateinit var url : URL
-    if(!uri.contains("http://"))
-        url = URL(baseurl + uri)
+    var url : URL = if(!uri.contains("http://"))
+        URL(baseurl + uri)
     else
-        url = URL(uri)
+        URL(uri)
     val stream = url.openStream()
     return BitmapFactory.decodeStream(stream)
 }

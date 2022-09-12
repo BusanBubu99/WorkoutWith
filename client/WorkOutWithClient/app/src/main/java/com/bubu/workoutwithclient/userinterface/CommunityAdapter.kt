@@ -1,5 +1,6 @@
 package com.bubu.workoutwithclient.userinterface
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +53,9 @@ class CommunityAdapter : RecyclerView.Adapter<CommunityAdapter.CommunityHolder>(
 			//var sdf = SimpleDateFormat("yyyy/MM/dd")
 			//var formattedData = sdf.format(community.editTime)
 			binding.textCommunityTime.text = community.editTime
-			binding.imageCommunityView.setImageBitmap(community.picture)
+			if(community.picture != null) {
+				binding.imageCommunityView.setImageBitmap(community.picture)
+			}
 		}
 	}
 }

@@ -37,7 +37,7 @@ suspend fun getCommunityList() : Any?{
 
 
 
-data class Community(var title: String, var content: String, var editor: String, var editTime: String, val picture : Bitmap,val uri : String)
+data class Community(var title: String, var content: String, var editor: String, var editTime: String, val picture : Bitmap?,val pictureUri : String?)
     : Serializable
 
 
@@ -76,10 +76,16 @@ class  CommunityFragment : Fragment() {
         CoroutineScope(Dispatchers.Default).launch {
             val communityData = getCommunityList() as List<UserGetCommunityListResponseData>
             communityData.forEach {
-                val bitmap = withContext(Dispatchers.IO){
-                    downloadProfilePic(it.picture)
+                val bitmap : Bitmap
+                if(it.picture != null) {
+                    bitmap = withContext(Dispatchers.IO) {
+                        downloadProfilePic(it.picture)
+                    }
+                    data.add(Community(it.title,it.contents,it.userId,it.timestamp,bitmap,it.picture))
+                } else{
+                    data.add(Community(it.title,it.contents,it.userId,it.timestamp,null,it.picture))
                 }
-                data.add(Community(it.title,it.contents,it.userId,it.timestamp,bitmap,it.picture))
+
             }
             communityAdapter.listCommunityData = data
             CoroutineScope(Dispatchers.Main).launch {
@@ -97,7 +103,10 @@ class  CommunityFragment : Fragment() {
         communityAdapter.setOnItemClickListner(object: CommunityAdapter.OnItemClickListner{
             override fun onItemClick(view: View, position: Int) {
                 //intent.putExtra("test",data[position] as Serializable)
-                intent.putExtra("pictureUri",data[position].uri)
+                if(data[position].pictureUri != null)
+                    intent.putExtra("pictureUri",data[position].pictureUri)
+                else
+                    intent.putExtra("pictureUri", "null")
                 intent.putExtra("title", data[position].title)
                 intent.putExtra("content", data[position].content)
                 intent.putExtra("editor", data[position].editor)
@@ -112,20 +121,5 @@ class  CommunityFragment : Fragment() {
         majorScreen = context as MajorScreen
     }
 
-    /*fun loadCommunityData() : MutableList<Community> {
-
-        val data : MutableList<Community> = mutableListOf()
-        for(no in 1..100) {
-            val title = "제목 ${no}"
-            val content = "내용 ${no}"
-            val editor = "작성자 ${no}"
-            val date = System.currentTimeMillis()
-
-            var community = Community(title, content, editor, date)
-
-            data.add(community)
-        }
-        return data
-    }*/
 }
 

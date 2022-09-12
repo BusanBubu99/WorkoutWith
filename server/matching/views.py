@@ -101,6 +101,8 @@ class MatchingRoomVoteViewSet(viewsets.ViewSet):
         try:
             vote = Vote.objects.get(voteId=voteid)
             serializer =VoteSerializer(vote)
+            for d in serializer.data["userList"]:
+                d["profilePic"] = "/media/" + d["profilePic"]
             return Response(serializer.data, status=200)
         except ObjectDoesNotExist:
             return Response({"error": "can't find vote from given voteId."}, status=400)

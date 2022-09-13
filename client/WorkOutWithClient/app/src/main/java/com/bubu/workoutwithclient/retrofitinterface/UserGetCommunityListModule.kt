@@ -62,7 +62,7 @@ class UserGetCommunityListModule(override val userData: Any? = null) : UserApiIn
                         return Gson().fromJson(
                             jsonString,
                             Array<UserGetCommunityListResponseData>::class.java
-                        ).toList()
+                        ).toList().reversed()
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

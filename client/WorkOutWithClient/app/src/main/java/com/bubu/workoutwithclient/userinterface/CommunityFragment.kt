@@ -64,14 +64,17 @@ class  CommunityFragment : Fragment() {
             val direction = CommunityFragmentDirections.actionCommunityFragmentToPostNewFragment()
             findNavController().navigate(direction)
         }
+        Log.d("PosN","OnCreateView")
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         var data : MutableList<Community> = mutableListOf<Community>()
+        val communityAdapter = CommunityAdapter()
+        updateCommunityList(binding,majorScreen, communityAdapter, data)
+        Log.d("PosN","OnViewCreated")
+        /*var data : MutableList<Community> = mutableListOf<Community>()
         val communityAdapter = CommunityAdapter()
         CoroutineScope(Dispatchers.Default).launch {
             val communityData = getCommunityList() as List<UserGetCommunityListResponseData>
@@ -92,7 +95,7 @@ class  CommunityFragment : Fragment() {
                 binding.RecyclerCommunity.adapter = communityAdapter
                 binding.RecyclerCommunity.layoutManager = LinearLayoutManager(majorScreen)
             }
-        }
+        }*/
 
         //val data1 = loadCommunityData()
 
@@ -121,5 +124,30 @@ class  CommunityFragment : Fragment() {
         majorScreen = context as MajorScreen
     }
 
+}
+
+fun updateCommunityList(binding : FragmentCommunityBinding, majorScreen : MajorScreen, communityAdapter : CommunityAdapter,
+data : MutableList<Community>) {
+    CoroutineScope(Dispatchers.Default).launch {
+        data.clear()
+        val communityData = getCommunityList() as List<UserGetCommunityListResponseData>
+        communityData.forEach {
+            val bitmap : Bitmap
+            if(it.picture != null) {
+                bitmap = withContext(Dispatchers.IO) {
+                    downloadProfilePic(it.picture)
+                }
+                data.add(Community(it.title,it.contents,it.userId,it.timestamp,bitmap,it.picture))
+            } else{
+                data.add(Community(it.title,it.contents,it.userId,it.timestamp,null,it.picture))
+            }
+
+        }
+        communityAdapter.listCommunityData = data
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.RecyclerCommunity.adapter = communityAdapter
+            binding.RecyclerCommunity.layoutManager = LinearLayoutManager(majorScreen)
+        }
+    }
 }
 

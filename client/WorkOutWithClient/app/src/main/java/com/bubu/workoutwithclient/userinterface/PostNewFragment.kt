@@ -174,4 +174,9 @@ class PostNewFragment : Fragment() {
         super.onAttach(context)
         majorScreen = context as MajorScreen
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("PostNEw","삭제")
+    }
 }

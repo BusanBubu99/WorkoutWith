@@ -52,7 +52,7 @@
         <entry key="app/src/main/res/layout/fragment_community.xml" value="0.2869791666666667" />
         <entry key="app/src/main/res/layout/fragment_completed.xml" value="0.2869791666666667" />
         <entry key="app/src/main/res/layout/fragment_create_schedule.xml" value="0.536" />
-        <entry key="app/src/main/res/layout/fragment_edit_profile.xml" value="0.4" />
+        <entry key="app/src/main/res/layout/fragment_edit_profile.xml" value="0.201171875" />
         <entry key="app/src/main/res/layout/fragment_find_id.xml" value="0.2600908173562059" />
         <entry key="app/src/main/res/layout/fragment_find_password.xml" value="0.24722222222222223" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.24722222222222223" />
@@ -61,7 +61,7 @@
         <entry key="app/src/main/res/layout/fragment_matching_start.xml" value="0.536" />
         <entry key="app/src/main/res/layout/fragment_matching_team.xml" value="0.2869791666666667" />
         <entry key="app/src/main/res/layout/fragment_my_profile.xml" value="0.2869791666666667" />
-        <entry key="app/src/main/res/layout/fragment_new_profile.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/layout/fragment_new_profile.xml" value="0.4" />
         <entry key="app/src/main/res/layout/fragment_post_new.xml" value="0.2869791666666667" />
         <entry key="app/src/main/res/layout/fragment_ranking.xml" value="0.2869791666666667" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.24722222222222223" />

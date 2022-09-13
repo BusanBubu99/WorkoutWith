@@ -170,11 +170,10 @@ class NewProfileFragment : Fragment() {
         val intent = Intent(activity, MajorScreen::class.java)
         binding.btnNewEditComplete.setOnClickListener {
             val editId = binding.EditNewProfileId.text.toString()
-            setFragmentResult("request", bundleOf("editId" to editId))
+            //setFragmentResult("request", bundleOf("editId" to editId))
             val editContent = binding.EditNewProfileContent.text.toString()
-            setFragmentResult("request", bundleOf("editContent" to editContent))
+            //setFragmentResult("request", bundleOf("editContent" to editContent))
             if (filePath != null && editId.isNotEmpty() && editContent.isNotEmpty()) {
-
                 CoroutineScope(Dispatchers.Default).launch {
                     Log.d("id", editId)
                     val result = editProfile(
@@ -197,7 +196,6 @@ class NewProfileFragment : Fragment() {
                     }
                 }
             }
-
         }
         setFragmentResultListener("request") { key, bundle ->
             bundle.getString("profileId")?.let {

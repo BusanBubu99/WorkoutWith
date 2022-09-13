@@ -21,12 +21,18 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.bubu.workoutwithclient.R
 import com.bubu.workoutwithclient.databinding.FragmentEditProfileBinding
+import com.bubu.workoutwithclient.retrofitinterface.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class EditProfileFragment : Fragment() {
-
+    var filePath = ""
     lateinit var binding : FragmentEditProfileBinding
     lateinit var majorScreen: MajorScreen
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,13 +53,58 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        CoroutineScope(Dispatchers.Default).launch {
+            val getProfileObject = UserGetProfileModule(UserGetProfileData(userInformation.userId))
+            val result = getProfileObject.getApiData()
+            if(result is UserGetProfileResponseData) {
+                Log.d("result!!!!",result.toString())
+                CoroutineScope(Dispatchers.Main).launch {
+                    val bitmap = withContext(Dispatchers.IO) {
+                        downloadProfilePic(result.profilePic)
+                    }
+                    binding.editProfileImage.setImageBitmap(bitmap)
+                    binding.EditProfileContent.setText(result.tags)
+                    binding.EditProfileId.setText(result.name)
+                }
+            } else if(result is UserError) {
+
+            } else {
+
+            }
+        }
         binding.btnEditComplete.setOnClickListener {
             val editId = binding.EditProfileId.text.toString()
-            setFragmentResult("request", bundleOf("editId" to editId))
+            //setFragmentResult("request", bundleOf("editId" to editId))
             val editContent = binding.EditProfileContent.text.toString()
-            setFragmentResult("request", bundleOf("editContent" to editContent))
-            val direction = EditProfileFragmentDirections.actionEditProfileFragment2ToMyProfileFragment()
-            findNavController().navigate(direction)
+            //setFragmentResult("request", bundleOf("editContent" to editContent))
+            if (filePath != null && editId.isNotEmpty() && editContent.isNotEmpty()) {
+                CoroutineScope(Dispatchers.Default).launch {
+                    Log.d("id", editId)
+                    val result = editProfile(
+                        UserEditProfileData(
+                            editId,
+                            File(filePath),
+                            editContent,
+                            "",
+                            "",
+                            ""
+                        )
+                    )
+                    if (result is UserEditProfileResponseData) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Log.d("res", "succeesful!")
+                            val direction = EditProfileFragmentDirections.actionEditProfileFragment2ToMyProfileFragment()
+                            findNavController().navigate(direction)
+                        }
+                    } else {
+
+                    }
+                }
+            }
+
+
         }
         setFragmentResultListener("request") { key, bundle ->
             bundle.getString("profileId")?.let {
@@ -91,13 +142,21 @@ class EditProfileFragment : Fragment() {
         }
     }
     private val getContentImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        uri.let { binding.editProfileImage.setImageURI(uri) }
+        uri.let { binding.editProfileImage.setImageURI(uri)
+            val uriPathHelper = URIPathHelper()
+            if (uri != null)
+                filePath =
+                    this.context?.let { it1 -> uriPathHelper.getPath(it1, uri!!) }.toString()}
     }
 
     var pictureUri: Uri? = null
     private val getTakePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) {
         if(it) {
-            pictureUri.let { binding.editProfileImage.setImageURI(pictureUri) }
+            pictureUri.let { binding.editProfileImage.setImageURI(pictureUri)
+                val uriPathHelper = URIPathHelper()
+                if (pictureUri != null)
+                    filePath = this.context?.let { it1 -> uriPathHelper.getPath(it1, pictureUri!!) }
+                        .toString()}
         }
     }
 

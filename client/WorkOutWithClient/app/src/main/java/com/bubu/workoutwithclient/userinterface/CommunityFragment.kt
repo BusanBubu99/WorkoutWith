@@ -130,6 +130,7 @@ fun updateCommunityList(binding : FragmentCommunityBinding, majorScreen : MajorS
 data : MutableList<Community>) {
     CoroutineScope(Dispatchers.Default).launch {
         data.clear()
+        Log.d("bug here", getCommunityList().toString())
         val communityData = getCommunityList() as List<UserGetCommunityListResponseData>
         communityData.forEach {
             val bitmap : Bitmap

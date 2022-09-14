@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -14,9 +15,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.bubu.workoutwithclient.R
@@ -26,10 +25,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+    val bytes = ByteArrayOutputStream()
+    inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+    val path =
+        MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+    return Uri.parse(path)
+}
 
 class EditProfileFragment : Fragment() {
     var filePath = ""
@@ -53,7 +61,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        lateinit var bitmap : Bitmap
 
         CoroutineScope(Dispatchers.Default).launch {
             val getProfileObject = UserGetProfileModule(UserGetProfileData(userInformation.userId))
@@ -61,7 +69,7 @@ class EditProfileFragment : Fragment() {
             if(result is UserGetProfileResponseData) {
                 Log.d("result!!!!",result.toString())
                 CoroutineScope(Dispatchers.Main).launch {
-                    val bitmap = withContext(Dispatchers.IO) {
+                    bitmap = withContext(Dispatchers.IO) {
                         downloadProfilePic(result.profilePic)
                     }
                     binding.editProfileImage.setImageBitmap(bitmap)
@@ -79,7 +87,18 @@ class EditProfileFragment : Fragment() {
             //setFragmentResult("request", bundleOf("editId" to editId))
             val editContent = binding.EditProfileContent.text.toString()
             //setFragmentResult("request", bundleOf("editContent" to editContent))
-            if (filePath != null && editId.isNotEmpty() && editContent.isNotEmpty()) {
+            if (editId.isNotEmpty() && editContent.isNotEmpty()) {
+                if(filePath == "") {
+                    val uriPathHelper = URIPathHelper()
+                    filePath = context?.let { it1 ->
+                        getImageUri(it1,bitmap)?.let { it1 -> context?.let { it2 ->
+                            uriPathHelper.getPath(
+                                it2, it1)
+                        } }
+                    }.toString()
+                    Log.d("zz",filePath)
+                }
+                Log.d("filePath",filePath)
                 CoroutineScope(Dispatchers.Default).launch {
                     Log.d("id", editId)
                     val result = editProfile(

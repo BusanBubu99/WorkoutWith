@@ -31,9 +31,9 @@ data class UserGetProfileData(val targetId: String)
 
 data class UserGetProfileResponseData(
     @SerializedName("userid") val userId: String,
-    @SerializedName("name") val name: String,
+    @SerializedName("name") var name: String,
     @SerializedName("profilePic") val profilePic: String,//file
-    @SerializedName("tags") val tags: String,
+    @SerializedName("tags") var tags: String,
     @SerializedName("city") val city : String,
     @SerializedName("county") val county : String,
     @SerializedName("district") val district : String,
@@ -75,7 +75,10 @@ class UserGetProfileModule(override val userData: UserGetProfileData) : UserApiI
                     } else if (resp.code() in 200..299) {
                         val responseBody = super.handle200(resp)
                         val jsonString: String = Gson().toJsonTree(responseBody).asJsonObject.toString()
-                        return convertToClass(jsonString, UserGetProfileResponseData::class.java)
+                        var midObject = convertToClass(jsonString, UserGetProfileResponseData::class.java)
+                        (midObject as UserGetProfileResponseData).name =(midObject as UserGetProfileResponseData).name.replace("\"","")
+                        (midObject as UserGetProfileResponseData).tags = (midObject as UserGetProfileResponseData).tags.replace("\"","")
+                        return midObject
                         /*val userId = jsonObject.get("userId").toString()
                         val name = jsonObject.get("name").toString()
                         val profilePic = jsonObject.get("profilePic").toString()//must be Edit

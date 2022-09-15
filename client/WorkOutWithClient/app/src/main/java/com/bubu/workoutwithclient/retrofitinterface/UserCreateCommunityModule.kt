@@ -70,6 +70,8 @@ class UserCreateCommunityModule(override val userData: UserCreateCommunityData) 
                         var requestBody = JsonObject()
                         requestBody.addProperty("title", userData.title)
                         requestBody.addProperty("contents", userData.content)
+                        Log.d("re",userData.title)
+                        Log.d("re2",userData.content)
                         var resp = retrofitObject.get(requestBody).execute()
                         if (resp.code() in 100..199) {
                             return super.handle100(resp)
@@ -103,6 +105,8 @@ class UserCreateCommunityModule(override val userData: UserCreateCommunityData) 
                             userData.picture.name,
                             requestFile
                         )
+                        Log.d("re",userData.title)
+                        Log.d("re2",userData.content)
                         var resp =
                             retrofitObject.get(userData.title, profilePicture, userData.content)
                                 .execute()

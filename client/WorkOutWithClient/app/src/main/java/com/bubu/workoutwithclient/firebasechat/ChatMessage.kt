@@ -1,5 +1,8 @@
 package com.bubu.workoutwithclient.firebasechat
 
+import java.text.SimpleDateFormat
+import java.util.*
+
 open class ChatMessage {
     var id : String = ""
     var msg : String = ""
@@ -15,4 +18,10 @@ open class ChatMessage {
         this.type = type
         this.timestamp = System.currentTimeMillis()
     }
+}
+fun millsecondToDate(yourmilliseconds : Long) : String{
+    //val yourmilliseconds = System.currentTimeMillis()
+    val sdf = SimpleDateFormat("MMM dd, yyyy HH:mm")
+    val resultdate = Date(yourmilliseconds)
+    return (sdf.format(resultdate))
 }

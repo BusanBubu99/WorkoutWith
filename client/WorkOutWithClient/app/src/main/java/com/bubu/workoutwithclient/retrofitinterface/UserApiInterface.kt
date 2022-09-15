@@ -27,7 +27,7 @@ import java.io.IOException
  * Exception :
  * Exceptions we don't know yet
  * */
-const val baseurl = "http://192.168.36.205:8000"
+const val baseurl = "http://14.44.119.81:8000"
 
 interface UserApiInterface {
     val userData : Any?

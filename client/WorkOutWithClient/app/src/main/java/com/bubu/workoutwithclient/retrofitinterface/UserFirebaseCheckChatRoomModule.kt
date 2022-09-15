@@ -1,18 +1,18 @@
 package com.bubu.workoutwithclient.retrofitinterface
 
 import android.util.Log
-import com.bubu.workoutwithclient.databinding.ActivityMatchRoomBinding
+import com.bubu.workoutwithclient.databinding.MatchRoomActivityBinding
 import com.bubu.workoutwithclient.firebasechat.ChatRoom
-import com.bubu.workoutwithclient.userinterface.MatchingTeamAdapter
-import com.bubu.workoutwithclient.userinterface.updateUserProfilePicture
+import com.bubu.workoutwithclient.userinterface.match.MatchTeamAdapter
+import com.bubu.workoutwithclient.userinterface.match.updateUserProfilePicture
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class UserFirebaseCheckChatRoomModule(val matchId: String, val title: String, val profileAdapter : MatchingTeamAdapter,
-val binding : ActivityMatchRoomBinding) {
+class UserFirebaseCheckChatRoomModule(val matchId: String, val title: String, val profileAdapter : MatchTeamAdapter,
+val binding : MatchRoomActivityBinding) {
     val database =
         Firebase.database("https://workoutwith-81ab7-default-rtdb.asia-southeast1.firebasedatabase.app/")
     val roomRef = database.getReference("rooms")

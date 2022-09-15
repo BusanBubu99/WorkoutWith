@@ -22,20 +22,20 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".userinterface.UserProfileActivity"
+            android:name=".userinterface.match.MatchUserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".userinterface.MatchRoomActivity"
+            android:name=".userinterface.match.MatchRoomActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" /> <!-- Allow Http Protocol By dong -->
         <activity
-            android:name=".userinterface.DetailActivity"
+            android:name=".userinterface.community.CommunityViewPostDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".userinterface.MajorScreen"
+            android:name=".userinterface.MainScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".userinterface.MainActivity"
+            android:name=".userinterface.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -2,18 +2,15 @@ package com.bubu.workoutwithclient.retrofitinterface
 
 import android.content.Intent
 import android.util.Log
-import com.bubu.workoutwithclient.databinding.ActivityMatchRoomBinding
+import com.bubu.workoutwithclient.databinding.MatchRoomActivityBinding
 import com.bubu.workoutwithclient.firebasechat.ChatMessage
 import com.bubu.workoutwithclient.firebasechat.ChatVoteMessage
-import com.bubu.workoutwithclient.userinterface.MatchRoomActivity
-import com.bubu.workoutwithclient.userinterface.downloadProfilePic
-import com.bubu.workoutwithclient.userinterface.getMatchRoom
+import com.bubu.workoutwithclient.userinterface.match.MatchRoomActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_match_room.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +18,7 @@ import java.io.Serializable
 
 class UserFirebaseReceiveChatModule(
     val userId: String, val matchId: String, val list: MutableList<ChatMessage>,
-    val adapter: MatchRoomActivity.ChatListAdapter, val binding: ActivityMatchRoomBinding
+    val adapter: MatchRoomActivity.ChatListAdapter, val binding: MatchRoomActivityBinding
 ) {
     val database =
         Firebase.database("https://workoutwith-81ab7-default-rtdb.asia-southeast1.firebasedatabase.app/")

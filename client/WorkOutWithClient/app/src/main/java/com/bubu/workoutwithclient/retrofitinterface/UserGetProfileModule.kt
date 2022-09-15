@@ -79,29 +79,6 @@ class UserGetProfileModule(override val userData: UserGetProfileData) : UserApiI
                         (midObject as UserGetProfileResponseData).name =(midObject as UserGetProfileResponseData).name.replace("\"","")
                         (midObject as UserGetProfileResponseData).tags = (midObject as UserGetProfileResponseData).tags.replace("\"","")
                         return midObject
-                        /*val userId = jsonObject.get("userId").toString()
-                        val name = jsonObject.get("name").toString()
-                        val profilePic = jsonObject.get("profilePic").toString()//must be Edit
-                        val tags = jsonObject.get("tags").toString()
-                        val city = jsonObject.get("city").toString()
-                        val county = jsonObject.get("county").toString()
-                        val district = jsonObject.get("district").toString()
-                        val communityPost = jsonObject.getAsJsonArray("communityPost")
-                        val list = mutableListOf<UserGetProfileCommunityPostResponseData>()
-                        communityPost.forEach {
-                            //can be null..
-                            list.add(
-                                UserGetProfileCommunityPostResponseData(
-                                    it.asJsonObject.get("postUserId").toString(),
-                                    it.asJsonObject.get("postId").toString().toInt(),
-                                    it.asJsonObject.get("title").toString(),
-                                    it.asJsonObject.get("picture").toString(),
-                                    it.asJsonObject.get("timestamp").toString(),
-                                    it.asJsonObject.get("like").toString().toInt()
-                                )
-                            )
-                        }
-                        return UserGetProfileResponseData(userId,name,profilePic,tags,city,county,district,list)*/
                     } else if (resp.code() in 300..399) {
                         return super.handle300(resp)
                     } else if (resp.code() in 400..499) {

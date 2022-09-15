@@ -22,8 +22,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:gravity="left"
-        app:layout_constraintTop_toBottomOf="@+id/textName"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toBottomOf="@+id/textName">
 
         <TextView
             android:id="@+id/textMsg"

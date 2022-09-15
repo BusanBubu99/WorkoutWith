@@ -233,7 +233,8 @@ class MatchRoomActivity : AppCompatActivity() {
         inner class HolderOp(val binding: MatchOpChatRecyclerBinding) :
             RecyclerView.ViewHolder(binding.root) {
             fun setMsg(msg: ChatMessage) {
-                if(msg.type == "1"){
+                if(msg.type == "1") {
+                    Log.d("Thisis","vote!!${msg.msg}")
                     binding.opjoinButton.isVisible = true
                     binding.opjoinButton.setOnClickListener {
                         Log.d("voteClick", (msg as ChatVoteMessage).voteId)
@@ -241,6 +242,10 @@ class MatchRoomActivity : AppCompatActivity() {
                     }
                     binding.textMsg.setTextColor(Color.parseColor("#00BFFF"))
                     binding.textMsg.setTypeface(null,Typeface.BOLD)
+                } else {
+                    binding.opjoinButton.isVisible = false
+                    binding.textMsg.setTextColor(Color.parseColor("#000000"))
+                    binding.textMsg.setTypeface(null, Typeface.NORMAL)
                 }
                 binding.textName.text = msg.id
                 binding.textMsg.text = msg.msg
@@ -251,7 +256,8 @@ class MatchRoomActivity : AppCompatActivity() {
         inner class HolderMy(val binding: MatchMyChatRecyclerBinding) :
             RecyclerView.ViewHolder(binding.root) {
             fun setMsg(msg: ChatMessage) {
-                if(msg.type == "1"){
+                if(msg.type == "1") {
+                    Log.d("Thisis","vote!!${msg.msg}")
                     binding.joinButton.isVisible = true
                     binding.joinButton.setOnClickListener {
                         Log.d("voteClick",(msg as ChatVoteMessage).voteId)
@@ -259,6 +265,10 @@ class MatchRoomActivity : AppCompatActivity() {
                     }
                     binding.textMsg.setTextColor(Color.parseColor("#00BFFF"))
                     binding.textMsg.setTypeface(null,Typeface.BOLD)
+                } else{
+                    binding.joinButton.isVisible = false
+                    binding.textMsg.setTextColor(Color.parseColor("#000000"))
+                    binding.textMsg.setTypeface(null,Typeface.NORMAL)
                 }
                 binding.textMsg.text = msg.msg
                 binding.textDate.text = millsecondToDate(msg.timestamp)//"${msg.timestamp}"

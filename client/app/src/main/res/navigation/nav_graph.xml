@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/matchHomeFragment">
+
+    <fragment
+        android:id="@+id/matchHomeFragment"
+        android:name="com.bubu.workoutwithclient.userinterface.match.MatchHomeFragment"
+        android:label="fragment_match_home"
+        tools:layout="@layout/match_home_fragment" >
+        <action
+            android:id="@+id/action_matchHomeFragment_to_matchStartFragment"
+            app:destination="@id/matchStartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/communityHomeFragment"
+        android:name="com.bubu.workoutwithclient.userinterface.community.CommunityHomeFragment"
+        android:label="fragment_community_home"
+        tools:layout="@layout/community_home_fragment" >
+        <action
+            android:id="@+id/action_communityHomeFragment_to_communityNewPostFragment"
+            app:destination="@id/communityNewPostFragment" />
+        <action
+            android:id="@+id/action_communityHomeFragment_to_communityViewPostDetailActivity"
+            app:destination="@id/communityViewPostDetailActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileMyFragment"
+        android:name="com.bubu.workoutwithclient.userinterface.profile.ProfileMyFragment"
+        android:label="fragment_profile_my"
+        tools:layout="@layout/profile_my_fragment" >
+        <action
+            android:id="@+id/action_profileMyFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="com.bubu.workoutwithclient.userinterface.profile.ProfileEditFragment"
+        android:label="fragment_profile_edit"
+        tools:layout="@layout/profile_edit_fragment" >
+        <action
+            android:id="@+id/action_profileEditFragment_to_profileMyFragment"
+            app:destination="@id/profileMyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchStartFragment"
+        android:name="com.bubu.workoutwithclient.userinterface.match.MatchStartFragment"
+        android:label="fragment_matching_start"
+        tools:layout="@layout/match_start_fragment" >
+        <action
+            android:id="@+id/action_matchingStartFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/communityNewPostFragment"
+        android:name="com.bubu.workoutwithclient.userinterface.community.CommunityNewPostFragment"
+        android:label="fragment_post_new"
+        tools:layout="@layout/community_new_post_fragment" >
+        <action
+            android:id="@+id/action_communityNewPostFragment_to_communityHomeFragment"
+            app:destination="@id/communityHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchCreateScheduleFragment"
+        android:name="com.bubu.workoutwithclient.userinterface.match.MatchCreateScheduleFragment"
+        android:label="fragment_match_create_schedule"
+        tools:layout="@layout/match_create_schedule_fragment" >
+        <action
+            android:id="@+id/action_matchCreateScheduleFragment_to_matchTeamFragment"
+            app:destination="@id/matchHomeFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/communityViewPostDetailActivity"
+        android:name="com.bubu.workoutwithclient.userinterface.community.CommunityViewPostDetailActivity"
+        android:label="activity_community_view_post_detail"
+        tools:layout="@layout/community_view_post_detail_activity" />
+    <fragment
+        android:id="@+id/matchJoinScheduleFragment"
+        android:name="com.bubu.workoutwithclient.userinterface.match.MatchJoinScheduleFragment"
+        android:label="fragment_match_join_schedule"
+        tools:layout="@layout/match_join_schedule_fragment" >
+        <action
+            android:id="@+id/action_matchJoinScheduleFragment_to_matchStartTeamFragment"
+            app:destination="@id/matchStartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.bubu.workoutwithclient.userinterface.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/login_fragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
+    </fragment>
+</navigation>

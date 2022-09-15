@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_back_to_matchHomeFragment"
+        android:title="뒤로 가기"
+        app:showAsAction="always"
+        android:icon="@drawable/common_back_icon" />
+</menu>

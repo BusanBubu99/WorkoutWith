@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_common_add_picture"
+        android:title="추가/작성 등 실행하기"
+        app:showAsAction="always"
+        android:icon="@drawable/common_add_icon"/>
+    <item android:id="@+id/action_post_confirm"
+        android:title="작성 완료"
+        app:showAsAction="always"
+        android:icon="@drawable/community_check_icon"/>
+</menu>

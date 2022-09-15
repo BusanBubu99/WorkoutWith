@@ -1,6 +1,8 @@
 package com.bubu.workoutwithclient.userinterface.login
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -50,6 +52,7 @@ class LoginRegisterFragment : Fragment() {
         mainActivity?.setTitle("회원가입")
         val binding = LoginRegisterFragmentBinding.inflate(inflater, container, false)
         binding.btnRegisterConfirm.setOnClickListener {
+            val builder = AlertDialog.Builder(mainActivity)
             CoroutineScope(Dispatchers.Default).launch {
                 val result = register(
                     binding.editRegisterEmailAddress.text.toString().lowercase(),
@@ -57,11 +60,12 @@ class LoginRegisterFragment : Fragment() {
                     binding.editRegisterPassword.text.toString(),
                     binding.editRegisterPasswordConfirm.text.toString()
                 )
-                CoroutineScope(Dispatchers.Main).launch {
-                    Toast.makeText(context, "확인 이메일을 전송합니다.", Toast.LENGTH_SHORT).show()
-                }
 				if(result == true) {
                     CoroutineScope(Dispatchers.Main).launch {
+                        builder.setMessage("인증 메일이 발송되었습니다. \n입력하신 이메일을 확인해주세요.")
+                        builder.setPositiveButton("확인", DialogInterface.OnClickListener
+                        { dialogInterface, i -> mainActivity?.goBack() })
+                        builder.show()
                         mainActivity.goBack()
                     }
 				} else if(result is UserError){

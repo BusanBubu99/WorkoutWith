@@ -15,6 +15,7 @@ class CommunityViewPostDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
 
         val pictureUri = intent.getStringExtra("pictureUri").toString()
         Log.d("imageView",pictureUri)

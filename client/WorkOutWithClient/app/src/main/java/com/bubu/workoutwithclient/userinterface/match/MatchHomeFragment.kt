@@ -90,6 +90,7 @@ class MatchHomeFragment : Fragment() {
 
     override fun onResume() {
         mainScreenActivity?.setTitle("내 매칭 리스트")
+        mainScreenActivity?.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
         super.onResume()
     }
 

@@ -19,10 +19,11 @@
 
     <LinearLayout
         android:id="@+id/LinearMsgLayout"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:gravity="left"
-        app:layout_constraintTop_toBottomOf="@+id/textName">
+        app:layout_constraintTop_toBottomOf="@+id/textName"
+        tools:ignore="MissingConstraints">
 
         <TextView
             android:id="@+id/textMsg"
@@ -30,6 +31,13 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:background="@drawable/match_chat_bubble"/>
+
+        <Button
+            android:id="@+id/opjoinButton"
+            android:layout_width="61dp"
+            android:layout_height="45dp"
+            android:text="참가"
+            android:visibility="invisible" />
     </LinearLayout>
 
 

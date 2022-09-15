@@ -54,8 +54,8 @@
         <entry key="app/src/main/res/drawable/community_icon.xml" value="0.294" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.294" />
         <entry key="app/src/main/res/layout/community_new_post_fragment.xml" value="0.2869791666666667" />
-        <entry key="app/src/main/res/layout/match_my_chat_recycler.xml" value="0.536" />
-        <entry key="app/src/main/res/layout/match_op_chat_recycler.xml" value="0.2869791666666667" />
+        <entry key="app/src/main/res/layout/match_my_chat_recycler.xml" value="0.6495673671199012" />
+        <entry key="app/src/main/res/layout/match_op_chat_recycler.xml" value="1.0" />
         <entry key="app/src/main/res/layout/match_room_activity.xml" value="0.2869791666666667" />
         <entry key="app/src/main/res/layout/match_start_fragment.xml" value="0.536" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.2869791666666667" />

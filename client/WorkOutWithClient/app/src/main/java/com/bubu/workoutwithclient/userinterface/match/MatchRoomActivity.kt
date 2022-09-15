@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -233,11 +234,12 @@ class MatchRoomActivity : AppCompatActivity() {
             RecyclerView.ViewHolder(binding.root) {
             fun setMsg(msg: ChatMessage) {
                 if(msg.type == "1"){
-                    binding.textMsg.setOnClickListener {
-                        Log.d("voteClick",(msg as ChatVoteMessage).voteId)
+                    binding.opjoinButton.isVisible = true
+                    binding.opjoinButton.setOnClickListener {
+                        Log.d("voteClick", (msg as ChatVoteMessage).voteId)
                         goJoinScheduleFragment(msg)
                     }
-                    binding.textMsg.setTextColor(0x00BFFF)
+                    binding.textMsg.setTextColor(Color.parseColor("#00BFFF"))
                     binding.textMsg.setTypeface(null,Typeface.BOLD)
                 }
                 binding.textName.text = msg.id
@@ -250,7 +252,8 @@ class MatchRoomActivity : AppCompatActivity() {
             RecyclerView.ViewHolder(binding.root) {
             fun setMsg(msg: ChatMessage) {
                 if(msg.type == "1"){
-                    binding.textMsg.setOnClickListener {
+                    binding.joinButton.isVisible = true
+                    binding.joinButton.setOnClickListener {
                         Log.d("voteClick",(msg as ChatVoteMessage).voteId)
                         goJoinScheduleFragment(msg)
                     }

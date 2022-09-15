@@ -99,6 +99,7 @@ class  CommunityHomeFragment : Fragment() {
 
     override fun onResume() {
         mainScreenActivity?.setTitle("커뮤니티 게시글")
+        mainScreenActivity?.supportActionBar!!.setDisplayHomeAsUpEnabled(false)
         super.onResume()
     }
 }

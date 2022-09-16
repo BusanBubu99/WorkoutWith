@@ -54,7 +54,7 @@ const val sgisconsumerSecret= "Input Your SGIS OpenAPI consumerSecret(Secret Key
 
 3-4(for client) generate key to sign the app (For example, the command below)
 ```bash
-cd WorkoutWith/app
+cd WorkoutWith/client/app
 keytool -genkey -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-alias
 #Example Password is "password"
 ```

@@ -28,6 +28,7 @@ import java.io.IOException
  * Exceptions we don't know yet
  * */
 const val baseurl = "Your Server baseurl"
+const val firebaseurl = "Your Firebaseurl"
 
 interface UserApiInterface {
     val userData : Any?

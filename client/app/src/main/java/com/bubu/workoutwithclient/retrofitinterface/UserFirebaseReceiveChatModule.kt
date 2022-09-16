@@ -21,7 +21,7 @@ class UserFirebaseReceiveChatModule(
     val adapter: MatchRoomActivity.ChatListAdapter, val binding: MatchRoomActivityBinding
 ) {
     val database =
-        Firebase.database("https://workoutwith-81ab7-default-rtdb.asia-southeast1.firebasedatabase.app/")
+        Firebase.database(firebaseurl)
     val msgRef = database.getReference("rooms/${matchId}/messages")
 
     fun receiveChat() {

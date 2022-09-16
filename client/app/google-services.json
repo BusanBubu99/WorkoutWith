@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "284649318307",
+    "firebase_url": "https://workoutwith-81ab7-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "workoutwith-81ab7",
+    "storage_bucket": "workoutwith-81ab7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284649318307:android:9a920920b77dcd57b41c16",
+        "android_client_info": {
+          "package_name": "com.bubu.workoutwithclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284649318307-f3gcnr6h8k836os4sc3pi81kpo2bedri.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWeYIw2iKyr_1e8JHs1Xq2Of_Oo8JuCiA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284649318307-f3gcnr6h8k836os4sc3pi81kpo2bedri.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

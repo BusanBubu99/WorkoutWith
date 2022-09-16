@@ -29,6 +29,8 @@ import java.io.IOException
  * */
 const val baseurl = "Your Server baseurl"
 const val firebaseurl = "Your Firebaseurl"
+const val sgisconsumerKey = "Input User SGIS OpenAPI consumerkey"
+const val sgisconsumerSecret= "Input User SGIS OpenAPI consumerSecret"
 
 interface UserApiInterface {
     val userData : Any?

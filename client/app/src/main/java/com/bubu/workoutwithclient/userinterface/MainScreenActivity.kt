@@ -34,10 +34,6 @@ class MainScreenActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		generateGameCode()
-		userAddressKey = UserAddressKey
-		userAddressKey.consumerKey = "Input User SGIS OpenAPI consumerkey"
-		userAddressKey.consumerSecret= "Input User SGIS OpenAPI consumerSecret"
-
 		mBinding = MainScreenActivityBinding.inflate(layoutInflater)
 
 		setContentView(mBinding.root)

@@ -7,8 +7,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.bubu.workoutwithclient.R
 import com.bubu.workoutwithclient.databinding.MainScreenActivityBinding
-import com.bubu.workoutwithclient.retrofitinterface.UserAddressKey
-import com.bubu.workoutwithclient.retrofitinterface.userAddressKey
 
 lateinit var gameCodeList : MutableList<String>
 

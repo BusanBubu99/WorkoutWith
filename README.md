@@ -64,6 +64,7 @@ chmod +x gradlew
 ./gradlew installRelease
 ```
 3-6(for client) Check the apk File in `client/app/build/outputs/apk/release/app-release.apk`
+
 ![image](https://user-images.githubusercontent.com/104804087/190551784-6c07bb3f-4f91-4cc9-bcd3-eeea98186425.png)
 
 

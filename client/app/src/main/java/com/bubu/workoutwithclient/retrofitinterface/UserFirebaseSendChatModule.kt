@@ -11,7 +11,7 @@ class UserFirebaseSendChatModule(
     val messageString: String
 ) {
     val database =
-        Firebase.database("https://workoutwith-81ab7-default-rtdb.asia-southeast1.firebasedatabase.app/")
+        Firebase.database(firebaseurl)
     val msgRef = database.getReference("rooms/${matchId}/messages")
     fun sendChat() {
         val message = ChatMessage(userId, messageString, "0")
@@ -31,7 +31,7 @@ class UserFirebaseVoteChatModule(
     val content: String
 ) {
     val database =
-        Firebase.database("https://workoutwith-81ab7-default-rtdb.asia-southeast1.firebasedatabase.app/")
+        Firebase.database(firebaseurl)
     val msgRef = database.getReference("rooms/${matchId}/messages")
     fun sendChat() {
 

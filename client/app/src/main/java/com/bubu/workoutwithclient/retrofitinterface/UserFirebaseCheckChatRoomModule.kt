@@ -14,7 +14,7 @@ import com.google.firebase.ktx.Firebase
 class UserFirebaseCheckChatRoomModule(val matchId: String, val title: String, val profileAdapter : MatchTeamAdapter,
 val binding : MatchRoomActivityBinding) {
     val database =
-        Firebase.database("https://workoutwith-81ab7-default-rtdb.asia-southeast1.firebasedatabase.app/")
+        Firebase.database(firebaseurl)
     val roomRef = database.getReference("rooms")
 
     init {

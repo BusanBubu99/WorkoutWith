@@ -7,8 +7,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.bubu.workoutwithclient.R
 import com.bubu.workoutwithclient.databinding.MainScreenActivityBinding
-import com.bubu.workoutwithclient.retrofitinterface.UserAddressKey
-import com.bubu.workoutwithclient.retrofitinterface.userAddressKey
 
 lateinit var gameCodeList : MutableList<String>
 
@@ -34,10 +32,6 @@ class MainScreenActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		generateGameCode()
-		userAddressKey = UserAddressKey
-		userAddressKey.consumerKey = "Input User SGIS OpenAPI consumerkey"
-		userAddressKey.consumerSecret= "Input User SGIS OpenAPI consumerSecret"
-
 		mBinding = MainScreenActivityBinding.inflate(layoutInflater)
 
 		setContentView(mBinding.root)

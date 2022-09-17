@@ -43,8 +43,8 @@ class UserGetAddressModule(override val userData: Any? = null) : UserApiInterfac
     interface UserGetCityAccessKeyInterface {
         @GET("/OpenAPI3/auth/authentication.json")
         fun get(
-            @Query("consumer_key") consumerKey: String = userAddressKey.consumerKey,
-            @Query("consumer_secret") consumerSecret: String = userAddressKey.consumerSecret
+            @Query("consumer_key") consumerKey: String = sgisconsumerKey,
+            @Query("consumer_secret") consumerSecret: String = sgisconsumerSecret
         ): Call<Any>
     }
 

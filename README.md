@@ -64,7 +64,8 @@ cd WorkoutWith/client/app
 keytool -genkey -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-alias
 #Example Password is "password"
 ```
-3-5(for client) release build in `client` Directory
+3-5(for client) release build in `client` Directory  
+Before executing this command, you must connect an AVD or connect a physical device with USB debugging Mode turned on.
 ```bash
 cd WorkoutWith/client
 ./gradlew installRelease

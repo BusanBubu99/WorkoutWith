@@ -35,7 +35,8 @@ python manage.py migrate
 ```bash
 python manage.py runserver 0.0.0.0:8000
 ```
-3-1(for client) Edit Your API Key in `UserApiInterface.kt`
+3-1(for client) Edit Your API Key in `UserApiInterface.kt` in Directory `WorkoutWith/client/app/src/main/java/com/bubu/workoutwithclient/retrofitinterface
+`
 ```kotlin
 const val baseurl = "Input Your Server baseurl"
 const val firebaseurl = "Input Your Firebaseurl"
@@ -43,6 +44,9 @@ const val sgisconsumerKey = "Input Your SGIS OpenAPI consumerkey(Service ID)"
 const val sgisconsumerSecret= "Input Your SGIS OpenAPI consumerSecret(Secret Key)"
 ```
 3-2(for client) Add `google-services.json` file, which is related to Firebase inside the `client/app` Directroy
+
+**Note: Firebase package name must be com.bubu.workoutwithclient.**
+
 <img src="https://user-images.githubusercontent.com/104804087/190549870-9e7b0e9d-1529-4d6f-ba2e-bb2dc21bf92f.png" height="200">
 
 3-3(for client) Check the `client/app/build.gradle` `signingConfigs`, `buildTypes` first before generating the key.
@@ -59,14 +63,18 @@ cd WorkoutWith/client/app
 keytool -genkey -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-alias
 #Example Password is "password"
 ```
-3-5(for client) release build in `client' Directory
+3-5(for client) release build in `client` Directory
 ```bash
-chmod +x gradlew
+cd WorkoutWith/client
 ./gradlew installRelease
 ```
 3-6(for client) Check the apk File in `client/app/build/outputs/apk/release/app-release.apk`
 
 ![image](https://user-images.githubusercontent.com/104804087/190551784-6c07bb3f-4f91-4cc9-bcd3-eeea98186425.png)
 
+## Demo Video
+https://www.youtube.com/watch?v=AGws0erJEKE
+
+[![Video Label](http://img.youtube.com/vi/AGws0erJEKE/0.jpg)](https://www.youtube.com/watch?v=AGws0erJEKE)
 
 

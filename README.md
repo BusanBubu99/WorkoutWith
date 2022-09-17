@@ -35,6 +35,7 @@ python manage.py migrate
 ```bash
 python manage.py runserver 0.0.0.0:8000
 ```
+
 3-1(for client) Edit Your API Key in `UserApiInterface.kt` in Directory `WorkoutWith/client/app/src/main/java/com/bubu/workoutwithclient/retrofitinterface
 `
 ```kotlin
@@ -76,5 +77,3 @@ cd WorkoutWith/client
 https://www.youtube.com/watch?v=AGws0erJEKE
 
 [![Video Label](http://img.youtube.com/vi/AGws0erJEKE/0.jpg)](https://www.youtube.com/watch?v=AGws0erJEKE)
-
-
